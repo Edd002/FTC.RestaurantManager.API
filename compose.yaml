@@ -1,1 +1,4 @@
 services:
+  example:
+    container_name: nginx
+    image: nginx
