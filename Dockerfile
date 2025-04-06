@@ -8,6 +8,7 @@ RUN gradle wrapper
 RUN ./gradlew clean build
 
 FROM openjdk:21-slim
+
 WORKDIR /app
 
 RUN mkdir -p /app/build/libs
