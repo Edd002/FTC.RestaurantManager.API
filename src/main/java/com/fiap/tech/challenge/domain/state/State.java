@@ -1,0 +1,58 @@
+package com.fiap.tech.challenge.domain.state;
+
+import com.fiap.tech.challenge.domain.city.City;
+import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
+import com.fiap.tech.challenge.global.audity.Audity;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
+
+@Data
+@Entity
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "t_state")
+@SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
+@SQLRestriction(value = "deleted = false")
+@EqualsAndHashCode(of = "id", callSuper = false)
+@ToString(of = {"id"})
+@EntityListeners({ StateEntityListener.class })
+public class State extends Audity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(generator = "SQ_STATE")
+    @SequenceGenerator(name = "SQ_STATE", sequenceName = "SQ_STATE", schema = "public", allocationSize = 1)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
+    @Column(name = "uf", nullable = false, length = 2)
+    private String uf;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "state", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private List<City> cityList;
+
+    @Transient
+    private transient State stateSavedState;
+
+    public void saveState(State stateSavedState) {
+        this.stateSavedState = stateSavedState;
+    }
+
+    @Override
+    public String getConstraintErrorMessage(String constraintName) {
+        return StateConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
+    }
+}

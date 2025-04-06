@@ -1,7 +1,7 @@
 package com.fiap.tech.challenge.domain.jwt;
 
 import com.fiap.tech.challenge.domain.jwt.enumerated.JwtConstraintEnum;
-import com.fiap.tech.challenge.domain.usertoken.UserToken;
+import com.fiap.tech.challenge.domain.user.User;
 import com.fiap.tech.challenge.global.audity.Audity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,8 +38,8 @@ public class Jwt extends Audity implements Serializable {
     private String accessToken;
 
     @ManyToOne(fetch= FetchType.EAGER)
-    @JoinColumn(name = "fk_user_token", nullable = false)
-    private UserToken userToken;
+    @JoinColumn(name = "fk_user", nullable = false)
+    private User user;
 
     @Transient
     private transient Jwt jwtSavedState;
