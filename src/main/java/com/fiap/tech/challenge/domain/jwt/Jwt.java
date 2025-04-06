@@ -6,10 +6,8 @@ import com.fiap.tech.challenge.global.audity.Audity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,8 +18,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_jwt")
-@SQLDelete(sql = "UPDATE t_jwt SET excluido = true WHERE id = ?")
-@Where(clause = "excluido = false")
+@SQLDelete(sql = "UPDATE t_jwt SET deleted = true WHERE id = ?")
+@SQLRestriction(value = "deleted = false")
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = {"id"})
 @EntityListeners({ JwtEntityListener.class })
@@ -40,7 +38,6 @@ public class Jwt extends Audity implements Serializable {
     private String accessToken;
 
     @ManyToOne(fetch= FetchType.EAGER)
-    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "fk_user_token", nullable = false)
     private UserToken userToken;
 

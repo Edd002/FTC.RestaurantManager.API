@@ -6,7 +6,7 @@ spring:
     active: local
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: postgresql://localhost:5453/ftc_user_manager_database
+    url: jdbc:postgresql://localhost:5453/ftc_user_manager_database
     username: postgres
     password: postgres
   http:
@@ -33,13 +33,13 @@ spring:
       hibernate.format_sql: true
     mandatory-file-encoding: UTF-8
     profiles:
-      active: ${SPRING_PROFILES_ACTIVE:default}
+      active: local
   devtools:
     livereload:
       enabled: false
-#  flyway:
-#    schemas: public
-#    table: t_flyway_schema_history
-#    enabled: true
-#    baseline-on-migrate: true
-#    locations: classpath:db/migration
+  flyway:
+    schemas: public
+    table: t_flyway_schema_history
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
