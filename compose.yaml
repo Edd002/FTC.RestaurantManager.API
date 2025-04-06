@@ -2,3 +2,26 @@ services:
   example:
     container_name: nginx
     image: nginx
+
+  #DATABASE
+  ftc_user_manager_database:
+    container_name: ftc_user_manager_database
+    image: postgres:17.4
+    networks:
+      - ftc_user_manager_database_net
+    ports:
+      - '5453:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ftc_user_manager_database
+    volumes:
+      - ftc_user_manager_database:/var/lib/postgresql
+      - ftc_user_manager_database_data:/var/lib/postgresql/data
+
+networks:
+  ftc_user_manager_database_net:
+
+volumes:
+  ftc_user_manager_database:
+  ftc_user_manager_database_data:
