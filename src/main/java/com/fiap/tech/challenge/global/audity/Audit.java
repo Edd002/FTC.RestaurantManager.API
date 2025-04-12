@@ -1,10 +1,8 @@
 package com.fiap.tech.challenge.global.audity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,27 +15,22 @@ import java.util.Date;
 
 import static com.fiap.tech.challenge.global.util.HashUtil.generateHash;
 
-@Data
-@SuperBuilder
-@NoArgsConstructor
 @MappedSuperclass
-@EntityListeners({ AuditingEntityListener.class, AudityEntityListener.class })
-public abstract class Audity implements Serializable {
+@EntityListeners({ AuditingEntityListener.class, AuditEntityListener.class })
+public abstract class Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Builder.Default
     @Column(name = "hash_id", nullable = false, updatable = false)
-    private String hashId = generateHash();
+    private final String hashId = generateHash();
 
-    @Builder.Default
     @CreatedDate
     @Column(name = "created_in", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdIn = new Date();
+    private final Date createdIn = new Date();
 
-    @Builder.Default
+    @Getter @Setter
     @LastModifiedDate
     @Column(name = "updated_in")
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,16 +51,17 @@ public abstract class Audity implements Serializable {
     @Column(name = "deleted_by")
     private String deleted_by;
 
-    @Builder.Default
     @Column(name = "deleted", nullable = false)
-    private Boolean deleted = Boolean.FALSE;
+    private final Boolean deleted = Boolean.FALSE;
 
+    @Getter
     @Transient
-    private transient Audity auditySavedState;
+    private transient Audit auditSavedState;
 
-    public void saveState(Audity auditoriaSavedState) {
-        this.auditySavedState = auditoriaSavedState;
+    public void saveState(Audit auditSavedState) {
+        this.auditSavedState = auditSavedState;
     }
 
     public abstract String getConstraintErrorMessage(String constraintName);
+
 }

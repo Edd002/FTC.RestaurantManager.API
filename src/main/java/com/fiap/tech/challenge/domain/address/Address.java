@@ -3,28 +3,21 @@ package com.fiap.tech.challenge.domain.address;
 import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
 import com.fiap.tech.challenge.domain.city.City;
 import com.fiap.tech.challenge.domain.user.User;
-import com.fiap.tech.challenge.global.audity.Audity;
+import com.fiap.tech.challenge.global.audity.Audit;
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Data
 @Entity
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "t_address")
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
-@EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id"})
 @EntityListeners({ AddressEntityListener.class })
-public class Address extends Audity implements Serializable {
+public class Address extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -32,7 +25,7 @@ public class Address extends Audity implements Serializable {
     @Id
     @GeneratedValue(generator = "SQ_ADDRESS")
     @SequenceGenerator(name = "SQ_ADDRESS", sequenceName = "SQ_ADDRESS", schema = "public", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "description", nullable = false)
@@ -60,6 +53,7 @@ public class Address extends Audity implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private User user;
 
+    @Getter
     @Transient
     private transient Address addressSavedState;
 
