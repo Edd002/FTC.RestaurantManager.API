@@ -16,7 +16,7 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE t_load_table SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ LoadTableEntityListener.class })
-public class LoadTable extends Audit implements Serializable {
+public final class LoadTable extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

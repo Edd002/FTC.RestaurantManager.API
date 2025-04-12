@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.state.dto;
 
-public class StateGetFilter {
+public final class StateGetFilter {
 }

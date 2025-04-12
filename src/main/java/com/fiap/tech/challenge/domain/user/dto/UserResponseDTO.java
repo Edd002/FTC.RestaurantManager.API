@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.user.dto;
 
-public class UserResponseDTO {
+public final class UserResponseDTO {
 }

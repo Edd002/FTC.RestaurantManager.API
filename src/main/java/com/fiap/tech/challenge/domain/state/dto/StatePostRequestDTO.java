@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.state.dto;
 
-public class StatePostRequestDTO extends StateRequestDTO {
+public final class StatePostRequestDTO extends StateRequestDTO {
 }

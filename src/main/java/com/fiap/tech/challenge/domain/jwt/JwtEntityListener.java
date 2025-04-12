@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.jwt;
 
-public class JwtEntityListener {
+public final class JwtEntityListener {
 }

@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.loadtable.dto;
 
-public class LoadTablePostRequestDTO extends LoadTableRequestDTO {
+public final class LoadTablePostRequestDTO extends LoadTableRequestDTO {
 }

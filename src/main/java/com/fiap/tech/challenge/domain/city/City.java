@@ -18,7 +18,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE t_city SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ CityEntityListener.class })
-public class City extends Audit implements Serializable {
+public final class City extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

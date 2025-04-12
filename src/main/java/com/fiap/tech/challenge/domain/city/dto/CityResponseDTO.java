@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.city.dto;
 
-public class CityResponseDTO {
+public final class CityResponseDTO {
 }

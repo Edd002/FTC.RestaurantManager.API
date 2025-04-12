@@ -3,5 +3,5 @@ package com.fiap.tech.challenge.domain.loadtable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class LoadTableController {
+public final class LoadTableController {
 }

@@ -17,7 +17,7 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ AddressEntityListener.class })
-public class Address extends Audit implements Serializable {
+public final class Address extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

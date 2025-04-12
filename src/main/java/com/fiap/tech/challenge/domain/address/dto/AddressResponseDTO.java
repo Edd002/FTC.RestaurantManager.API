@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
-public class AddressResponseDTO {
+public final class AddressResponseDTO {
 }

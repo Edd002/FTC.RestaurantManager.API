@@ -18,7 +18,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE t_user SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ UserEntityListener.class })
-public class User extends Audit implements Serializable {
+public final class User extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

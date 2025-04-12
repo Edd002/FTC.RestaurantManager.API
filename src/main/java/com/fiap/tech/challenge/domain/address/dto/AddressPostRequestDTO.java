@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
-public class AddressPostRequestDTO extends AddressRequestDTO {
+public final class AddressPostRequestDTO extends AddressRequestDTO {
 }

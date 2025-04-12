@@ -16,7 +16,7 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE t_jwt SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ JwtEntityListener.class })
-public class Jwt extends Audit implements Serializable {
+public final class Jwt extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.user.dto;
 
-public class UserPutRequestDTO extends UserRequestDTO {
+public final class UserPutRequestDTO extends UserRequestDTO {
 }
