@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable.dto;
 
-public final class LoadTableResponseDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+
+public final class LoadTableResponseDTO extends BaseResponseDTO {
 }

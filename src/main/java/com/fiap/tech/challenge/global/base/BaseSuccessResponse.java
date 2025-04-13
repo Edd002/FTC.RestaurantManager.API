@@ -1,6 +1,8 @@
 package com.fiap.tech.challenge.global.base;
 
-public abstract class BaseSuccessResponse<T> extends BaseResponse {
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+
+public abstract class BaseSuccessResponse<T extends BaseResponseDTO> extends BaseResponse {
 
 	protected T item;
 

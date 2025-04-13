@@ -1,12 +1,14 @@
 package com.fiap.tech.challenge.global.base.success;
 
 import com.fiap.tech.challenge.global.base.BaseSuccessResponse;
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
-public class BaseSuccessResponse202<T> extends BaseSuccessResponse<T> {
+public class BaseSuccessResponse202<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
 
 	protected BaseSuccessResponse202() {
 		super(HttpStatus.ACCEPTED.value());
@@ -44,5 +46,10 @@ public class BaseSuccessResponse202<T> extends BaseSuccessResponse<T> {
 	@Schema(description = "Data e hora da resposta.", example = "2023-09-26 16:42:12.147", type = "string", pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	public Date getTimestamp() {
 		return this.timestamp;
+	}
+
+	@Override
+	public ResponseEntity<BaseSuccessResponse202<T>> getResponse() {
+		return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
 	}
 }

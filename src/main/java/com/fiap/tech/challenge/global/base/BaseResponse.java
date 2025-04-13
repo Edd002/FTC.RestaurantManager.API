@@ -30,6 +30,10 @@ public abstract class BaseResponse {
     }
 
     public ResponseEntity<?> getResponse() {
-        return new ResponseEntity<>(this, HttpStatus.valueOf(status));
+        return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
+    }
+
+    public ResponseEntity<?> getResponseWithoutPayload() {
+        return new ResponseEntity<>(HttpStatus.valueOf(this.status));
     }
 }

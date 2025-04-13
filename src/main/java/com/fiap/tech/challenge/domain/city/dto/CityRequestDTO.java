@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.city.dto;
 
-public abstract class CityRequestDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
+
+public abstract class CityRequestDTO extends BaseRequestDTO {
 }

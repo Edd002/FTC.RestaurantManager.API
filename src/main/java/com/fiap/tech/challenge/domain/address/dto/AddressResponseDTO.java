@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
-public final class AddressResponseDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+
+public final class AddressResponseDTO extends BaseResponseDTO {
 }

@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.jwt.dto;
 
-public final class JwtResponseDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+
+public final class JwtResponseDTO extends BaseResponseDTO {
 }

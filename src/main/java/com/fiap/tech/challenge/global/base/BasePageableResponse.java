@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.global.base;
 
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
-public class BasePageableResponse<T> {
+public class BasePageableResponse<T> extends BaseResponseDTO {
 
 	@Schema(description = "Número da página.", example = "1", defaultValue = "0")
 	private int page = 0;

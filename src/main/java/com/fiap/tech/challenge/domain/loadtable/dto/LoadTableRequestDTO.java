@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable.dto;
 
-public abstract class LoadTableRequestDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
+
+public abstract class LoadTableRequestDTO extends BaseRequestDTO {
 }

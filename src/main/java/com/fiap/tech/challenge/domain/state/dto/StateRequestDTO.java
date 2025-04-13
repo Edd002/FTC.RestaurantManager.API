@@ -1,4 +1,6 @@
 package com.fiap.tech.challenge.domain.state.dto;
 
-public abstract class StateRequestDTO {
+import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
+
+public abstract class StateRequestDTO extends BaseRequestDTO {
 }
