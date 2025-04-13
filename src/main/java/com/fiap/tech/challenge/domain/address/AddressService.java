@@ -3,5 +3,5 @@ package com.fiap.tech.challenge.domain.address;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddressService {
+public final class AddressService {
 }

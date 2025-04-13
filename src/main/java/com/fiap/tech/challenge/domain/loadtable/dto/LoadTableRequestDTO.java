@@ -1,9 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 
-@Data
-@NoArgsConstructor
-public abstract class LoadTableRequestDTO {
+public abstract class LoadTableRequestDTO extends BaseRequestDTO {
 }

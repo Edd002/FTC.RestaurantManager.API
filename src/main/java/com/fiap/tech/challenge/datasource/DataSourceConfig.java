@@ -24,7 +24,6 @@ public class DataSourceConfig {
         dataSource.setUrl(environment.getProperty("spring.datasource.url"));
         dataSource.setUsername(environment.getProperty("spring.datasource.username"));
         dataSource.setPassword(environment.getProperty("spring.datasource.password"));
-
         return dataSource;
     }
 }

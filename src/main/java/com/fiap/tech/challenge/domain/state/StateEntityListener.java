@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.state;
 
-public class StateEntityListener {
+public final class StateEntityListener {
 }

@@ -1,9 +1,6 @@
 package com.fiap.tech.challenge.domain.user.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 
-@Data
-@NoArgsConstructor
-public abstract class UserRequestDTO {
+public abstract class UserRequestDTO extends BaseRequestDTO {
 }

@@ -32,8 +32,7 @@ public class LocalDataSourceConfig {
 
     @Primary
     @Bean(name = "localEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean localEntityManagerFactory(final EntityManagerFactoryBuilder builder,
-                                                                            final @Qualifier("local-db") DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean localEntityManagerFactory(final EntityManagerFactoryBuilder builder, final @Qualifier("local-db") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
                 .packages("com.fiap.tech.challenge.domain")
@@ -44,8 +43,7 @@ public class LocalDataSourceConfig {
 
     @Primary
     @Bean(name = "localTransactionManager")
-    public PlatformTransactionManager localTransactionManager(@Qualifier("localEntityManagerFactory")
-                                                              EntityManagerFactory localEntityManagerFactory) {
+    public PlatformTransactionManager localTransactionManager(final @Qualifier("localEntityManagerFactory") EntityManagerFactory localEntityManagerFactory) {
         return new JpaTransactionManager(localEntityManagerFactory);
     }
 }

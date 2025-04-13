@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.address;
 
-public class AddressEntityListener {
+public final class AddressEntityListener {
 }

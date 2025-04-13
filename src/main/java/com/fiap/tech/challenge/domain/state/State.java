@@ -2,10 +2,9 @@ package com.fiap.tech.challenge.domain.state;
 
 import com.fiap.tech.challenge.domain.city.City;
 import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
-import com.fiap.tech.challenge.global.audity.Audity;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -13,18 +12,12 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-@Data
 @Entity
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "t_state")
 @SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
-@EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id"})
 @EntityListeners({ StateEntityListener.class })
-public class State extends Audity implements Serializable {
+public final class State extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -32,7 +25,7 @@ public class State extends Audity implements Serializable {
     @Id
     @GeneratedValue(generator = "SQ_STATE")
     @SequenceGenerator(name = "SQ_STATE", sequenceName = "SQ_STATE", schema = "public", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "nome", nullable = false)
@@ -44,6 +37,7 @@ public class State extends Audity implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "state", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<City> cityList;
 
+    @Getter
     @Transient
     private transient State stateSavedState;
 

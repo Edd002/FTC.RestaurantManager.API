@@ -1,11 +1,6 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 
-@Data
-@Builder
-@NoArgsConstructor
-public class AddressResponseDTO {
+public final class AddressResponseDTO extends BaseResponseDTO {
 }

@@ -3,10 +3,9 @@ package com.fiap.tech.challenge.domain.user;
 import com.fiap.tech.challenge.domain.address.Address;
 import com.fiap.tech.challenge.domain.jwt.Jwt;
 import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
-import com.fiap.tech.challenge.global.audity.Audity;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -14,18 +13,12 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-@Data
 @Entity
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "t_user")
 @SQLDelete(sql = "UPDATE t_user SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
-@EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id"})
 @EntityListeners({ UserEntityListener.class })
-public class User extends Audity implements Serializable {
+public final class User extends Audit implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -33,7 +26,7 @@ public class User extends Audity implements Serializable {
     @Id
     @GeneratedValue(generator = "SQ_USER")
     @SequenceGenerator(name = "SQ_USER", sequenceName = "SQ_USER", schema = "public", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -55,6 +48,7 @@ public class User extends Audity implements Serializable {
     @JoinColumn(name = "fk_address", nullable = false)
     private Address address;
 
+    @Getter
     @Transient
     private transient User userSavedState;
 

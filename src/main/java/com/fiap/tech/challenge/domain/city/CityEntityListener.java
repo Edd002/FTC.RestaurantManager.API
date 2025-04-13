@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.city;
 
-public class CityEntityListener {
+public final class CityEntityListener {
 }
