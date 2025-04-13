@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.audity;
+package com.fiap.tech.challenge.global.audit;
 
 import java.io.Serializable;
 

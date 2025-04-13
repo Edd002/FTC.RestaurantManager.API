@@ -2,7 +2,7 @@ package com.fiap.tech.challenge.domain.jwt;
 
 import com.fiap.tech.challenge.domain.jwt.enumerated.JwtConstraintEnum;
 import com.fiap.tech.challenge.domain.user.User;
-import com.fiap.tech.challenge.global.audity.Audit;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;

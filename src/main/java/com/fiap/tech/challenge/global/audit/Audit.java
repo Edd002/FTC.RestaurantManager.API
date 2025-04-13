@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.audity;
+package com.fiap.tech.challenge.global.audit;
 
 import jakarta.persistence.*;
 import lombok.Getter;

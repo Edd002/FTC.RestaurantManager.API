@@ -2,16 +2,12 @@ package com.fiap.tech.challenge.global.exception;
 
 import java.io.Serial;
 
-public abstract class ApiException extends RuntimeException {
+public final class EntityListEmptyException extends ApiException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public ApiException() {
-        super();
-    }
-
-    public ApiException(String message) {
+    public EntityListEmptyException(String message) {
         super(message);
     }
 }

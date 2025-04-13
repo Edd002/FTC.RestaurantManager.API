@@ -1,7 +1,7 @@
 package com.fiap.tech.challenge.domain.loadtable;
 
 import com.fiap.tech.challenge.domain.loadtable.enumerated.LoadTableConstraintEnum;
-import com.fiap.tech.challenge.global.audity.Audit;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

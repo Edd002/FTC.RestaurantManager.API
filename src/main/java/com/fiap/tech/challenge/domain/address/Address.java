@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.address;
 import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
 import com.fiap.tech.challenge.domain.city.City;
 import com.fiap.tech.challenge.domain.user.User;
-import com.fiap.tech.challenge.global.audity.Audit;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;

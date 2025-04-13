@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.user;
 import com.fiap.tech.challenge.domain.address.Address;
 import com.fiap.tech.challenge.domain.jwt.Jwt;
 import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
-import com.fiap.tech.challenge.global.audity.Audit;
+import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
