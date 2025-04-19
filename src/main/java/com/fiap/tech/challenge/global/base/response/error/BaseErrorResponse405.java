@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.error;
+package com.fiap.tech.challenge.global.base.response.error;
 
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 import java.util.List;
 
-public final class BaseErrorResponse404 extends BaseErrorResponse {
+public final class BaseErrorResponse405 extends BaseErrorResponse {
 
-	public BaseErrorResponse404(List<String> messages) {
-		super(HttpStatus.NOT_FOUND.value(), messages);
+	public BaseErrorResponse405(List<String> messages) {
+		super(HttpStatus.METHOD_NOT_ALLOWED.value(), messages);
 	}
 
 	@Schema(description = "Se a requisição foi bem sucedida.", example = "false")
@@ -18,17 +18,17 @@ public final class BaseErrorResponse404 extends BaseErrorResponse {
 		return success;
 	}
 
-	@Schema(description = "Erro da resposta.", example = "Not Found")
+	@Schema(description = "Erro da resposta.", example = "Method Not Allowed")
 	public String getError() {
 		return error;
 	}
 
-	@Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O servidor não pode encontrar o recurso solicitado.\"]")
+	@Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O servidor não permite a ação específica com o método HTTP configurado.\"]")
 	public List<String> getMessages() {
 		return messages;
 	}
 
-	@Schema(description = "Código de status.", example = "404")
+	@Schema(description = "Código de status.", example = "405")
 	public int getStatus() {
 		return this.status;
 	}
@@ -38,7 +38,7 @@ public final class BaseErrorResponse404 extends BaseErrorResponse {
 		return this.path;
 	}
 
-	@Schema(description = "Causa da resposta.", example = "Not Found")
+	@Schema(description = "Causa da resposta.", example = "Method Not Allowed")
 	public String getReason() {
 		return this.reason;
 	}

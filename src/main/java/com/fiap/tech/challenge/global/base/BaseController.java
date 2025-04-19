@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.global.base;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.base.error.*;
+import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.exception.*;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import jakarta.persistence.EntityManager;

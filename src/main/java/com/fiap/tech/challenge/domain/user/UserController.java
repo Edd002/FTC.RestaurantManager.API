@@ -5,11 +5,11 @@ import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.global.base.BaseController;
-import com.fiap.tech.challenge.global.base.BasePageableResponse;
-import com.fiap.tech.challenge.global.base.error.*;
-import com.fiap.tech.challenge.global.base.success.BaseSuccessResponse200;
-import com.fiap.tech.challenge.global.base.success.BaseSuccessResponse201;
-import com.fiap.tech.challenge.global.base.success.nocontent.NoPayloadBaseSuccessResponse200;
+import com.fiap.tech.challenge.global.base.response.error.*;
+import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableResponse200;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,10 +63,9 @@ public class UserController extends BaseController {
     @Operation(method = "GET", summary = "Buscar user por filtro", description = "Buscar user por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
-    public ResponseEntity<BaseSuccessResponse200<BasePageableResponse<UserResponseDTO>>> findByFilter(@ParameterObject @Valid UserGetFilter filter) {
+    public ResponseEntity<BasePageableResponse200<UserResponseDTO>> findByFilter(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando users por filtro...");
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-        //return new BaseSuccessResponse200<>(userResponseDTO).getResponse();
+        //return new BasePageableResponse200<UserResponseDTO>(null, null).getResponse();
         return null;
     }
 

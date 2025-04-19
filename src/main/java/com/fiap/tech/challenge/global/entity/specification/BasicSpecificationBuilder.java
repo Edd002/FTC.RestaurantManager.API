@@ -13,9 +13,9 @@ import java.util.Optional;
 @Log
 public abstract class BasicSpecificationBuilder<TYPE, SPECIFICATION extends Specification<TYPE>, FILTER> {
 
-    protected List<SearchCriteria> withs;
-    protected List<SearchCriteria> secondaryWiths;
-    protected List<SearchCriteria> wheres;
+    protected final List<SearchCriteria> withs;
+    protected final List<SearchCriteria> secondaryWiths;
+    protected final List<SearchCriteria> wheres;
 
     public BasicSpecificationBuilder() {
         withs = new ArrayList<>();
@@ -55,16 +55,16 @@ public abstract class BasicSpecificationBuilder<TYPE, SPECIFICATION extends Spec
 
     protected abstract void initParams(FILTER filter);
 
-    protected abstract SPECIFICATION buildSpecification(String key, SearchOperationEnum operation, Object value);
+    protected abstract SPECIFICATION buildSpecification(SearchOperationEnum operation, Object value);
 
     protected abstract SPECIFICATION buildSpecification(String key, SearchOperationEnum operation, Object value, Object param);
 
     protected SPECIFICATION defaultSpecification() {
         final FetchDeletedEnum showDeleted = showDeleted();
         return switch (showDeleted != null ? showDeleted : FetchDeletedEnum.FETCH_NOT_DELETED) {
-            case FETCH_DELETED -> buildSpecification("deleted", SearchOperationEnum.EQUAL, Boolean.TRUE);
-            case FETCH_NOT_DELETED -> buildSpecification("deleted", SearchOperationEnum.EQUAL, Boolean.FALSE);
-            default -> buildSpecification("deleted", SearchOperationEnum.IS_NOT_NULL, null);
+            case FETCH_DELETED -> buildSpecification(SearchOperationEnum.EQUAL, Boolean.TRUE);
+            case FETCH_NOT_DELETED -> buildSpecification(SearchOperationEnum.EQUAL, Boolean.FALSE);
+            default -> buildSpecification(SearchOperationEnum.IS_NOT_NULL, null);
         };
     }
 
@@ -107,7 +107,7 @@ public abstract class BasicSpecificationBuilder<TYPE, SPECIFICATION extends Spec
         if (listWiths.isEmpty()) {
             return Optional.ofNullable(defaultSpecification);
         }
-        Specification<TYPE> filtersWiths = Specification.where(listWiths.get(0));
+        Specification<TYPE> filtersWiths = Specification.where(listWiths.getFirst());
         for (int i = 1; i < listWiths.size(); i++) {
             SPECIFICATION specification = listWiths.get(i);
             filtersWiths = softFilters() ? filtersWiths.or(specification) : filtersWiths.and(specification);

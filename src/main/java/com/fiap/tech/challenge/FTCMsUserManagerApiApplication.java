@@ -5,8 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 
 @Log
+@EnableCaching
 @ServletComponentScan
 @SpringBootApplication(exclude = RepositoryRestMvcAutoConfiguration.class)
 public class FTCMsUserManagerApiApplication {

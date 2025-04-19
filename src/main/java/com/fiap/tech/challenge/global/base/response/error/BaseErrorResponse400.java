@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.error;
+package com.fiap.tech.challenge.global.base.response.error;
 
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;

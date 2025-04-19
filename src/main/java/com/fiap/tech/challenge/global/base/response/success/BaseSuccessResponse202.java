@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.success;
+package com.fiap.tech.challenge.global.base.response.success;
 
 import com.fiap.tech.challenge.global.base.BaseSuccessResponse;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
@@ -8,14 +8,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
-public class BaseSuccessResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
+public class BaseSuccessResponse202<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
 
-	protected BaseSuccessResponse200() {
-		super(HttpStatus.OK.value());
+	protected BaseSuccessResponse202() {
+		super(HttpStatus.ACCEPTED.value());
 	}
 
-	public BaseSuccessResponse200(T item) {
-		super(HttpStatus.OK.value(), item);
+	public BaseSuccessResponse202(T item) {
+		super(HttpStatus.ACCEPTED.value(), item);
 	}
 
 	@Schema(description = "Se a requisição foi bem sucedida.", example = "true")
@@ -28,7 +28,7 @@ public class BaseSuccessResponse200<T extends BaseResponseDTO> extends BaseSucce
 		return this.item;
 	}
 
-	@Schema(description = "Código de status.", example = "200")
+	@Schema(description = "Código de status.", example = "202")
 	public int getStatus() {
 		return this.status;
 	}
@@ -38,7 +38,7 @@ public class BaseSuccessResponse200<T extends BaseResponseDTO> extends BaseSucce
 		return this.path;
 	}
 
-	@Schema(description = "Causa da resposta.", example = "OK")
+	@Schema(description = "Causa da resposta.", example = "Accepted")
 	public String getReason() {
 		return this.reason;
 	}
@@ -49,7 +49,7 @@ public class BaseSuccessResponse200<T extends BaseResponseDTO> extends BaseSucce
 	}
 
 	@Override
-	public ResponseEntity<BaseSuccessResponse200<T>> getResponse() {
+	public ResponseEntity<BaseSuccessResponse202<T>> getResponse() {
 		return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
 	}
 }

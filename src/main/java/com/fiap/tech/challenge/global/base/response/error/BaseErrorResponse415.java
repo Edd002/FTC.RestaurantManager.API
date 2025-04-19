@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.error;
+package com.fiap.tech.challenge.global.base.response.error;
 
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 import java.util.List;
 
-public final class BaseErrorResponse500 extends BaseErrorResponse {
+public final class BaseErrorResponse415 extends BaseErrorResponse {
 
-    public BaseErrorResponse500(List<String> messages) {
-        super(HttpStatus.INTERNAL_SERVER_ERROR.value(), messages);
+    public BaseErrorResponse415(List<String> messages) {
+        super(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), messages);
     }
 
     @Schema(description = "Se a requisição foi bem sucedida.", example = "false")
@@ -18,17 +18,17 @@ public final class BaseErrorResponse500 extends BaseErrorResponse {
         return success;
     }
 
-    @Schema(description = "Erro da resposta.", example = "Internal Server Error")
+    @Schema(description = "Erro da resposta.", example = "Unsupported Media Type")
     public String getError() {
         return error;
     }
 
-    @Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O servidor encontrou uma situação com a qual não sabe lidar.\"]")
+    @Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O formato da carga útil está em um formato não suportado.\"]")
     public List<String> getMessages() {
         return messages;
     }
 
-    @Schema(description = "Código de status.", example = "500")
+    @Schema(description = "Código de status.", example = "415")
     public int getStatus() {
         return this.status;
     }
@@ -38,7 +38,7 @@ public final class BaseErrorResponse500 extends BaseErrorResponse {
         return this.path;
     }
 
-    @Schema(description = "Causa da resposta.", example = "Internal Server Error")
+    @Schema(description = "Causa da resposta.", example = "Unsupported Media Type")
     public String getReason() {
         return this.reason;
     }

@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 public abstract class BaseErrorResponse extends BaseResponse {
 
-	protected String error;
+	protected final String error;
 
-	protected List<String> messages;
+	protected final List<String> messages;
 
 	public BaseErrorResponse(int status, List<String> messages) {
 		super(status);

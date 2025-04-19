@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.error;
+package com.fiap.tech.challenge.global.base.response.error;
 
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import java.util.Date;
 import java.util.List;
 
-public final class BaseErrorResponse403 extends BaseErrorResponse {
+public final class BaseErrorResponse422 extends BaseErrorResponse {
 
-	public BaseErrorResponse403(List<String> messages) {
-		super(HttpStatus.FORBIDDEN.value(), messages);
+	public BaseErrorResponse422(List<String> messages) {
+		super(HttpStatus.UNPROCESSABLE_ENTITY.value(), messages);
 	}
 
 	@Schema(description = "Se a requisição foi bem sucedida.", example = "false")
@@ -18,17 +18,17 @@ public final class BaseErrorResponse403 extends BaseErrorResponse {
 		return success;
 	}
 
-	@Schema(description = "Erro da resposta.", example = "Forbidden")
+	@Schema(description = "Erro da resposta.", example = "Unprocessable Entity")
 	public String getError() {
 		return error;
 	}
 
-	@Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O cliente não tem direitos de acesso ao conteúdo.\", \"O servidor está rejeitando dar a resposta.\"]")
+	@Schema(description = "Mensagens da requisição.", type = "List", example = "[\"O servidor não pode não processar as instruções presentes.\"]")
 	public List<String> getMessages() {
 		return messages;
 	}
 
-	@Schema(description = "Código de status.", example = "403")
+	@Schema(description = "Código de status.", example = "422")
 	public int getStatus() {
 		return this.status;
 	}
@@ -38,7 +38,7 @@ public final class BaseErrorResponse403 extends BaseErrorResponse {
 		return this.path;
 	}
 
-	@Schema(description = "Causa da resposta.", example = "Forbidden")
+	@Schema(description = "Causa da resposta.", example = "Unprocessable Entity")
 	public String getReason() {
 		return this.reason;
 	}
