@@ -49,8 +49,7 @@ public abstract class BaseController {
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList());
-        }
-        if (ex instanceof BindException) {
+        } else if (ex instanceof BindException) {
             errors.addAll(((BindException) ex).getBindingResult()
                     .getFieldErrors()
                     .stream()

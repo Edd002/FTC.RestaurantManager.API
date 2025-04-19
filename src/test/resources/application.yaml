@@ -65,8 +65,9 @@ spring:
 
 #SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui)
 server.swagger.base.url: http://localhost:8084/user-manager
-springdoc.swagger-ui.operationsSorter: method
-springdoc.swagger-ui.tagsSorter: alpha
-springdoc.swagger-ui.defaultModelsExpandDepth: -1
 springdoc:
+  swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    defaultModelsExpandDepth: -1
   writer-with-order-by-keys: true
