@@ -6,7 +6,7 @@ import com.fiap.tech.challenge.domain.user.dto.UserRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.global.base.BaseController;
 import com.fiap.tech.challenge.global.base.response.error.*;
-import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableResponse200;
+import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
@@ -48,7 +48,7 @@ public class UserController extends BaseController {
     public ResponseEntity<BaseSuccessResponse201<UserResponseDTO>> create(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         log.info("Criando usuário...");
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse201<UserResponseDTO>(userResponseDTO).getResponse();
+        return new BaseSuccessResponse201<UserResponseDTO>(userResponseDTO).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar usuário", description = "Atualizar usuário.")
@@ -57,15 +57,15 @@ public class UserController extends BaseController {
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando user...");
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).getResponse();
+        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar user por filtro", description = "Buscar user por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
-    public ResponseEntity<BasePageableResponse200<UserResponseDTO>> findByFilter(@ParameterObject @Valid UserGetFilter filter) {
+    public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> findByFilter(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando users por filtro...");
-        //return new BasePageableResponse200<UserResponseDTO>(null, null).getResponse();
+        //return new BasePageableSuccessResponse200<UserResponseDTO>(null, null).buildPageableResponse();
         return null;
     }
 
@@ -75,7 +75,7 @@ public class UserController extends BaseController {
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> findOneByHashId(@PathVariable("hashId") String hashId) {
         log.info("Buscando user por hash id...");
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).getResponse();
+        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir user por hash id", description = "Excluir user por hash id.")
@@ -83,6 +83,6 @@ public class UserController extends BaseController {
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> deleteOneByHashId(@PathVariable("hashId") String hashId) {
         log.info("Excluindo user por hash id...");
-        return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().getResponseWithoutPayload();
+        return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 }

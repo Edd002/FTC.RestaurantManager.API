@@ -22,7 +22,7 @@ public final class NoPayloadBaseSuccessResponse200<T extends BaseResponseDTO> ex
 	}
 
 	@Override
-	public ResponseEntity<NoPayloadBaseSuccessResponse200<T>> getResponseWithoutPayload() {
+	public ResponseEntity<NoPayloadBaseSuccessResponse200<T>> buildResponseWithoutPayload() {
 		return new ResponseEntity<>(HttpStatus.valueOf(this.status));
 	}
 }

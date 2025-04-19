@@ -1,7 +1,9 @@
 package com.fiap.tech.challenge.global.base.response.success.pageable;
 
-import com.fiap.tech.challenge.global.base.BaseSuccessResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
-public class BasePageableResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
+public class BasePageableSuccessResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse200<T> {
 
 	@Schema(description = "Número da página.", example = "1", defaultValue = "0")
 	private int page = 0;
@@ -29,16 +31,22 @@ public class BasePageableResponse200<T extends BaseResponseDTO> extends BaseSucc
 	@Schema(description = "Lista de todos os objetos de resposta.", type = "List")
 	private Collection<T> list = new ArrayList<>();
 
-	public BasePageableResponse200(Pageable pageable, Page<T> page) {
-		super(HttpStatus.OK.value());
+	@Schema
+	@Hidden
+	@JsonIgnore
+	public T getItem() {
+		return this.item;
+	}
+
+	public BasePageableSuccessResponse200(Pageable pageable, Page<T> page) {
+		super();
 		this.offset = pageable.getPageSize();
 		this.page = pageable.getPageNumber();
 		this.list = page.getContent();
 		this.totalElements = page.getTotalElements();
 	}
 
-	@Override
-	public ResponseEntity<BasePageableResponse200<T>> getResponse() {
+	public ResponseEntity<BasePageableSuccessResponse200<T>> buildPageableResponse() {
 		return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
 	}
 }

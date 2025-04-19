@@ -14,18 +14,18 @@ import java.util.Collection;
 
 @Getter
 @Setter
-public class BaseListResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
+public class BaseListSuccessResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
 
 	@Schema(description = "Lista de todos os objetos de resposta.", type = "List")
 	@JsonProperty("list")
 	private Collection<T> list = new ArrayList<>();
 
-	public BaseListResponse200(int status) {
+	public BaseListSuccessResponse200(int status) {
 		super(HttpStatus.OK.value());
 	}
 
 	@Override
-	public ResponseEntity<BaseListResponse200<T>> getResponse() {
+	public ResponseEntity<BaseListSuccessResponse200<T>> buildResponse() {
 		return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
 	}
 }

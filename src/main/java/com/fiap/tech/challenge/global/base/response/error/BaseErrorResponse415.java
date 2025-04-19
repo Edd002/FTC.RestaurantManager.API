@@ -33,7 +33,7 @@ public final class BaseErrorResponse415 extends BaseErrorResponse {
         return this.status;
     }
 
-    @Schema(description = "URI do endpoint.", example = "/cuc/api/v1/path")
+    @Schema(description = "URI do endpoint.", example = "/user-manager/api/v1/path")
     public String getPath() {
         return this.path;
     }
@@ -43,7 +43,7 @@ public final class BaseErrorResponse415 extends BaseErrorResponse {
         return this.reason;
     }
 
-    @Schema(description = "Data e hora da resposta.", example = "2023-09-26 16:42:12.147", type = "string", pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+    @Schema(description = "Data e hora da resposta.", example = "2025-04-26 16:42:12.147", type = "string", pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     public Date getTimestamp() {
         return this.timestamp;
     }

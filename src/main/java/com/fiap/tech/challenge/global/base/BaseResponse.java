@@ -29,11 +29,11 @@ public abstract class BaseResponse {
         this.timestamp = new Date();
     }
 
-    public ResponseEntity<?> getResponse() {
+    public ResponseEntity<?> buildResponse() {
         return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
     }
 
-    public ResponseEntity<?> getResponseWithoutPayload() {
+    public ResponseEntity<?> buildResponseWithoutPayload() {
         return new ResponseEntity<>(HttpStatus.valueOf(this.status));
     }
 }
