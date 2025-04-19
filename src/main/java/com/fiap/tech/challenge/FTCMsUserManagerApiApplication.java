@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @Log
 @EnableCaching
 @ServletComponentScan
-@SpringBootApplication(exclude = RepositoryRestMvcAutoConfiguration.class)
+@SpringBootApplication(exclude = { RepositoryRestMvcAutoConfiguration.class })
 public class FTCMsUserManagerApiApplication {
 
 	public static void main(String[] args) {
