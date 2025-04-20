@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springdoc.core.annotations.ParameterObject;
@@ -43,8 +44,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Usuários - Endpoints de Usuários")
 public class UserController extends BaseController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, EntityManager entityManager) {
+        super(entityManager);
+        this.userService = userService;
+    }
 
     @Operation(method = "POST", summary = "Criar usuário", description = "Criar usuário.")
     @ApiResponse(responseCode = "201", description = "Created")

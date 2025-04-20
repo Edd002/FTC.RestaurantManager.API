@@ -37,8 +37,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public abstract class BaseController {
 
+    private final EntityManager entityManager;
+
     @Autowired
-    private EntityManager entityManager;
+    public BaseController(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, BindException.class, InvalidPropertyException.class})
     public ResponseEntity<?> handleMethodArgumentNotValid(Exception ex) {

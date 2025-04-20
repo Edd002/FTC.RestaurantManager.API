@@ -22,11 +22,14 @@ import java.util.Optional;
 @Service
 public class UserService extends BaseService<IUserRepository, User> {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final PageableBuilder pageableBuilder;
 
     @Autowired
-    private PageableBuilder pageableBuilder;
+    public UserService(ModelMapper modelMapper, PageableBuilder pageableBuilder) {
+        this.modelMapper = modelMapper;
+        this.pageableBuilder = pageableBuilder;
+    }
 
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {

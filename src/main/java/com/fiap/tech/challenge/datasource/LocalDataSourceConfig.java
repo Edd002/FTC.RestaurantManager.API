@@ -27,8 +27,12 @@ import static java.util.Collections.singletonMap;
 @EnableTransactionManagement
 public class LocalDataSourceConfig {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public LocalDataSourceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Primary
     @Bean(name = "localEntityManagerFactory")
