@@ -22,7 +22,7 @@ public final class SearchCriteria {
         this.value = value;
     }
 
-    public SearchCriteria(String key, SearchOperationEnum operation, Object value, Object param) {
+    public SearchCriteria(final String key, final SearchOperationEnum operation, final Object value, final Object param) {
         this.key = key;
         this.operation = operation;
         this.value = value;

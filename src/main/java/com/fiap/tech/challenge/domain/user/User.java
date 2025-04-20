@@ -6,6 +6,7 @@ import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -27,6 +28,7 @@ public final class User extends Audit implements Serializable {
     @GeneratedValue(generator = "SQ_USER")
     @SequenceGenerator(name = "SQ_USER", sequenceName = "SQ_USER", schema = "public", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
+    @Getter @Setter
     private Long id;
 
     @Column(name = "name", nullable = false)

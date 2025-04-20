@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-public final class BasicSpecification<TYPE> {
+public abstract class BasicSpecification<TYPE> {
 
     private final transient SearchCriteria criteria;
 
@@ -19,7 +19,7 @@ public final class BasicSpecification<TYPE> {
         this.criteria = searchCriteria;
     }
 
-    private Predicate genericPredicate(Root<TYPE> root, CriteriaBuilder builder) {
+    protected Predicate genericPredicate(Root<TYPE> root, CriteriaBuilder builder) {
         boolean isChild = ValidationUtil.isNotBlank(criteria.getKey()) && criteria.getKey().contains(".");
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.EQUAL) && criteria.getValue() instanceof Date) {

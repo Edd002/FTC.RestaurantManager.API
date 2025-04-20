@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -42,13 +43,15 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Usuários - Endpoints de Usuários")
 public class UserController extends BaseController {
 
+    @Autowired
+    private UserService userService;
+
     @Operation(method = "POST", summary = "Criar usuário", description = "Criar usuário.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserResponseDTO>> create(@RequestBody @Valid UserPostRequestDTO userPostRequestDTO) {
         log.info("Criando usuário...");
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse201<UserResponseDTO>(userResponseDTO).buildResponse();
+        return new BaseSuccessResponse201<>(userService.create(userPostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar usuário", description = "Atualizar usuário.")
@@ -56,33 +59,31 @@ public class UserController extends BaseController {
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando usuário...");
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).buildResponse();
+        return new BaseSuccessResponse200<>(userService.update(hashId, userPutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar user por filtro", description = "Buscar user por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
-    public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> findByFilter(@ParameterObject @Valid UserGetFilter filter) {
+    public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando usuários por filtro...");
-        //return new BasePageableSuccessResponse200<UserResponseDTO>(null, null).buildPageableResponse();
-        return null;
+        return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar user por hash id", description = "Buscar user por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> findOneByHashId(@PathVariable("hashId") String hashId) {
+    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando usuário por hash id...");
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-        return new BaseSuccessResponse200<UserResponseDTO>(userResponseDTO).buildResponse();
+        return new BaseSuccessResponse200<>(userService.find(hashId)).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir user por hash id", description = "Excluir user por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> deleteOneByHashId(@PathVariable("hashId") String hashId) {
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> deleteByHashId(@PathVariable("hashId") String hashId) {
         log.info("Excluindo usuário por hash id...");
+        userService.delete(hashId);
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 }

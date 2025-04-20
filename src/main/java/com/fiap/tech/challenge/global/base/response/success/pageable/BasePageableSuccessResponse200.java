@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -38,10 +37,10 @@ public class BasePageableSuccessResponse200<T extends BaseResponseDTO> extends B
 		return this.item;
 	}
 
-	public BasePageableSuccessResponse200(Pageable pageable, Page<T> page) {
+	public BasePageableSuccessResponse200(Page<T> page) {
 		super();
-		this.offset = pageable.getPageSize();
-		this.page = pageable.getPageNumber();
+		this.offset = page.getPageable().getPageSize();
+		this.page = page.getPageable().getPageNumber();
 		this.list = page.getContent();
 		this.totalElements = page.getTotalElements();
 	}

@@ -4,7 +4,6 @@ import com.fiap.tech.challenge.domain.loadtable.enumerated.LoadTableConstraintEn
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -30,7 +29,6 @@ public final class LoadTable extends Audit implements Serializable {
     @Column(name = "entity_name", nullable = false)
     private String entityName;
 
-    @Getter @Setter
     @Column(name = "entity_load", nullable = false)
     private Boolean entityLoad = Boolean.FALSE;
 

@@ -2,7 +2,6 @@ package com.fiap.tech.challenge.global.audit;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -30,7 +29,6 @@ public abstract class Audit implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private final Date createdIn = new Date();
 
-    @Getter @Setter
     @LastModifiedDate
     @Column(name = "updated_in")
     @Temporal(TemporalType.TIMESTAMP)
