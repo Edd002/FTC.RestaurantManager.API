@@ -28,8 +28,8 @@ public final class State extends Audit implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "nome", nullable = false)
-    private String nome;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "uf", nullable = false, length = 2)
     private String uf;

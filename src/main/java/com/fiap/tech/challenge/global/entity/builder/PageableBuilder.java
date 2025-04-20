@@ -15,19 +15,17 @@ import java.util.List;
 public class PageableBuilder {
 
 	public Pageable build(BasePaginationFilter filter) {
-		Pageable pageable;
 		int pageNumber = filter.getPageNumber() - 1;
 		int pageSize = filter.getAll() ? Integer.MAX_VALUE : filter.getPageSize();
 		List<String> sortBy = filter.getSortBy();
 		List<Sort.Order> sortFields = ValidationUtil.isNotEmpty(sortBy) ? orderProperties(sortBy) : new ArrayList<>();
 		SortOrderEnum sortDirection = ValidationUtil.isNull(filter.getSortDirection()) ? SortOrderEnum.EMPTY : SortOrderEnum.valueOfIgnoreCase(filter.getSortDirection());
-        pageable = switch (sortDirection) {
+        return switch (sortDirection) {
             case ASC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields));
             case DESC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields).descending());
             case EMPTY -> PageRequest.of(pageNumber, pageSize);
             case BOTH -> PageRequest.of(pageNumber, pageSize, Sort.by(ValidationUtil.isNotNull(filter.getSortFields()) ? filter.getSortFields() : new ArrayList<>()));
         };
-		return pageable;
 	}
 
 	private List<Sort.Order> orderProperties(List<String> properties) {

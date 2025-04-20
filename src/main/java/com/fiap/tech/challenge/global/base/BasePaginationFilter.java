@@ -16,12 +16,12 @@ public abstract class BasePaginationFilter {
 
 	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Número da página.", example = "1", defaultValue = "1")
 	@Positive(message = "O número da página deve ser positivo.")
-	protected Integer pageNumber = 1;
+	protected int pageNumber = 1;
 
 	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Tamanho da página.", example = "50", defaultValue = "50")
 	@Positive(message = "O tamanho da página deve ser positivo.")
 	@Max(value = 500, message = "O tamanho da página deve ser menor ou igual a 500.")
-	protected Integer pageSize = 50;
+	protected int pageSize = 50;
 
 	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Campos para ordenação.", type = "List", example = "[\"id\"]")
 	protected List<String> sortBy;

@@ -10,7 +10,7 @@ import lombok.experimental.FieldNameConstants;
 public enum CityConstraintEnum {
 
     @FieldNameConstants.Include T_CITY_HASH_ID_UK("O hash id informado para a cidade já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_CITY_FK_STATE_AND_NOME_UK("O nome informado para a cidade já encontra-se cadastrado para o estado.");
+    @FieldNameConstants.Include T_CITY_FK_STATE_AND_NAME_UK("O nome informado para a cidade já encontra-se cadastrado para o estado.");
 
     private final String errorMessage;
 }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public final class UserService extends BaseService<IUserRepository, User> {
+public class UserService extends BaseService<IUserRepository, User> {
 
     @Autowired
     private ModelMapper modelMapper;
