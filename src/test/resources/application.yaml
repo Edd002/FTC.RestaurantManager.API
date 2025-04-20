@@ -10,7 +10,6 @@ server:
     encoding:
       charset: UTF-8
       enabled: true
-  header-ip-candidates: X-Forwarded-For,Proxy-Client-IP,WL-Proxy-Client-IP,HTTP_X_FORWARDED_FOR,HTTP_X_FORWARDED,HTTP_X_CLUSTER_CLIENT_IP,HTTP_CLIENT_IP,HTTP_FORWARDED_FOR,HTTP_FORWARDED,HTTP_VIA,REMOTE_ADDR
 
 # SPRING CONFIG
 spring:
@@ -27,7 +26,7 @@ spring:
     console.enabled: true
     console.path: /h2-console
     console.settings.trace: false
-    spring.h2.console.settings.web-allow-others: false
+    console.settings.web-allow-others: false
   jackson:
     default-property-inclusion: non_null
     deserialization:
@@ -46,12 +45,12 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
-    mandatory-file-encoding: UTF-8
     profiles:
       active: test
   devtools:
     livereload:
       enabled: false
+  mandatory-file-encoding: UTF-8
   flyway:
     table: T_FLYWAY_SCHEMA_HISTORY
     enabled: true

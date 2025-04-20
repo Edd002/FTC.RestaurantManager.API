@@ -29,7 +29,7 @@ public final class State extends Audit implements Serializable {
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Getter private String name;
 
     @Column(name = "uf", nullable = false, length = 2)
     private String uf;
@@ -37,9 +37,8 @@ public final class State extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "state", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<City> cityList;
 
-    @Getter
     @Transient
-    private transient State stateSavedState;
+    @Getter private transient State stateSavedState;
 
     public void saveState(State stateSavedState) {
         this.stateSavedState = stateSavedState;

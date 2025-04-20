@@ -28,8 +28,7 @@ public final class User extends Audit implements Serializable {
     @GeneratedValue(generator = "SQ_USER")
     @SequenceGenerator(name = "SQ_USER", sequenceName = "SQ_USER", schema = "public", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
-    @Getter @Setter
-    private Long id;
+    @Getter @Setter private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -46,13 +45,12 @@ public final class User extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Jwt> jwtList;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinColumn(name = "fk_address", nullable = false)
-    private Address address;
+    @Setter private Address address;
 
-    @Getter
     @Transient
-    private transient User userSavedState;
+    @Getter private transient User userSavedState;
 
     public void saveState(User userSavedState) {
         this.userSavedState = userSavedState;

@@ -4,6 +4,7 @@ import com.fiap.tech.challenge.domain.loadtable.enumerated.LoadTableConstraintEn
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -20,6 +21,10 @@ public final class LoadTable extends Audit implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public LoadTable(String entityName) {
+        this.entityName = entityName;
+    }
+
     @Id
     @GeneratedValue(generator = "SQ_LOAD_TABLE")
     @SequenceGenerator(name = "SQ_LOAD_TABLE", sequenceName = "SQ_LOAD_TABLE", schema = "public", allocationSize = 1)
@@ -30,11 +35,10 @@ public final class LoadTable extends Audit implements Serializable {
     private String entityName;
 
     @Column(name = "entity_load", nullable = false)
-    private Boolean entityLoad = Boolean.FALSE;
+    @Getter @Setter private Boolean entityLoad = Boolean.FALSE;
 
-    @Getter
     @Transient
-    private transient LoadTable loadTableSavedState;
+    @Getter private transient LoadTable loadTableSavedState;
 
     public void saveState(LoadTable loadTableSavedState) {
         this.loadTableSavedState = loadTableSavedState;

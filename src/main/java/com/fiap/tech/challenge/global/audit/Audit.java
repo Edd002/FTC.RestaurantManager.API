@@ -52,9 +52,8 @@ public abstract class Audit implements Serializable {
     @Column(name = "deleted", nullable = false)
     private final Boolean deleted = Boolean.FALSE;
 
-    @Getter
     @Transient
-    private transient Audit auditSavedState;
+    @Getter private transient Audit auditSavedState;
 
     public void saveState(Audit auditSavedState) {
         this.auditSavedState = auditSavedState;

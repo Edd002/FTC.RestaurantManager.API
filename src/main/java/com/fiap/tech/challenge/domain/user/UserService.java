@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
+import com.fiap.tech.challenge.domain.address.Address;
 import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
@@ -34,6 +35,7 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
         User newUser = modelMapper.map(userPostRequestDTO, User.class);
+        newUser.setAddress(new Address());
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 

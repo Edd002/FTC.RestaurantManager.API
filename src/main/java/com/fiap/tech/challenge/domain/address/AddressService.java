@@ -1,7 +1,8 @@
 package com.fiap.tech.challenge.domain.address;
 
+import com.fiap.tech.challenge.global.base.BaseService;
 import org.springframework.stereotype.Service;
 
 @Service
-public final class AddressService {
+public class AddressService extends BaseService<IAddressRepository, Address> {
 }

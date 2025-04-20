@@ -43,19 +43,18 @@ public final class Address extends Audit implements Serializable {
     @Column(name = "cep", nullable = false)
     private String cep;
 
-    @Column(name = "postalCode", nullable = false)
+    @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_city", nullable = false)
     private City city;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToOne(mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private User user;
 
-    @Getter
     @Transient
-    private transient Address addressSavedState;
+    @Getter private transient Address addressSavedState;
 
     public void saveState(Address addressSavedState) {
         this.addressSavedState = addressSavedState;

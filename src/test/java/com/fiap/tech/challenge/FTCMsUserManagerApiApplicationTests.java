@@ -9,5 +9,4 @@ class FTCMsUserManagerApiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
