@@ -18,6 +18,18 @@ public class MapperConfig {
                 .setDeepCopyEnabled(true)
                 .setAmbiguityIgnored(true)
                 .setSkipNullEnabled(true);
+        configModelMapper(modelMapper);
         return modelMapper;
+    }
+
+    private void configModelMapper(ModelMapper modelMapper) {
+        configUserRequestDTOToUserMapper(modelMapper);
+        configUserToUserResponseDTOMapper(modelMapper);
+    }
+
+    private void configUserToUserResponseDTOMapper(ModelMapper modelMapper) {
+    }
+
+    private void configUserRequestDTOToUserMapper(ModelMapper modelMapper) {
     }
 }

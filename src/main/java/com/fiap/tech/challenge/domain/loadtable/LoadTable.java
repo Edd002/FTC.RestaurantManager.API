@@ -21,6 +21,9 @@ public final class LoadTable extends Audit implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public LoadTable() {
+    }
+
     public LoadTable(String entityName) {
         this.entityName = entityName;
     }
