@@ -13,8 +13,12 @@ import java.util.Objects;
 @Configuration
 public class DataSourceConfig {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public DataSourceConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Primary
     @Bean(name = "local-db")

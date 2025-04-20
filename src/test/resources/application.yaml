@@ -7,7 +7,9 @@ server:
   port: 8084
   servlet:
     context-path: /user-manager
-  header-ip-candidates: X-Forwarded-For,Proxy-Client-IP,WL-Proxy-Client-IP,HTTP_X_FORWARDED_FOR,HTTP_X_FORWARDED,HTTP_X_CLUSTER_CLIENT_IP,HTTP_CLIENT_IP,HTTP_FORWARDED_FOR,HTTP_FORWARDED,HTTP_VIA,REMOTE_ADDR
+    encoding:
+      charset: UTF-8
+      enabled: true
 
 # SPRING CONFIG
 spring:
@@ -24,11 +26,7 @@ spring:
     console.enabled: true
     console.path: /h2-console
     console.settings.trace: false
-    spring.h2.console.settings.web-allow-others: false
-  http:
-    encoding:
-      charset: UTF-8
-      enabled: true
+    console.settings.web-allow-others: false
   jackson:
     default-property-inclusion: non_null
     deserialization:
@@ -47,12 +45,12 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
-    mandatory-file-encoding: UTF-8
     profiles:
       active: test
   devtools:
     livereload:
       enabled: false
+  mandatory-file-encoding: UTF-8
   flyway:
     table: T_FLYWAY_SCHEMA_HISTORY
     enabled: true
@@ -62,6 +60,10 @@ spring:
     user:
       name: user
       password: user
+logging:
+  level:
+    org:
+      flywaydb: debug
 
 #SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui)
 server.swagger.base.url: http://localhost:8084/user-manager

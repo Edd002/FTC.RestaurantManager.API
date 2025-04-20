@@ -7,6 +7,9 @@ import com.fiap.tech.challenge.global.util.CollectionUtil;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +66,7 @@ public abstract class BaseService<R extends IBaseRepository<E>, E> {
     }
 
     public E findByHashId(String hashId) {
-        return findByHashId(hashId, "Nenhum registro com hash id " + hashId + " foi encontrado.");
+        return findByHashId(hashId, String.format("Nenhum registro com hash id %s foi encontrado.", hashId));
     }
 
     public E findByHashId(String hashId, String entityNotFoundErrorMessage) {
@@ -87,6 +90,10 @@ public abstract class BaseService<R extends IBaseRepository<E>, E> {
         return repository.findAll();
     }
 
+    public Page<E> findAll(Specification<E> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
+    }
+
     public Optional<E> findWithoutExceptionByHashId(String hashId) {
         return ValidationUtil.isNotNull(hashId) ? repository.findByHashId(hashId) : Optional.empty();
     }
@@ -95,15 +102,15 @@ public abstract class BaseService<R extends IBaseRepository<E>, E> {
         delete(entity, "Nenhum registro foi encontrado para ser excluído.");
     }
     
-    public void delete(E entity, String entityNullErrorMessag) {
+    public void delete(E entity, String entityNullErrorMessage) {
         if (ValidationUtil.isNull(entity)) {
-            throw new EntityNullException(entityNullErrorMessag);
+            throw new EntityNullException(entityNullErrorMessage);
         }
         repository.delete(entity);
     }
 
     public Long deleteByHashId(String hashId) {
-        return deleteByHashId(hashId, "Nenhum registro com hash id " + hashId + " foi encontrado para ser excluído.");
+        return deleteByHashId(hashId, String.format("Nenhum registro com hash id %s foi encontrado para ser excluído.", hashId));
     }
 
     public Long deleteByHashId(String hashId, String entityNotFoundErrorMessage) {
@@ -115,7 +122,7 @@ public abstract class BaseService<R extends IBaseRepository<E>, E> {
     }
 
     public List<E> removeByHashId(String hashId) {
-        return removeByHashId(hashId, "Nenhum registro com hash id " + hashId + " foi encontrado para ser excluído.");
+        return removeByHashId(hashId, String.format("Nenhum registro com hash id %s foi encontrado para ser excluído.", hashId));
     }
 
     public List<E> removeByHashId(String hashId, String entityNotFoundErrorMessage) {

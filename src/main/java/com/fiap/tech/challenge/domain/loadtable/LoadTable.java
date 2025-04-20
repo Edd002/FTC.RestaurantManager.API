@@ -21,6 +21,13 @@ public final class LoadTable extends Audit implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public LoadTable() {
+    }
+
+    public LoadTable(String entityName) {
+        this.entityName = entityName;
+    }
+
     @Id
     @GeneratedValue(generator = "SQ_LOAD_TABLE")
     @SequenceGenerator(name = "SQ_LOAD_TABLE", sequenceName = "SQ_LOAD_TABLE", schema = "public", allocationSize = 1)
@@ -30,13 +37,11 @@ public final class LoadTable extends Audit implements Serializable {
     @Column(name = "entity_name", nullable = false)
     private String entityName;
 
-    @Getter @Setter
     @Column(name = "entity_load", nullable = false)
-    private Boolean entityLoad = Boolean.FALSE;
+    @Getter @Setter private Boolean entityLoad = Boolean.FALSE;
 
-    @Getter
     @Transient
-    private transient LoadTable loadTableSavedState;
+    @Getter private transient LoadTable loadTableSavedState;
 
     public void saveState(LoadTable loadTableSavedState) {
         this.loadTableSavedState = loadTableSavedState;

@@ -34,9 +34,8 @@ public final class Jwt extends Audit implements Serializable {
     @JoinColumn(name = "fk_user", nullable = false)
     private User user;
 
-    @Getter
     @Transient
-    private transient Jwt jwtSavedState;
+    @Getter private transient Jwt jwtSavedState;
 
     public void saveState(Jwt jwtSavedState) {
         this.jwtSavedState = jwtSavedState;

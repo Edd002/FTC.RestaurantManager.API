@@ -30,7 +30,7 @@ public final class City extends Audit implements Serializable {
     private Long id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Getter private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_state", nullable = false)
@@ -39,9 +39,8 @@ public final class City extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "city", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Address> addressList;
 
-    @Getter
     @Transient
-    private transient City citySavedState;
+    @Getter private transient City citySavedState;
 
     public void saveState(City citySavedState) {
         this.citySavedState = citySavedState;

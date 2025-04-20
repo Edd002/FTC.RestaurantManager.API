@@ -1,4 +1,19 @@
 package com.fiap.tech.challenge.domain.user.dto;
 
-public final class UserGetFilter {
+import com.fiap.tech.challenge.global.base.BasePaginationFilter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+
+@Getter
+public final class UserGetFilter extends BasePaginationFilter {
+
+    @Schema(description = "Nome do usuário.", example = "Roberto Afonso")
+    private String name;
+
+    @Schema(description = "E-mail do usuário.", example = "robertoafonso@email.com")
+    private String email;
+
+    public UserGetFilter(int pageNumber, int pageSize) {
+        super(pageNumber, pageSize);
+    }
 }

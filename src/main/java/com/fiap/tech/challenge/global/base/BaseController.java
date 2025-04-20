@@ -37,8 +37,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public abstract class BaseController {
 
+    private final EntityManager entityManager;
+
     @Autowired
-    private EntityManager entityManager;
+    public BaseController(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, BindException.class, InvalidPropertyException.class})
     public ResponseEntity<?> handleMethodArgumentNotValid(Exception ex) {
@@ -79,7 +83,7 @@ public abstract class BaseController {
     public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex) {
         try {
             Class<?> entityClass = entityManager.getMetamodel().getEntities().stream().
-                    filter(entityType -> Objects.requireNonNull(ex.getConstraintName()).contains(entityType.getJavaType().getAnnotation(Table.class).name()))
+                    filter(entityType -> Objects.requireNonNull(ex.getConstraintName()).contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
                     .findFirst()
                     .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
                     .getJavaType();
