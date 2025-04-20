@@ -1,16 +1,16 @@
-package com.fiap.tech.challenge.global.base.success.nocontent;
+package com.fiap.tech.challenge.global.base.response.success.nocontent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
-import com.fiap.tech.challenge.global.base.success.BaseSuccessResponse202;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public final class NoPayloadBaseSuccessResponse202<T extends BaseResponseDTO> extends BaseSuccessResponse202<T> {
+public final class NoPayloadBaseSuccessResponse201<T extends BaseResponseDTO> extends BaseSuccessResponse201<T> {
 
-	public NoPayloadBaseSuccessResponse202() {
+	public NoPayloadBaseSuccessResponse201() {
 		super();
 	}
 
@@ -22,7 +22,7 @@ public final class NoPayloadBaseSuccessResponse202<T extends BaseResponseDTO> ex
 	}
 
 	@Override
-	public ResponseEntity<NoPayloadBaseSuccessResponse202<T>> getResponseWithoutPayload() {
+	public ResponseEntity<NoPayloadBaseSuccessResponse201<T>> buildResponseWithoutPayload() {
 		return new ResponseEntity<>(HttpStatus.valueOf(this.status));
 	}
 }

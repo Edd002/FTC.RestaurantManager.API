@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.global.base;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.base.error.*;
+import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.exception.*;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import jakarta.persistence.EntityManager;
@@ -49,8 +49,7 @@ public abstract class BaseController {
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList());
-        }
-        if (ex instanceof BindException) {
+        } else if (ex instanceof BindException) {
             errors.addAll(((BindException) ex).getBindingResult()
                     .getFieldErrors()
                     .stream()
@@ -72,7 +71,7 @@ public abstract class BaseController {
         if (ex instanceof InvalidPropertyException) {
             errors.add(String.format("Campo '%s' inválido.", ((InvalidPropertyException) ex).getPropertyName()));
         }
-        return new BaseErrorResponse400(errors).getResponse();
+        return new BaseErrorResponse400(errors).buildResponse();
     }
 
     @SuppressWarnings("unchecked")
@@ -86,39 +85,39 @@ public abstract class BaseController {
                     .getJavaType();
             if (Audit.class.isAssignableFrom(entityClass)) {
                 Audit entity = ((Class<Audit>) entityClass).getDeclaredConstructor().newInstance();
-                return new BaseErrorResponse422(List.of(entity.getConstraintErrorMessage(ex.getConstraintName()))).getResponse();
+                return new BaseErrorResponse422(List.of(entity.getConstraintErrorMessage(ex.getConstraintName()))).buildResponse();
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ConstraintNotAssociatedWithEntityException ignored) {
         }
-        return new BaseErrorResponse422(List.of("Violação do restritor " + ex.getConstraintName() + " do banco de dados.")).getResponse();
+        return new BaseErrorResponse422(List.of("Violação do restritor " + ex.getConstraintName() + " do banco de dados.")).buildResponse();
     }
 
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<?> handleException(Exception ex) {
         if (ex instanceof BadRequestException || ex instanceof InvalidUserTokenException || ex instanceof HttpMessageNotReadableException || ex instanceof MissingRequestHeaderException) {
-            return new BaseErrorResponse400(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse400(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof EntityNotFoundException) {
-            return new BaseErrorResponse404(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse404(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof UnauthorizedException) {
-            return new BaseErrorResponse401(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse401(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof PreConditionFailedException) {
-            return new BaseErrorResponse412(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse412(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof HttpMediaTypeNotSupportedException) {
-            return new BaseErrorResponse415(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse415(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof AccessDeniedException || ex instanceof ForbiddenException) {
-            return new BaseErrorResponse403(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse403(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof HttpRequestMethodNotSupportedException) {
-            return new BaseErrorResponse405(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse405(List.of(ex.getMessage())).buildResponse();
         }
         if (ex instanceof MultipartException || ex instanceof UnprocessableEntityException) {
-            return new BaseErrorResponse422(List.of(ex.getMessage())).getResponse();
+            return new BaseErrorResponse422(List.of(ex.getMessage())).buildResponse();
         }
-        return new BaseErrorResponse500(List.of(ex.getMessage())).getResponse();
+        return new BaseErrorResponse500(List.of(ex.getMessage())).buildResponse();
     }
 }

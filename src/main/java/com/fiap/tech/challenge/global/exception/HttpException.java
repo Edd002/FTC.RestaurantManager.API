@@ -11,7 +11,7 @@ public final class HttpException extends ApiException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private HttpStatus httpStatus;
+    private final HttpStatus httpStatus;
 
     public HttpException(String message, HttpStatus httpStatus) {
         super(message);

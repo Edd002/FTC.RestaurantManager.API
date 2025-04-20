@@ -13,14 +13,14 @@ public abstract class BaseResponse {
 
     protected boolean success;
 
-    protected int status;
+    protected final int status;
 
-    protected String path;
+    protected final String path;
 
-    protected String reason;
+    protected final String reason;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "GMT-3")
-    protected Date timestamp;
+    protected final Date timestamp;
 
     public BaseResponse(int status) {
         this.status = status;
@@ -29,11 +29,11 @@ public abstract class BaseResponse {
         this.timestamp = new Date();
     }
 
-    public ResponseEntity<?> getResponse() {
+    public ResponseEntity<?> buildResponse() {
         return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
     }
 
-    public ResponseEntity<?> getResponseWithoutPayload() {
+    public ResponseEntity<?> buildResponseWithoutPayload() {
         return new ResponseEntity<>(HttpStatus.valueOf(this.status));
     }
 }

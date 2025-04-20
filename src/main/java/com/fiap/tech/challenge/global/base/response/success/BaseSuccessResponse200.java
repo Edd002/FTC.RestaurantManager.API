@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.base.success;
+package com.fiap.tech.challenge.global.base.response.success;
 
 import com.fiap.tech.challenge.global.base.BaseSuccessResponse;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
@@ -8,14 +8,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
-public class BaseSuccessResponse204<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
+public class BaseSuccessResponse200<T extends BaseResponseDTO> extends BaseSuccessResponse<T> {
 
-	protected BaseSuccessResponse204() {
-		super(HttpStatus.NO_CONTENT.value());
+	protected BaseSuccessResponse200() {
+		super(HttpStatus.OK.value());
 	}
 
-	public BaseSuccessResponse204(T item) {
-		super(HttpStatus.NO_CONTENT.value(), item);
+	public BaseSuccessResponse200(T item) {
+		super(HttpStatus.OK.value(), item);
 	}
 
 	@Schema(description = "Se a requisição foi bem sucedida.", example = "true")
@@ -28,28 +28,28 @@ public class BaseSuccessResponse204<T extends BaseResponseDTO> extends BaseSucce
 		return this.item;
 	}
 
-	@Schema(description = "Código de status.", example = "204")
+	@Schema(description = "Código de status.", example = "200")
 	public int getStatus() {
 		return this.status;
 	}
 
-	@Schema(description = "URI do endpoint.", example = "/cuc/api/v1/path")
+	@Schema(description = "URI do endpoint.", example = "/user-manager/api/v1/path")
 	public String getPath() {
 		return this.path;
 	}
 
-	@Schema(description = "Causa da resposta.", example = "No Content")
+	@Schema(description = "Causa da resposta.", example = "OK")
 	public String getReason() {
 		return this.reason;
 	}
 
-	@Schema(description = "Data e hora da resposta.", example = "2023-09-26 16:42:12.147", type = "string", pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+	@Schema(description = "Data e hora da resposta.", example = "2025-04-26 16:42:12.147", type = "string", pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 	public Date getTimestamp() {
 		return this.timestamp;
 	}
 
 	@Override
-	public ResponseEntity<BaseSuccessResponse204<T>> getResponse() {
+	public ResponseEntity<BaseSuccessResponse200<T>> buildResponse() {
 		return new ResponseEntity<>(this, HttpStatus.valueOf(this.status));
 	}
 }

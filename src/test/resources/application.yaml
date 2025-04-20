@@ -1,3 +1,14 @@
+# SERVER CONFIG
+server:
+  compression:
+    enabled: true
+  http2:
+    enabled: true
+  port: 8084
+  servlet:
+    context-path: /user-manager
+  header-ip-candidates: X-Forwarded-For,Proxy-Client-IP,WL-Proxy-Client-IP,HTTP_X_FORWARDED_FOR,HTTP_X_FORWARDED,HTTP_X_CLUSTER_CLIENT_IP,HTTP_CLIENT_IP,HTTP_FORWARDED_FOR,HTTP_FORWARDED,HTTP_VIA,REMOTE_ADDR
+
 # SPRING CONFIG
 spring:
   application:
@@ -47,3 +58,16 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+  security:
+    user:
+      name: user
+      password: user
+
+#SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui)
+server.swagger.base.url: http://localhost:8084/user-manager
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    defaultModelsExpandDepth: -1
+  writer-with-order-by-keys: true
