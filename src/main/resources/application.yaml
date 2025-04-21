@@ -61,7 +61,7 @@ logging:
     org:
       flywaydb: debug
 
-#SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui)
+#SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui/index.html)
 server.swagger.base.url: http://localhost:8084/user-manager
 springdoc:
   swagger-ui:
