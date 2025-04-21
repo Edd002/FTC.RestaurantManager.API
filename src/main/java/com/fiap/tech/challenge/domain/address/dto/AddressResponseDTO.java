@@ -1,6 +1,37 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Setter;
 
-public final class AddressResponseDTO extends BaseResponseDTO {
+public class AddressResponseDTO extends BaseResponseDTO {
+
+    @Schema(description = "Descrição do endereço.", example = "Rua dos Cadomblés")
+    @JsonProperty("description")
+    private String description;
+
+    @Schema(description = "Número do endereço.", example = "34")
+    @JsonProperty("number")
+    private String number;
+
+    @Schema(description = "Complemento do endereço.", example = "Case A")
+    @JsonProperty("complement")
+    private String complement;
+
+    @Schema(description = "Bairro do endereço.", example = "Santo Antônio")
+    @JsonProperty("neighborhood")
+    private String neighborhood;
+
+    @Schema(description = "CEP do endereço.", example = "35090-650")
+    @JsonProperty("cep")
+    private String cep;
+
+    @Schema(description = "Caixa postal do endereço.", example = "1234-5678")
+    @JsonProperty("postalCode")
+    private String postalCode;
+
+    @Schema(description = "Hash id da cidade do endereço.", example = "7edacee2252544519c29240daa51ee97")
+    @JsonProperty("hashIdCity")
+    @Setter private String hashIdCity;
 }

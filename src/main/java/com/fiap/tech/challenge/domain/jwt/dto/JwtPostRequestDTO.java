@@ -1,4 +1,4 @@
 package com.fiap.tech.challenge.domain.jwt.dto;
 
-public final class JwtPostRequestDTO extends JwtRequestDTO {
+public class JwtPostRequestDTO extends JwtRequestDTO {
 }

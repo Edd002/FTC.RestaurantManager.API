@@ -6,6 +6,7 @@ import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
 public abstract class AddressRequestDTO extends BaseRequestDTO {
 
@@ -48,5 +49,5 @@ public abstract class AddressRequestDTO extends BaseRequestDTO {
     @JsonDeserialize(using = StrictStringDeserializer.class)
     @NotBlank(message = "A hash id da cidade do endereço não pode ser nulo ou em branco.")
     @JsonProperty("hashIdCity")
-    private String hashIdCity;
+    @Getter private String hashIdCity;
 }
