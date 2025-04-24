@@ -3,21 +3,52 @@ services:
     container_name: nginx
     image: nginx
 
-  #DATABASE
+  # FTC UserManager API
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ftc_user_manager_api
+    ports:
+      - "8084:8084"
+    depends_on:
+      - ftc_user_manager_database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_user_manager_database:5432/ftc_user_manager_database
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    networks:
+      - ftc_user_manager_database_net
+
+  # DATABASE
   ftc_user_manager_database:
     container_name: ftc_user_manager_database
     image: postgres:17.4
-    networks:
-      - ftc_user_manager_database_net
     ports:
-      - '5453:5432'
+      - '5432:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ftc_user_manager_database
+    networks:
+      - ftc_user_manager_database_net
     volumes:
       - ftc_user_manager_database:/var/lib/postgresql
       - ftc_user_manager_database_data:/var/lib/postgresql/data
+
+  # PGADMIN
+  ftc_user_manager_pgadmin:
+    container_name: ftc_user_manager_pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "80:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    networks:
+      - ftc_user_manager_database_net
+    depends_on:
+      - ftc_user_manager_database
 
 networks:
   ftc_user_manager_database_net:
@@ -25,3 +56,4 @@ networks:
 volumes:
   ftc_user_manager_database:
   ftc_user_manager_database_data:
+
