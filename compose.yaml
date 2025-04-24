@@ -15,8 +15,8 @@ services:
       - ftc_user_manager_database
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_user_manager_database:5432/ftc_user_manager_database
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     networks:
       - ftc_user_manager_database_net
 
@@ -27,8 +27,8 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ftc_user_manager_database
     networks:
       - ftc_user_manager_database_net
@@ -43,8 +43,8 @@ services:
     ports:
       - "80:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     networks:
       - ftc_user_manager_database_net
     depends_on:
