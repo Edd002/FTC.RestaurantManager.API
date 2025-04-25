@@ -1,0 +1,67 @@
+# SERVER CONFIG
+server:
+  compression:
+    enabled: true
+  http2:
+    enabled: true
+  port: 8085
+  servlet:
+    context-path: /user-manager
+    encoding:
+      charset: UTF-8
+      enabled: true
+
+# SPRING CONFIG
+spring:
+  application:
+    name: FTC.UserManager.API
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5453/ftc_user_manager_database
+    username: postgres
+    password: postgres
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+    serialization:
+      write-dates-as-timestamps: false
+      FAIL_ON_EMPTY_BEANS: false
+    mapper:
+      ALLOW_COERCION_OF_SCALARS: false
+    time-zone: America/Sao_Paulo
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+  devtools:
+    livereload:
+      enabled: false
+  mandatory-file-encoding: UTF-8
+  flyway:
+    schemas: public
+    table: t_flyway_schema_history
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  security:
+    user:
+      name: user
+      password: user
+logging:
+  level:
+    org:
+      flywaydb: debug
+
+#SWAGGER (URL: http://localhost:8085/user-manager/swagger-ui/index.html)
+server.swagger.base.url: http://localhost:8085/user-manager
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
+    defaultModelsExpandDepth: -1
+  writer-with-order-by-keys: true
