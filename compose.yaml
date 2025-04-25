@@ -10,10 +10,11 @@ services:
       dockerfile: Dockerfile
     container_name: ftc_user_manager_api
     ports:
-      - "8084:8084"
+      - "8085:8085"
     depends_on:
       - ftc_user_manager_database
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_user_manager_database:5432/ftc_user_manager_database
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
@@ -25,7 +26,7 @@ services:
     container_name: ftc_user_manager_database
     image: postgres:17.4
     ports:
-      - '5432:5432'
+      - '5453:5432'
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
