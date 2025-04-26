@@ -1,8 +1,11 @@
 package com.fiap.tech.challenge.global.exception;
 
-import org.hibernate.service.spi.ServiceException;
+import com.fiap.tech.challenge.global.base.BaseErrorResponse;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
 
-public final class ForbiddenException extends ServiceException {
+import java.util.List;
+
+public final class ForbiddenException extends ApiException {
 
     public ForbiddenException() {
         super("Acesso negado.");
@@ -10,5 +13,10 @@ public final class ForbiddenException extends ServiceException {
 
     public ForbiddenException(String message) {
         super("Acesso negado. " + message);
+    }
+
+    @Override
+    public BaseErrorResponse getBaseErrorResponse() {
+        return new BaseErrorResponse403(List.of(super.getMessage()));
     }
 }

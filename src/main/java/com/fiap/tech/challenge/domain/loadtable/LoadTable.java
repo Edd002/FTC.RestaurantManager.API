@@ -38,8 +38,8 @@ public class LoadTable extends Audit implements Serializable {
     @Column(name = "entity_name", nullable = false)
     private String entityName;
 
-    @Column(name = "entity_load", nullable = false)
-    @Getter @Setter private Boolean entityLoad = Boolean.FALSE;
+    @Column(name = "entity_load_enabled", nullable = false)
+    @Getter @Setter private Boolean entityLoadEnabled = Boolean.FALSE;
 
     @Transient
     @Getter private transient LoadTable loadTableSavedState;

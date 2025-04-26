@@ -10,7 +10,7 @@ import lombok.experimental.FieldNameConstants;
 public enum JwtConstraintEnum {
 
     @FieldNameConstants.Include T_JWT_HASH_ID_UK("O hash id informado para o JWT já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_JWT_ACCESS_TOKEN_UK("O código informado para o JWT já encontra-se cadastrado.");
+    @FieldNameConstants.Include T_JWT_BEARER_TOKEN_UK("O código informado para o JWT já encontra-se cadastrado.");
 
     private final String errorMessage;
 }

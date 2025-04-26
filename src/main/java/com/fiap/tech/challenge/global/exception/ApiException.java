@@ -1,5 +1,7 @@
 package com.fiap.tech.challenge.global.exception;
 
+import com.fiap.tech.challenge.global.base.BaseErrorResponse;
+
 import java.io.Serial;
 
 public abstract class ApiException extends RuntimeException {
@@ -14,4 +16,6 @@ public abstract class ApiException extends RuntimeException {
     public ApiException(String message) {
         super(message);
     }
+
+    public abstract BaseErrorResponse getBaseErrorResponse();
 }

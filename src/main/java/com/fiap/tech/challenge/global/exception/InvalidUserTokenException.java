@@ -1,8 +1,11 @@
 package com.fiap.tech.challenge.global.exception;
 
-import org.hibernate.service.spi.ServiceException;
+import com.fiap.tech.challenge.global.base.BaseErrorResponse;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 
-public final class InvalidUserTokenException extends ServiceException {
+import java.util.List;
+
+public final class InvalidUserTokenException extends ApiException {
 
     public InvalidUserTokenException() {
         super("Token de usuário inválido.");
@@ -10,5 +13,10 @@ public final class InvalidUserTokenException extends ServiceException {
 
     public InvalidUserTokenException(String message) {
         super("Token de usuário inválido. " + message);
+    }
+
+    @Override
+    public BaseErrorResponse getBaseErrorResponse() {
+        return new BaseErrorResponse401(List.of(super.getMessage()));
     }
 }

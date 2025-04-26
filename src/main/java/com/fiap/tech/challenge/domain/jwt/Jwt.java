@@ -32,8 +32,8 @@ public class Jwt extends Audit implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     @Getter @Setter private Long id;
 
-    @Column(name = "access_token", nullable = false)
-    private String accessToken;
+    @Column(name = "bearer_token", nullable = false)
+    private String bearerToken;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "fk_user", nullable = false)
