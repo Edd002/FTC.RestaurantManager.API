@@ -21,4 +21,9 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
     @Transactional
     public void invalidate(String bearerToken) {
     }
+
+    @Override
+    public Jwt findByHashId(String hashId) {
+        return super.findByHashId(hashId, String.format("O JWT com hash id %s não foi encontrado.", hashId));
+    }
 }

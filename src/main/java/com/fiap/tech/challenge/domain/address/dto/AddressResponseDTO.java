@@ -1,10 +1,12 @@
 package com.fiap.tech.challenge.domain.address.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fiap.tech.challenge.domain.city.dto.CityResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Setter;
 
+@Setter
 public class AddressResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Descrição do endereço.", example = "Rua dos Cadomblés")
@@ -31,7 +33,7 @@ public class AddressResponseDTO extends BaseResponseDTO {
     @JsonProperty("postalCode")
     private String postalCode;
 
-    @Schema(description = "Hash id da cidade do endereço.", example = "7edacee2252544519c29240daa51ee97")
-    @JsonProperty("hashIdCity")
-    @Setter private String hashIdCity;
+    @Schema(description = "cidade do endereço.")
+    @JsonProperty("city")
+    private CityResponseDTO city;
 }

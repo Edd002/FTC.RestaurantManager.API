@@ -4,10 +4,8 @@ import com.fiap.tech.challenge.domain.city.City;
 import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.bean.BeanComponent;
-import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -16,8 +14,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
-@NoArgsConstructor
 @Table(name = "t_state")
 @SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
@@ -31,10 +30,10 @@ public class State extends Audit implements Serializable {
     @GeneratedValue(generator = "SQ_STATE")
     @SequenceGenerator(name = "SQ_STATE", sequenceName = "SQ_STATE", schema = "public", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
-    @Getter @Setter private Long id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
-    @Getter private String name;
+    private String name;
 
     @Column(name = "uf", nullable = false, length = 2)
     private String uf;
@@ -43,7 +42,7 @@ public class State extends Audit implements Serializable {
     private List<City> cityList;
 
     @Transient
-    @Getter private transient State stateSavedState;
+    private transient State stateSavedState;
 
     public void saveState(State stateSavedState) {
         this.stateSavedState = stateSavedState;
@@ -56,9 +55,7 @@ public class State extends Audit implements Serializable {
 
     @Override
     public void setHashId(String hashId) {
-        BeanComponent.getBean(IStateRepository.class).findByHashId(hashId).ifPresentOrElse(state -> this.setId(state.getId()), () -> {
-            throw new EntityNotFoundException(String.format("O estado com o hash id %s não foi encontrada.", hashId));
-        });
+        this.setId(BeanComponent.getBean(StateService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);
     }
 }

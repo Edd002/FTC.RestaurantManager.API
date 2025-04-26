@@ -43,23 +43,23 @@ public abstract class BaseController {
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, BindException.class, InvalidPropertyException.class})
-    public ResponseEntity<?> handleMethodArgumentNotValid(Exception ex) {
+    public ResponseEntity<?> handleMethodArgumentNotValid(Exception exception) {
         List<String> errors = new ArrayList<>();
-        if (ex instanceof MethodArgumentNotValidException) {
-            errors.addAll(((MethodArgumentNotValidException) ex).getBindingResult()
+        if (exception instanceof MethodArgumentNotValidException) {
+            errors.addAll(((MethodArgumentNotValidException) exception).getBindingResult()
                     .getFieldErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList());
-        } else if (ex instanceof BindException) {
-            errors.addAll(((BindException) ex).getBindingResult()
+        } else if (exception instanceof BindException) {
+            errors.addAll(((BindException) exception).getBindingResult()
                     .getFieldErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList());
         }
-        if (ex instanceof HttpMessageNotReadableException) {
-            if (ex.getCause() instanceof InvalidFormatException cause && ValidationUtil.isNotEmpty(cause.getPath())) {
+        if (exception instanceof HttpMessageNotReadableException) {
+            if (exception.getCause() instanceof InvalidFormatException cause && ValidationUtil.isNotEmpty(cause.getPath())) {
                 errors.add(String.format("Campo %s com valor %s inválido.",
                         cause.getPath().stream()
                                 .map(JsonMappingException.Reference::getFieldName)
@@ -67,40 +67,41 @@ public abstract class BaseController {
                                 .collect(Collectors.joining(".")),
                         cause.getValue()));
             } else {
-                errors.add(StringUtils.substringBefore(ex.getMessage(), "; nested exception is"));
+                errors.add(StringUtils.substringBefore(exception.getMessage(), "; nested exception is"));
             }
         }
-        if (ex instanceof InvalidPropertyException) {
-            errors.add(String.format("Campo %s inválido.", ((InvalidPropertyException) ex).getPropertyName()));
+        if (exception instanceof InvalidPropertyException) {
+            errors.add(String.format("Campo %s inválido.", ((InvalidPropertyException) exception).getPropertyName()));
         }
         return new BaseErrorResponse400(errors).buildResponse();
     }
 
     @SuppressWarnings("unchecked")
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex) {
+    public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
         try {
             Class<?> entityClass = entityManager.getMetamodel().getEntities().stream().
-                    filter(entityType -> Objects.requireNonNull(ex.getConstraintName()).contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
+                    filter(entityType -> Objects.requireNonNull(constraintViolationException.getConstraintName()).contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
                     .findFirst()
                     .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
                     .getJavaType();
             if (Audit.class.isAssignableFrom(entityClass)) {
                 Audit entity = ((Class<Audit>) entityClass).getDeclaredConstructor().newInstance();
-                return new BaseErrorResponse422(List.of(entity.getConstraintErrorMessage(ex.getConstraintName()))).buildResponse();
+                return new BaseErrorResponse422(List.of(entity.getConstraintErrorMessage(constraintViolationException.getConstraintName()))).buildResponse();
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ConstraintNotAssociatedWithEntityException ignored) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ConstraintNotAssociatedWithEntityException ignored) {
         }
-        return new BaseErrorResponse422(List.of(String.format("Violação do restritor %s do banco de dados.", ex.getConstraintName()))).buildResponse();
+        return new BaseErrorResponse422(List.of(String.format("Violação do restritor %s do banco de dados.", constraintViolationException.getConstraintName()))).buildResponse();
     }
 
     @ExceptionHandler(value = {ApiException.class})
-    public ResponseEntity<?> handleException(ApiException apiException) {
+    public ResponseEntity<?> handleExceptionApiException(ApiException apiException) {
         return apiException.getBaseErrorResponse().buildResponse();
     }
 
     @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<?> handleException(Exception ex) {
-        return new BaseErrorResponse500(List.of(ex.getMessage())).buildResponse();
+    public ResponseEntity<?> handleException(Exception exception) {
+        return new BaseErrorResponse500(List.of(exception.getMessage())).buildResponse();
     }
 }

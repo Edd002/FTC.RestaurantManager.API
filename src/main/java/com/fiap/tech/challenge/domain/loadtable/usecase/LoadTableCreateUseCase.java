@@ -11,9 +11,15 @@ public final class LoadTableCreateUseCase {
         this.loadTable = loadTable;
     }
 
-    public LoadTable create(String entityName) {
-        LoadTable loadTable = ValidationUtil.isNotNull(this.loadTable) ? this.loadTable : new LoadTable(entityName);
+    public LoadTable buildLoadTable(String entityName) {
+        LoadTable loadTable = ValidationUtil.isNotNull(this.loadTable) ? this.loadTable : newLoadTableWithEntityName(entityName);
         loadTable.setEntityLoadEnabled(false);
         return loadTable;
+    }
+
+    private LoadTable newLoadTableWithEntityName(String entityName) {
+        LoadTable newLoadTable = new LoadTable();
+        newLoadTable.setEntityName(entityName);
+        return newLoadTable;
     }
 }

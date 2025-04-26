@@ -1,8 +1,6 @@
 package com.fiap.tech.challenge.global.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.tech.challenge.global.exception.HashingException;
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -55,11 +53,5 @@ public class HashUtil {
 
     public static String generateCode() {
         return generate().substring(0, 6);
-    }
-
-    @SneakyThrows
-    public static String generateHashKey(Object obj) {
-        String json = new ObjectMapper().writeValueAsString(obj);
-        return hash(json);
     }
 }

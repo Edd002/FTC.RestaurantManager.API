@@ -1,7 +1,7 @@
 package com.fiap.tech.challenge.domain.loadtable;
 
-import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableEntityLoadEnabledCase;
 import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableCreateUseCase;
+import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableEntityLoadEnabledCase;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.exception.EntityNullException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
@@ -27,6 +27,11 @@ public class LoadTableService extends BaseService<ILoadTableRepository, LoadTabl
             throw new EntityNullException("Nenhuma entidade foi informada para ser cadastrada ou atualizada.");
         }
         LoadTable loadTable = loadTableRepository.findByEntityName(entityName);
-        save(new LoadTableCreateUseCase(loadTable).create(entityName));
+        save(new LoadTableCreateUseCase(loadTable).buildLoadTable(entityName));
+    }
+
+    @Override
+    public LoadTable findByHashId(String hashId) {
+        return super.findByHashId(hashId, String.format("A carregamento de tabela com o hash id %s não foi encontrado.", hashId));
     }
 }

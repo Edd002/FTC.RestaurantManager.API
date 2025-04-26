@@ -15,6 +15,8 @@ import java.util.Date;
 
 import static com.fiap.tech.challenge.global.util.HashUtil.generateHash;
 
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners({ AuditingEntityListener.class, AuditEntityListener.class })
 public abstract class Audit implements Serializable {
@@ -23,7 +25,7 @@ public abstract class Audit implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "hash_id", nullable = false, updatable = false)
-    @Getter @Setter private String hashId = generateHash();
+    private String hashId = generateHash();
 
     @CreatedDate
     @Column(name = "created_in", nullable = false, updatable = false)
@@ -37,7 +39,7 @@ public abstract class Audit implements Serializable {
 
     @Column(name = "deleted_in")
     @Temporal(TemporalType.TIMESTAMP)
-    @Setter private Date deletedIn;
+    private Date deletedIn;
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
@@ -48,13 +50,13 @@ public abstract class Audit implements Serializable {
     private String updatedBy;
 
     @Column(name = "deleted_by")
-    @Setter private String deletedBy;
+    private String deletedBy;
 
     @Column(name = "deleted", nullable = false)
-    @Setter private Boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 
     @Transient
-    @Getter private transient Audit auditSavedState;
+    private transient Audit auditSavedState;
 
     public void saveState(Audit auditSavedState) {
         this.auditSavedState = auditSavedState;

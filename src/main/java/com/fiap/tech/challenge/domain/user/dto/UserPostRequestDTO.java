@@ -7,10 +7,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+@Getter
 public class UserPostRequestDTO extends UserRequestDTO {
 
     @Schema(description = "Endereço do usuário.")
     @NotNull(message = "O endereço do usuário deve ser informado.")
     @JsonProperty("address")
-    @Valid @Getter private AddressPostRequestDTO address;
+    @Valid private AddressPostRequestDTO address;
 }
