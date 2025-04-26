@@ -1,11 +1,9 @@
 package com.fiap.tech.challenge.domain.user;
 
-import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
-import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
+import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
 import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
+import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;
@@ -36,14 +34,19 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
-        User newUser = new UserCreateUseCase(userPostRequestDTO).buildUser();
+        User newUser = new UserCreateUseCase(userPostRequestDTO).getBuiltedUser();
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
     public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(hashId, userPutRequestDTO).buildUser();
+        User updatedUser = new UserUpdateUseCase(hashId, userPutRequestDTO).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
+    }
+
+    @Transactional
+    public void updatePassword(String hashId, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), userUpdatePasswordPatchRequestDTO).getBuiltedUser());
     }
 
     @Transactional

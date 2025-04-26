@@ -24,7 +24,7 @@ public class UserUpdateUseCase {
         this.user.getAddress().setCityByHashId(userPutRequestDTO.getAddress().getHashIdCity());
     }
 
-    public User buildUser() {
+    public User getBuiltedUser() {
         return this.user;
     }
 }

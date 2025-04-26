@@ -31,7 +31,7 @@ public abstract class UserRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Senha do usuário.", example = "robertoafonso2025")
     @JsonDeserialize(using = StrictStringDeserializer.class)
-    @NotBlank(message = "A senha do usuário não pode ser nulo ou em branco.")
+    @NotBlank(message = "A senha do usuário não pode ser nula ou em branco.")
     @JsonProperty("password")
     private String password;
 }

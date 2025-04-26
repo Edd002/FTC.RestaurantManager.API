@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Log
 @RestControllerAdvice
-public abstract class BaseController {
+public class BaseController {
 
     private final EntityManager entityManager;
 

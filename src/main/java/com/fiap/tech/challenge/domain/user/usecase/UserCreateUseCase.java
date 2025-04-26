@@ -25,7 +25,7 @@ public class UserCreateUseCase {
         this.user.getAddress().setCityByHashId(userPostRequestDTO.getAddress().getHashIdCity());
     }
 
-    public User buildUser() {
+    public User getBuiltedUser() {
         return this.user;
     }
 }

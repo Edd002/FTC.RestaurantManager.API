@@ -1,9 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
-import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
-import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
+import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -64,6 +61,15 @@ public class UserController {
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando usuário...");
         return new BaseSuccessResponse200<>(userService.update(hashId, userPutRequestDTO)).buildResponse();
+    }
+
+    @Operation(method = "PATCH", summary = "Atualizar senha do usuário", description = "Atualizar senha do usuário.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PatchMapping(value = "/{hashId}")
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@PathVariable("hashId") String hashId, @RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        log.info("Atualizando senha do usuário...");
+        userService.updatePassword(hashId, userUpdatePasswordPatchRequestDTO);
+        return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 
     @Operation(method = "GET", summary = "Buscar usuário por filtro", description = "Buscar usuário por filtro.")
