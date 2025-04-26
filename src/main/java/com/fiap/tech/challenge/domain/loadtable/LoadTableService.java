@@ -1,12 +1,12 @@
 package com.fiap.tech.challenge.domain.loadtable;
 
+import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableCreateUseCase;
+import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableEntityLoadEnabledCase;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.exception.EntityNullException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class LoadTableService extends BaseService<ILoadTableRepository, LoadTable> {
@@ -18,17 +18,20 @@ public class LoadTableService extends BaseService<ILoadTableRepository, LoadTabl
         this.loadTableRepository = loadTableRepository;
     }
 
-    public boolean load(String entityName) {
-        Optional<LoadTable> loadTable = loadTableRepository.findByEntityName(entityName);
-        return loadTable.isEmpty() || loadTable.get().getEntityLoad();
+    public boolean entityLoadEnabled(String entityName) {
+        return new LoadTableEntityLoadEnabledCase(loadTableRepository.findByEntityName(entityName)).entityLoadEnabled();
     }
 
-    public void save(String entityName) {
+    public void create(String entityName) {
         if (ValidationUtil.isBlank(entityName)) {
             throw new EntityNullException("Nenhuma entidade foi informada para ser cadastrada ou atualizada.");
         }
-        LoadTable loadTable = loadTableRepository.findByEntityName(entityName).orElse(new LoadTable(entityName));
-        loadTable.setEntityLoad(false);
-        save(loadTable);
+        LoadTable loadTable = loadTableRepository.findByEntityName(entityName);
+        save(new LoadTableCreateUseCase(loadTable).buildLoadTable(entityName));
+    }
+
+    @Override
+    public LoadTable findByHashId(String hashId) {
+        return super.findByHashId(hashId, String.format("A carregamento de tabela com o hash id %s não foi encontrado.", hashId));
     }
 }

@@ -2,13 +2,12 @@ package com.fiap.tech.challenge.domain.address;
 
 import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
 import com.fiap.tech.challenge.domain.city.City;
+import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.user.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.bean.BeanComponent;
-import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -16,8 +15,9 @@ import org.hibernate.annotations.SQLRestriction;
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@Setter
 @Entity
-@NoArgsConstructor
 @Table(name = "t_address")
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
@@ -31,7 +31,7 @@ public class Address extends Audit implements Serializable {
     @GeneratedValue(generator = "SQ_ADDRESS")
     @SequenceGenerator(name = "SQ_ADDRESS", sequenceName = "SQ_ADDRESS", schema = "public", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
-    @Getter @Setter private Long id;
+    private Long id;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -53,13 +53,13 @@ public class Address extends Audit implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_city", nullable = false)
-    @Getter private City city;
+    private City city;
 
-    @OneToOne(mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private User user;
 
     @Transient
-    @Getter private transient Address addressSavedState;
+    private transient Address addressSavedState;
 
     public void saveState(Address addressSavedState) {
         this.addressSavedState = addressSavedState;
@@ -72,9 +72,11 @@ public class Address extends Audit implements Serializable {
 
     @Override
     public void setHashId(String hashId) {
-        BeanComponent.getBean(IAddressRepository.class).findByHashId(hashId).ifPresentOrElse(address -> this.setId(address.getId()), () -> {
-            throw new EntityNotFoundException(String.format("O endereço com o hash id %s não foi encontrado.", hashId));
-        });
+        this.setId(BeanComponent.getBean(AddressService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);
+    }
+
+    public void setCityByHashId(String cityHashId) {
+        this.setCity(BeanComponent.getBean(CityService.class).findByHashId(cityHashId));
     }
 }

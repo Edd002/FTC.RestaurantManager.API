@@ -1,10 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
-import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
-import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
-import com.fiap.tech.challenge.global.base.BaseController;
+import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -42,13 +38,12 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BaseErrorResponse500.class)))
 })
 @Tag(name = "Usuários - Endpoints de Usuários")
-public class UserController extends BaseController {
+public class UserController {
 
     private final UserService userService;
 
     @Autowired
     public UserController(UserService userService, EntityManager entityManager) {
-        super(entityManager);
         this.userService = userService;
     }
 
@@ -68,7 +63,16 @@ public class UserController extends BaseController {
         return new BaseSuccessResponse200<>(userService.update(hashId, userPutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar user por filtro", description = "Buscar user por filtro.")
+    @Operation(method = "PATCH", summary = "Atualizar senha do usuário", description = "Atualizar senha do usuário.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PatchMapping(value = "/{hashId}")
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@PathVariable("hashId") String hashId, @RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        log.info("Atualizando senha do usuário...");
+        userService.updatePassword(hashId, userUpdatePasswordPatchRequestDTO);
+        return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
+    }
+
+    @Operation(method = "GET", summary = "Buscar usuário por filtro", description = "Buscar usuário por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
     public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {
@@ -76,7 +80,7 @@ public class UserController extends BaseController {
         return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar user por hash id", description = "Buscar user por hash id.")
+    @Operation(method = "GET", summary = "Buscar usuário por hash id", description = "Buscar usuário por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find(@PathVariable("hashId") String hashId) {
@@ -84,7 +88,7 @@ public class UserController extends BaseController {
         return new BaseSuccessResponse200<>(userService.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir user por hash id", description = "Excluir user por hash id.")
+    @Operation(method = "DELETE", summary = "Excluir usuário por hash id", description = "Excluir usuário por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> deleteByHashId(@PathVariable("hashId") String hashId) {

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
+@Getter
 public abstract class AddressRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Descrição do endereço.", example = "Rua dos Cadomblés")
@@ -49,5 +50,5 @@ public abstract class AddressRequestDTO extends BaseRequestDTO {
     @JsonDeserialize(using = StrictStringDeserializer.class)
     @NotBlank(message = "A hash id da cidade do endereço não pode ser nulo ou em branco.")
     @JsonProperty("hashIdCity")
-    @Getter private String hashIdCity;
+    private String hashIdCity;
 }

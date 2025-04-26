@@ -56,6 +56,8 @@ logging:
   level:
     org:
       flywaydb: debug
+      springframework.web: DEBUG
+      org.hibernate: ERROR
 
 #SWAGGER (URL: http://localhost:8085/user-manager/swagger-ui/index.html)
 server.swagger.base.url: http://localhost:8085/user-manager

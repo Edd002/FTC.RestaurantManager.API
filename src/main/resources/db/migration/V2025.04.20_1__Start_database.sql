@@ -44,7 +44,7 @@ create table t_jwt
     hash_id      varchar(255) not null,
     updated_in   timestamp(6),
     updated_by   varchar(255),
-    access_token varchar(255) not null,
+    bearer_token varchar(255) not null,
     fk_user      bigint       not null,
     primary key (id)
 );
@@ -59,7 +59,7 @@ create table t_load_table
     hash_id     varchar(255) not null,
     updated_in  timestamp(6),
     updated_by  varchar(255),
-    entity_load boolean      not null,
+    entity_load_enabled boolean      not null,
     entity_name varchar(255) not null,
     primary key (id)
 );
@@ -117,7 +117,7 @@ CREATE UNIQUE INDEX T_ADDRESS_HASH_ID_UK ON public.t_address (hash_id);
 CREATE UNIQUE INDEX T_CITY_HASH_ID_UK ON public.t_city (hash_id);
 CREATE UNIQUE INDEX T_CITY_FK_STATE_AND_NAME_UK ON public.t_city (fk_state, name, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_JWT_HASH_ID_UK ON public.t_jwt (hash_id);
-CREATE UNIQUE INDEX T_JWT_ACCESS_TOKEN_UK ON public.t_jwt (access_token, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_JWT_BEARER_TOKEN_UK ON public.t_jwt (bearer_token, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_LOAD_TABLE_HASH_ID_UK ON public.t_load_table (hash_id);
 CREATE UNIQUE INDEX T_LOAD_TABLE_ENTITY_NAME_UK ON public.t_load_table (entity_name, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_STATE_HASH_ID_UK ON public.t_state (hash_id);

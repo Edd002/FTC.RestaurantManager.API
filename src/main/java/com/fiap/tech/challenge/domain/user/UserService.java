@@ -1,10 +1,10 @@
 package com.fiap.tech.challenge.domain.user;
 
-import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
-import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
-import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
+import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
+import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
+import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
+import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -22,26 +22,31 @@ import java.util.Optional;
 @Service
 public class UserService extends BaseService<IUserRepository, User> {
 
-    private final ModelMapper modelMapper;
     private final PageableBuilder pageableBuilder;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    public UserService(ModelMapper modelMapper, PageableBuilder pageableBuilder) {
-        this.modelMapper = modelMapper;
+    public UserService(PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.pageableBuilder = pageableBuilder;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
-        User newUser = modelMapper.map(userPostRequestDTO, User.class);
+        User newUser = new UserCreateUseCase(userPostRequestDTO).getBuiltedUser();
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
     public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = modelMapper.map(userPutRequestDTO, User.class);
-        updatedUser.setHashId(hashId);
+        User updatedUser = new UserUpdateUseCase(hashId, userPutRequestDTO).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
+    }
+
+    @Transactional
+    public void updatePassword(String hashId, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), userUpdatePasswordPatchRequestDTO).getBuiltedUser());
     }
 
     @Transactional
@@ -56,11 +61,16 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public UserResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado.", hashId)), UserResponseDTO.class);
+        return modelMapper.map(this.findByHashId(hashId), UserResponseDTO.class);
     }
 
     @Transactional
     public void delete(String hashId) {
         deleteByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado para ser excluído.", hashId));
+    }
+
+    @Override
+    public User findByHashId(String hashId) {
+        return super.findByHashId(hashId, String.format("O usuário com o hash id %s não foi encontrado.", hashId));
     }
 }

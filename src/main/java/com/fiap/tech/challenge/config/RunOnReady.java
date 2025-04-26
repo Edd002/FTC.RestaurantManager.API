@@ -42,13 +42,13 @@ public class RunOnReady {
         }.getType());
         List<City> cityList = JsonUtil.objectListFromJson("city", PATH_RESOURCE_CITY, new TypeToken<ArrayList<City>>() {
         }.getType());
-        if ((loadTableService.load(State.class.getSimpleName()))) {
+        if ((loadTableService.entityLoadEnabled(State.class.getSimpleName()))) {
             stateList.forEach(this::createState);
-            loadTableService.save(State.class.getSimpleName());
+            loadTableService.create(State.class.getSimpleName());
         }
-        if ((loadTableService.load(City.class.getSimpleName()))) {
+        if ((loadTableService.entityLoadEnabled(City.class.getSimpleName()))) {
             cityList.forEach(this::createCity);
-            loadTableService.save(City.class.getSimpleName());
+            loadTableService.create(City.class.getSimpleName());
         }
     }
 
