@@ -8,6 +8,10 @@ import lombok.Setter;
 @Setter
 public class StateResponseDTO extends BaseResponseDTO {
 
+    @Schema(description = "Hash id do estado.", example = "d7966ee2323f4b9886d4ac0941942a21")
+    @JsonProperty("hashId")
+    private String hashId;
+
     @Schema(description = "Nome do estado.", example = "Acre")
     @JsonProperty("name")
     private String name;

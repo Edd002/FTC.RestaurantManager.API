@@ -8,6 +8,10 @@ import lombok.Setter;
 @Setter
 public class JwtResponseDTO extends BaseResponseDTO {
 
+    @Schema(description = "Hash id do JWT.", example = "f9e7e2a467ea4a7b84dd6555ae6a3528")
+    @JsonProperty("hashId")
+    private String hashId;
+
     @Schema(description = "Nome do token de usuário.", example = "Token Gerado no User Manager")
     @JsonProperty("tokenAplicacaoNome")
     private String userTokenName;

@@ -34,6 +34,11 @@ public abstract class BasicSpecification<TYPE> {
             return builder.equal(root.join(params[0]).get(params[1]), criteria.getValue());
         }
 
+        if (isChild && criteria.getOperation().equals(SearchOperationEnum.EQUAL_IGNORE_CASE)) {
+            String[] params = criteria.getKey().split("\\.");
+            return builder.like(builder.lower(root.join(params[0]).get(params[1])), StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase());
+        }
+
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.LIKE)) {
             String[] params = criteria.getKey().split("\\.");
             return builder.like(
@@ -66,12 +71,12 @@ public abstract class BasicSpecification<TYPE> {
                     builder.function("date", Date.class, builder.literal(criteria.getValue())));
         }
 
-        if (criteria.getOperation().equals(SearchOperationEnum.EQUAL_IGNORE_CASE)) {
-            return builder.like(builder.lower(root.get(criteria.getKey())), StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase());
-        }
-
         if (criteria.getOperation().equals(SearchOperationEnum.EQUAL)) {
             return builder.equal(root.get(criteria.getKey()), criteria.getValue());
+        }
+
+        if (criteria.getOperation().equals(SearchOperationEnum.EQUAL_IGNORE_CASE)) {
+            return builder.like(builder.lower(root.get(criteria.getKey())), StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase());
         }
 
         if (criteria.getOperation().equals(SearchOperationEnum.NOT_EQUAL) && criteria.getValue() instanceof Date) {

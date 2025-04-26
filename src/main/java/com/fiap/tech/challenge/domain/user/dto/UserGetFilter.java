@@ -3,7 +3,9 @@ package com.fiap.tech.challenge.domain.user.dto;
 import com.fiap.tech.challenge.global.base.BasePaginationFilter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public final class UserGetFilter extends BasePaginationFilter {
 

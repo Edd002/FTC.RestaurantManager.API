@@ -9,6 +9,10 @@ import lombok.Setter;
 @Setter
 public class CityResponseDTO extends BaseResponseDTO {
 
+    @Schema(description = "Hash id da cidade.", example = "d56f6fa310484355a881983b3942ec6b")
+    @JsonProperty("hashId")
+    private String hashId;
+
     @Schema(description = "Nome da cidade.", example = "Ariquemes")
     @JsonProperty("name")
     private String name;

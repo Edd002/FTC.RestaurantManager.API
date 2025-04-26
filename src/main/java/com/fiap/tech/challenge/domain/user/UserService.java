@@ -58,7 +58,7 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public UserResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado.", hashId)), UserResponseDTO.class);
+        return modelMapper.map(this.findByHashId(hashId), UserResponseDTO.class);
     }
 
     @Transactional
