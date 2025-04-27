@@ -69,7 +69,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
-            Authentication authentication = bundleAuthUserDetailsService.getAuthentication(jwt.getEmail());
+            Authentication authentication = bundleAuthUserDetailsService.getAuthentication(jwt.getLogin());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && !ArrayUtils.contains(IGNORE_RESPONSE_FILTER_PATHS, httpServletRequest.getServletPath())) {

@@ -77,7 +77,7 @@ public class JwtBuilder {
     private String getJwtFromHeader(HttpServletRequest request) {
         String bearer = "Bearer ";
         String bearerToken = request.getHeader("Authorization");
-        if (bearerToken == null) {
+        if (ValidationUtil.isNull(bearerToken)) {
             log.severe("Authorization Header ausente - Path da requisição: " + request.getServletPath());
             throw new AuthenticationHttpException("O header de autorização deve estar presente.");
         }

@@ -27,7 +27,7 @@ public class JwtClaims {
         }
     }
 
-    public String getEmail() throws JwtException {
+    public String getLogin() throws JwtException {
         return this.claims.getPayload().getSubject();
     }
 }

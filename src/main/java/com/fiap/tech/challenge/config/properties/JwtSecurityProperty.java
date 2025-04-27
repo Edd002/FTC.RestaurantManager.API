@@ -10,6 +10,7 @@ import java.util.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+@Getter
 @Validated
 @NoArgsConstructor
 @ConfigurationProperties(prefix = "security.jwt.tokens")
@@ -18,14 +19,9 @@ public class JwtSecurityProperty {
     private String bearerTokenSecretKey;
 
     @Setter
-    @Getter
     private Long bearerTokenValidityInMilliseconds;
 
     public void setBearerTokenSecretKey(String bearerTokenSecretKey) {
         this.bearerTokenSecretKey = Base64.getEncoder().encodeToString(bearerTokenSecretKey.getBytes(UTF_8));
-    }
-
-    public String getBearerTokenSecretKey() {
-        return bearerTokenSecretKey;
     }
 }
