@@ -2,8 +2,10 @@ package com.fiap.tech.challenge.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringDeserializer;
+import com.fiap.tech.challenge.global.util.enumerated.validation.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -34,4 +36,9 @@ public abstract class UserRequestDTO extends BaseRequestDTO {
     @NotBlank(message = "A senha do usuário não pode ser nula ou em branco.")
     @JsonProperty("password")
     private String password;
+
+    @Schema(description = "Permissão do usuário.", example = "OWNER")
+    @ValueOfEnum(enumClass = UserRoleEnum.class, message = "Permissão do usuário inválida.")
+    @JsonProperty("role")
+    private String role;
 }

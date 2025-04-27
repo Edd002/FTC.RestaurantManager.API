@@ -1,7 +1,22 @@
 {
   "user": [
     {
-      "name": ""
+      "name": "Admin",
+      "email": "admin@email.com",
+      "login": "admin",
+      "password": "admin",
+      "role": "OWNER",
+      "address": {
+        "description": "Description",
+        "number": "00",
+        "complement": "Complement",
+        "neighborhood": "Neighborhood",
+        "cep": "00000-000",
+        "postalCode": "0000-0000",
+        "city": {
+          "id": 1
+        }
+      }
     }
   ]
 }

@@ -3,7 +3,6 @@ package com.fiap.tech.challenge.config.security;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
-import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.serializer.ErrorResponseJsonSerializer;
@@ -68,7 +67,10 @@ public class SecurityConfig {
             "/configuration/**",
             "/webjars/**",
             "/actuator/health/**",
-            "/api/v1/jwts/generate"
+            "/api/v1/jwts/generate",
+
+            "/api/v1/users/**", // TODO Remove after config done
+            "/api/v1/cities/**" // TODO Remove after config done
     };
 
     private static final String[] OWNER_MATCHERS = {
@@ -111,13 +113,14 @@ public class SecurityConfig {
                 .exceptionHandling(eh -> eh.authenticationEntryPoint((request, response, e) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
                     BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Cliente não autorizado."));;
                     Gson gson = new GsonBuilder().registerTypeAdapter(BaseErrorResponse.class, new ErrorResponseJsonSerializer()).setDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).create();
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        // .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name()) TODO Add after config
                         .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults());

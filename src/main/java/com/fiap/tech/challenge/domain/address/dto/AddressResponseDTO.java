@@ -21,7 +21,7 @@ public class AddressResponseDTO extends BaseResponseDTO {
     @JsonProperty("number")
     private String number;
 
-    @Schema(description = "Complemento do endereço.", example = "Case A")
+    @Schema(description = "Complemento do endereço.", example = "Casa A")
     @JsonProperty("complement")
     private String complement;
 
