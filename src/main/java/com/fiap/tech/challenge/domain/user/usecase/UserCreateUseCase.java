@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.address.Address;
 import com.fiap.tech.challenge.domain.user.User;
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
 
-public class UserCreateUseCase {
+public final class UserCreateUseCase {
 
     private final User user;
 

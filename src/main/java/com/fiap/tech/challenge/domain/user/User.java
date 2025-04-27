@@ -65,10 +65,16 @@ public class User extends Audit implements Serializable {
     }
 
     @Override
+    public User buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         User existingUser = BeanComponent.getBean(UserService.class).findByHashId(hashId);
         this.setId(existingUser.getId());
-        this.setAddress(existingUser.getAddress());
+        this.setAddress(new Address().buildWithId(existingUser.getAddress().getId()));
         super.setHashId(hashId);
     }
 }

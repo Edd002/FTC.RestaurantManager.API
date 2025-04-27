@@ -4,5 +4,5 @@ public enum FetchDeletedEnum {
 
     FETCH_ALL,
     FETCH_DELETED,
-    FETCH_NOT_DELETED,
+    FETCH_NOT_DELETED;
 }

@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.user.usecase;
 import com.fiap.tech.challenge.domain.user.User;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 
-public class UserUpdateUseCase {
+public final class UserUpdateUseCase {
 
     private final User user;
 

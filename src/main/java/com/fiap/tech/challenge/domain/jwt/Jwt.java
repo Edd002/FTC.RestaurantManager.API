@@ -51,6 +51,12 @@ public class Jwt extends Audit implements Serializable {
     }
 
     @Override
+    public Jwt buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         this.setId(BeanComponent.getBean(JwtService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);
