@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;
+import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ import java.util.Optional;
 @Service
 public class UserService extends BaseService<IUserRepository, User> {
 
+    private final IUserRepository userRepository;
+
     private final PageableBuilder pageableBuilder;
 
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+        this.userRepository = userRepository;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
@@ -67,6 +71,10 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public void delete(String hashId) {
         deleteByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado para ser excluído.", hashId));
+    }
+
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login).orElseThrow(() -> new EntityNotFoundException(String.format("O usuário com o login %s não foi encontrado.", login)));
     }
 
     @Override

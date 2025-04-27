@@ -93,6 +93,7 @@ create table t_user
     login      varchar(255) not null,
     name       varchar(255) not null,
     password   varchar(255) not null,
+    role       varchar(255) not null,
     fk_address bigint       not null,
     primary key (id)
 );
@@ -127,3 +128,5 @@ CREATE UNIQUE INDEX T_USER_HASH_ID_UK ON public.t_user (hash_id);
 CREATE UNIQUE INDEX T_USER_EMAIL_UK ON public.t_user (email, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_USER_LOGIN_ID_UK ON public.t_user (login, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_USER_FK_ADDRESS_UK ON public.t_user (fk_address, deleted) WHERE deleted IS NULL OR deleted = false;
+
+ALTER TABLE public.t_user ADD CONSTRAINT T_USER_ROLE_CHECK CHECK (role IN ('OWNER', 'CLIENT'));

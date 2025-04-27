@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IJwtRepository extends IBaseRepository<Jwt> {
+
+    Jwt findByBearerToken(String bearerToken);
 }
