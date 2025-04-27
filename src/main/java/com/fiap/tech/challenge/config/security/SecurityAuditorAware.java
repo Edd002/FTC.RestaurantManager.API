@@ -1,13 +1,12 @@
-package com.fiap.tech.challenge.config;
+package com.fiap.tech.challenge.config.security;
 
+import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -19,9 +18,12 @@ public class SecurityAuditorAware implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (ValidationUtil.isNull(authentication) || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            if (AuthUserContextHolder.hasNoAuthUser()) {
                 return Optional.empty();
+            }
+            User user = AuthUserContextHolder.getAuthUser();
+            if (ValidationUtil.isNotNull(user) && ValidationUtil.isNotNull(user.getId())) {
+                return Optional.ofNullable(user.getLogin());
             }
         } catch (Exception ignore) {
         }

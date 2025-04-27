@@ -56,6 +56,12 @@ public class City extends Audit implements Serializable {
     }
 
     @Override
+    public City buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         this.setId(BeanComponent.getBean(CityService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);

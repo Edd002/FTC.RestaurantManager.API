@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.user;
 import com.fiap.tech.challenge.domain.address.Address;
 import com.fiap.tech.challenge.domain.jwt.Jwt;
 import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
+import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
@@ -45,6 +46,10 @@ public class User extends Audit implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRoleEnum role;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Jwt> jwtList;
 
@@ -65,10 +70,16 @@ public class User extends Audit implements Serializable {
     }
 
     @Override
+    public User buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         User existingUser = BeanComponent.getBean(UserService.class).findByHashId(hashId);
         this.setId(existingUser.getId());
-        this.setAddress(existingUser.getAddress());
+        this.setAddress(new Address().buildWithId(existingUser.getAddress().getId()));
         super.setHashId(hashId);
     }
 }

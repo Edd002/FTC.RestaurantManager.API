@@ -5,6 +5,8 @@ import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.loadtable.LoadTableService;
 import com.fiap.tech.challenge.domain.state.State;
 import com.fiap.tech.challenge.domain.state.StateService;
+import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.UserService;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.java.Log;
@@ -22,18 +24,19 @@ public class RunOnReady {
 
     private static final String PATH_RESOURCE_STATE = "/runready/state.json";
     private static final String PATH_RESOURCE_CITY = "/runready/city.json";
+    private static final String PATH_RESOURCE_USER = "/runready/user.json";
 
     private final LoadTableService loadTableService;
-
     private final StateService stateService;
-
     private final CityService cityService;
+    private final UserService userService;
 
     @Autowired
-    public RunOnReady(LoadTableService loadTableService, StateService stateService, CityService cityService) {
+    public RunOnReady(LoadTableService loadTableService, StateService stateService, CityService cityService, UserService userService) {
         this.loadTableService = loadTableService;
         this.stateService = stateService;
         this.cityService = cityService;
+        this.userService = userService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -42,6 +45,8 @@ public class RunOnReady {
         }.getType());
         List<City> cityList = JsonUtil.objectListFromJson("city", PATH_RESOURCE_CITY, new TypeToken<ArrayList<City>>() {
         }.getType());
+        List<User> userList = JsonUtil.objectListFromJson("user", PATH_RESOURCE_USER, new TypeToken<ArrayList<User>>() {
+        }.getType());
         if ((loadTableService.entityLoadEnabled(State.class.getSimpleName()))) {
             stateList.forEach(this::createState);
             loadTableService.create(State.class.getSimpleName());
@@ -49,6 +54,10 @@ public class RunOnReady {
         if ((loadTableService.entityLoadEnabled(City.class.getSimpleName()))) {
             cityList.forEach(this::createCity);
             loadTableService.create(City.class.getSimpleName());
+        }
+        if ((loadTableService.entityLoadEnabled(User.class.getSimpleName()))) {
+            userList.forEach(this::createUser);
+            loadTableService.create(User.class.getSimpleName());
         }
     }
 
@@ -65,6 +74,14 @@ public class RunOnReady {
             cityService.save(city);
         } catch (Exception exception) {
             log.severe(String.format("A cidade de nome %s não pode ser cadastrada. Erro: %s", city.getName(), exception.getMessage()));
+        }
+    }
+
+    private void createUser(User user) {
+        try {
+            userService.save(user);
+        } catch (Exception exception) {
+            log.severe(String.format("O usuário de nome %s não pode ser cadastrado. Erro: %s", user.getName(), exception.getMessage()));
         }
     }
 }

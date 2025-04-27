@@ -71,6 +71,12 @@ public class Address extends Audit implements Serializable {
     }
 
     @Override
+    public Address buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         this.setId(BeanComponent.getBean(AddressService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);

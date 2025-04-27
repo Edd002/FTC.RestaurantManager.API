@@ -12,5 +12,5 @@ public enum SearchOperationEnum {
     IS_NOT_NULL,
     GREATEST,
     LEAST,
-    BETWEEN
+    BETWEEN;
 }

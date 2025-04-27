@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.domain.address.dto.AddressResponseDTO;
+import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Setter;
@@ -24,6 +25,10 @@ public class UserResponseDTO extends BaseResponseDTO {
     @Schema(description = "Login do usuário.", example = "roberto_afonso_001")
     @JsonProperty("login")
     private String login;
+
+    @Schema(description = "Permissão do usuário.", example = "OWNER")
+    @JsonProperty("role")
+    private UserRoleEnum role;
 
     @Schema(description = "Endereço do usuário.")
     @JsonProperty("address")

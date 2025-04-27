@@ -54,6 +54,12 @@ public class State extends Audit implements Serializable {
     }
 
     @Override
+    public State buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         this.setId(BeanComponent.getBean(StateService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);

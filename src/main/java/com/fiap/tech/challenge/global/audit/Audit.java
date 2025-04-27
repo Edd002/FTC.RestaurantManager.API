@@ -63,4 +63,6 @@ public abstract class Audit implements Serializable {
     }
 
     public abstract String getConstraintErrorMessage(String constraintName);
+
+    public abstract Audit buildWithId(Long id);
 }

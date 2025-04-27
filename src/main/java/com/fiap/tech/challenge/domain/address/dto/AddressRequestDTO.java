@@ -23,7 +23,7 @@ public abstract class AddressRequestDTO extends BaseRequestDTO {
     @JsonProperty("number")
     private String number;
 
-    @Schema(description = "Complemento do endereço.", example = "Case A")
+    @Schema(description = "Complemento do endereço.", example = "Casa A")
     @JsonDeserialize(using = StrictStringDeserializer.class)
     @JsonProperty("complement")
     private String complement;

@@ -49,6 +49,12 @@ public class LoadTable extends Audit implements Serializable {
     }
 
     @Override
+    public LoadTable buildWithId(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    @Override
     public void setHashId(String hashId) {
         this.setId(BeanComponent.getBean(LoadTableService.class).findByHashId(hashId).getId());
         super.setHashId(hashId);

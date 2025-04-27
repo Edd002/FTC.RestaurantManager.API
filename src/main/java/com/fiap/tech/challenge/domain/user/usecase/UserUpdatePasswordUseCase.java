@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.user.User;
 import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO;
 import com.fiap.tech.challenge.global.exception.InvalidUserPasswordException;
 
-public class UserUpdatePasswordUseCase {
+public final class UserUpdatePasswordUseCase {
 
     private final User user;
 
