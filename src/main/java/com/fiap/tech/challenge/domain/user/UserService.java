@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.user.dto.*;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
 import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
@@ -24,9 +25,7 @@ import java.util.Optional;
 public class UserService extends BaseService<IUserRepository, User> {
 
     private final IUserRepository userRepository;
-
     private final PageableBuilder pageableBuilder;
-
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -44,7 +43,7 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(hashId, userPutRequestDTO).getBuiltedUser();
+        User updatedUser = new UserUpdateUseCase(this.findByHashId(hashId), userPutRequestDTO).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 

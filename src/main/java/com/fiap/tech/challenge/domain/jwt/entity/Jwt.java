@@ -1,26 +1,36 @@
-package com.fiap.tech.challenge.domain.jwt;
+package com.fiap.tech.challenge.domain.jwt.entity;
 
+import com.fiap.tech.challenge.domain.jwt.JwtEntityListener;
 import com.fiap.tech.challenge.domain.jwt.enumerated.JwtConstraintEnum;
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "t_jwt")
 @SQLDelete(sql = "UPDATE t_jwt SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ JwtEntityListener.class })
 public class Jwt extends Audit implements Serializable {
+
+    protected Jwt() {}
+
+    public Jwt(Long id) {
+        this.id = id;
+    }
+
+    public Jwt(String bearerToken, User user) {
+        this.bearerToken = bearerToken;
+        this.user = user;
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -51,14 +61,7 @@ public class Jwt extends Audit implements Serializable {
     }
 
     @Override
-    public Jwt buildWithId(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    @Override
-    public void setHashId(String hashId) {
-        this.setId(BeanComponent.getBean(JwtService.class).findByHashId(hashId).getId());
-        super.setHashId(hashId);
+    public void setUpdatedIn(Date updatedIn) {
+        super.setUpdatedIn(updatedIn);
     }
 }

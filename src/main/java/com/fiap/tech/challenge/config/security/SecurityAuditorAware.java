@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.jspecify.annotations.NonNull;

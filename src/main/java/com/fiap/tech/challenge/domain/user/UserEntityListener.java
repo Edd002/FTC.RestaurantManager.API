@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
+import com.fiap.tech.challenge.domain.user.entity.User;
 import jakarta.persistence.PostLoad;
 import org.apache.commons.lang3.SerializationUtils;
 

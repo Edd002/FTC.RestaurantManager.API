@@ -1,29 +1,60 @@
-package com.fiap.tech.challenge.domain.user;
+package com.fiap.tech.challenge.domain.user.entity;
 
-import com.fiap.tech.challenge.domain.address.Address;
-import com.fiap.tech.challenge.domain.jwt.Jwt;
+import com.fiap.tech.challenge.domain.address.entity.Address;
+import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
+import com.fiap.tech.challenge.domain.user.UserEntityListener;
 import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.bean.BeanComponent;
+import com.fiap.tech.challenge.global.util.CriptoUtil;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "t_user")
 @SQLDelete(sql = "UPDATE t_user SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ UserEntityListener.class })
 public class User extends Audit implements Serializable {
+
+    protected User() {}
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(Long id, String name, String email, String login, String password, String role, Address address) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.role = UserRoleEnum.valueOf(role);
+        this.address = address;
+    }
+
+    public User(String name, String email, String login, String password, String role, Address address) {
+        this.name = name;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.role = UserRoleEnum.valueOf(role);
+        this.address = address;
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -69,17 +100,7 @@ public class User extends Audit implements Serializable {
         return UserConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 
-    @Override
-    public User buildWithId(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    @Override
-    public void setHashId(String hashId) {
-        User existingUser = BeanComponent.getBean(UserService.class).findByHashId(hashId);
-        this.setId(existingUser.getId());
-        this.setAddress(new Address().buildWithId(existingUser.getAddress().getId()));
-        super.setHashId(hashId);
+    public void setPassword(String criptoKey, String password) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException, UnsupportedEncodingException, BadPaddingException {
+        this.password = CriptoUtil.newInstance(criptoKey).encrypt(password);
     }
 }

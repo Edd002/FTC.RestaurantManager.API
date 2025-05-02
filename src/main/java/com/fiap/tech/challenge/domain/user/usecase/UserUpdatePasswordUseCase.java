@@ -1,10 +1,23 @@
 package com.fiap.tech.challenge.domain.user.usecase;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO;
+import com.fiap.tech.challenge.global.exception.CriptoException;
 import com.fiap.tech.challenge.global.exception.InvalidUserPasswordException;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public final class UserUpdatePasswordUseCase {
+
+    @Value("${cripto.key}")
+    private String criptoKey;
 
     private final User user;
 
@@ -19,7 +32,14 @@ public final class UserUpdatePasswordUseCase {
         if (!userUpdatePasswordPatchRequestDTO.getNewPassword().equals(userUpdatePasswordPatchRequestDTO.getNewPasswordConfirmation())) {
             throw new InvalidUserPasswordException("A senha nova é difente da confirmação de senha nova.");
         }
-        this.user.setPassword(userUpdatePasswordPatchRequestDTO.getNewPassword());
+        try {
+            this.user.setPassword(criptoKey, userUpdatePasswordPatchRequestDTO.getNewPassword());
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException e) {
+            throw new CriptoException("Erro ao gerar senha criptografada do usuário.");
+        } catch (Exception exception) {
+            throw new CriptoException("Ocorreu um erro na alteração de senha do usuário.");
+        }
+
     }
 
     public User getBuiltedUser() {

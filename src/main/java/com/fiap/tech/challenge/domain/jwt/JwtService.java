@@ -3,7 +3,8 @@ package com.fiap.tech.challenge.domain.jwt;
 import com.fiap.tech.challenge.domain.jwt.dto.JwtGeneratePostRequestDTO;
 import com.fiap.tech.challenge.domain.jwt.dto.JwtResponseDTO;
 import com.fiap.tech.challenge.domain.jwt.dto.TokenInternalDTO;
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.exception.InvalidBearerTokenHttpException;
@@ -50,10 +51,7 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
     }
 
     public void create(TokenInternalDTO tokenInternalDTO, User user) {
-        Jwt jwt = new Jwt();
-        jwt.setBearerToken(tokenInternalDTO.getBearerToken());
-        jwt.setUser(user);
-        save(jwt);
+        save(new Jwt(tokenInternalDTO.getBearerToken(), user));
     }
 
     public Boolean isJwtActiveByBearerToken(String bearerToken) {

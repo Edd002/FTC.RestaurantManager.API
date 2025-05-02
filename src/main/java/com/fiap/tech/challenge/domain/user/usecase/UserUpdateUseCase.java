@@ -1,27 +1,32 @@
 package com.fiap.tech.challenge.domain.user.usecase;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
+import com.fiap.tech.challenge.domain.user.entity.User;
 
 public final class UserUpdateUseCase {
 
     private final User user;
 
-    public UserUpdateUseCase(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        user = new User();
-        this.user.setHashId(hashId);
-        this.user.setName(userPutRequestDTO.getName());
-        this.user.setEmail(userPutRequestDTO.getEmail());
-        this.user.setLogin(userPutRequestDTO.getLogin());
-        this.user.setPassword(userPutRequestDTO.getPassword());
-        this.user.getAddress().setDescription(userPutRequestDTO.getAddress().getDescription());
-        this.user.getAddress().setNumber(userPutRequestDTO.getAddress().getNumber());
-        this.user.getAddress().setComplement(userPutRequestDTO.getAddress().getComplement());
-        this.user.getAddress().setComplement(userPutRequestDTO.getAddress().getComplement());
-        this.user.getAddress().setNeighborhood(userPutRequestDTO.getAddress().getNeighborhood());
-        this.user.getAddress().setCep(userPutRequestDTO.getAddress().getCep());
-        this.user.getAddress().setPostalCode(userPutRequestDTO.getAddress().getPostalCode());
-        this.user.getAddress().setCityByHashId(userPutRequestDTO.getAddress().getHashIdCity());
+    public UserUpdateUseCase(User actualUser, UserPutRequestDTO userPutRequestDTO) {
+        this.user = new User(
+                actualUser.getId(),
+                userPutRequestDTO.getName(),
+                userPutRequestDTO.getEmail(),
+                userPutRequestDTO.getLogin(),
+                userPutRequestDTO.getPassword(),
+                userPutRequestDTO.getRole(),
+                new Address(
+                        actualUser.getAddress().getId(),
+                        userPutRequestDTO.getAddress().getDescription(),
+                        userPutRequestDTO.getAddress().getNumber(),
+                        userPutRequestDTO.getAddress().getComplement(),
+                        userPutRequestDTO.getAddress().getNeighborhood(),
+                        userPutRequestDTO.getAddress().getCep(),
+                        userPutRequestDTO.getAddress().getPostalCode(),
+                        userPutRequestDTO.getAddress().getHashIdCity()
+                )
+        );
     }
 
     public User getBuiltedUser() {

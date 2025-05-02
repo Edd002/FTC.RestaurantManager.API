@@ -1,13 +1,12 @@
-package com.fiap.tech.challenge.domain.city;
+package com.fiap.tech.challenge.domain.city.entity;
 
-import com.fiap.tech.challenge.domain.address.Address;
+import com.fiap.tech.challenge.domain.address.entity.Address;
+import com.fiap.tech.challenge.domain.city.CityEntityListener;
 import com.fiap.tech.challenge.domain.city.enumerated.CityConstraintEnum;
-import com.fiap.tech.challenge.domain.state.State;
+import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -16,13 +15,18 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "t_city")
 @SQLDelete(sql = "UPDATE t_city SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ CityEntityListener.class })
 public class City extends Audit implements Serializable {
+
+    protected City() {}
+
+    public City(Long id) {
+        this.id = id;
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -53,17 +57,5 @@ public class City extends Audit implements Serializable {
     @Override
     public String getConstraintErrorMessage(String constraintName) {
         return CityConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
-    }
-
-    @Override
-    public City buildWithId(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    @Override
-    public void setHashId(String hashId) {
-        this.setId(BeanComponent.getBean(CityService.class).findByHashId(hashId).getId());
-        super.setHashId(hashId);
     }
 }

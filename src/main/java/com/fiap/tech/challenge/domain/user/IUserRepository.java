@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.IBaseRepository;
 import org.springframework.stereotype.Repository;
 

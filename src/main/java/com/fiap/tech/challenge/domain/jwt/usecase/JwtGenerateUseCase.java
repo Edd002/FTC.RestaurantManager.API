@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.jwt.usecase;
 
-import com.fiap.tech.challenge.domain.jwt.Jwt;
+import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
 
 public final class JwtGenerateUseCase {
 

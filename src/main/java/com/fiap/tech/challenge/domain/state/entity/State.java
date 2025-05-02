@@ -1,12 +1,11 @@
-package com.fiap.tech.challenge.domain.state;
+package com.fiap.tech.challenge.domain.state.entity;
 
-import com.fiap.tech.challenge.domain.city.City;
+import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.state.StateEntityListener;
 import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -15,13 +14,18 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "t_state")
 @SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ StateEntityListener.class })
 public class State extends Audit implements Serializable {
+
+    protected State() {}
+
+    public State(Long id) {
+        this.id = id;
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -51,17 +55,5 @@ public class State extends Audit implements Serializable {
     @Override
     public String getConstraintErrorMessage(String constraintName) {
         return StateConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
-    }
-
-    @Override
-    public State buildWithId(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    @Override
-    public void setHashId(String hashId) {
-        this.setId(BeanComponent.getBean(StateService.class).findByHashId(hashId).getId());
-        super.setHashId(hashId);
     }
 }

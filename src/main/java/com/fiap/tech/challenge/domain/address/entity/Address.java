@@ -1,14 +1,14 @@
-package com.fiap.tech.challenge.domain.address;
+package com.fiap.tech.challenge.domain.address.entity;
 
+import com.fiap.tech.challenge.domain.address.AddressEntityListener;
 import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
-import com.fiap.tech.challenge.domain.city.City;
 import com.fiap.tech.challenge.domain.city.CityService;
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -16,13 +16,39 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "t_address")
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ AddressEntityListener.class })
 public class Address extends Audit implements Serializable {
+
+    protected Address() {}
+
+    public Address(Long id) {
+        this.id = id;
+    }
+
+    public Address(Long id, String description, String number, String complement, String neighborhood, String cep, String postalCode, String cityHashId) {
+        this.id = id;
+        this.description = description;
+        this.number = number;
+        this.complement = complement;
+        this.neighborhood = neighborhood;
+        this.cep = cep;
+        this.postalCode = postalCode;
+        this.city = BeanComponent.getBean(CityService.class).findByHashId(cityHashId);
+    }
+
+    public Address(String description, String number, String complement, String neighborhood, String cep, String postalCode, String cityHashId) {
+        this.description = description;
+        this.number = number;
+        this.complement = complement;
+        this.neighborhood = neighborhood;
+        this.cep = cep;
+        this.postalCode = postalCode;
+        this.city = BeanComponent.getBean(CityService.class).findByHashId(cityHashId);
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -68,21 +94,5 @@ public class Address extends Audit implements Serializable {
     @Override
     public String getConstraintErrorMessage(String constraintName) {
         return AddressConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
-    }
-
-    @Override
-    public Address buildWithId(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    @Override
-    public void setHashId(String hashId) {
-        this.setId(BeanComponent.getBean(AddressService.class).findByHashId(hashId).getId());
-        super.setHashId(hashId);
-    }
-
-    public void setCityByHashId(String cityHashId) {
-        this.setCity(BeanComponent.getBean(CityService.class).findByHashId(cityHashId));
     }
 }

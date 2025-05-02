@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.user.authuser;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

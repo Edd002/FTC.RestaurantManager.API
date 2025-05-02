@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.user.authuser;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;

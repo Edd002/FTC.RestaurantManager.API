@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable;
 
+import com.fiap.tech.challenge.domain.loadtable.entity.LoadTable;
 import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableCreateUseCase;
 import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableEntityLoadEnabledCase;
 import com.fiap.tech.challenge.global.base.BaseService;
