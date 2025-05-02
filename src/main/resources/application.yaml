@@ -20,8 +20,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5453/ftc_user_manager_database
-    username: postgres
-    password: postgres
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jackson:
     default-property-inclusion: non_null
     deserialization:

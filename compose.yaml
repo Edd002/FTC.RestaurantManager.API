@@ -5,6 +5,8 @@ services:
 
   # FTC UserManager API
   app:
+    env_file:
+      .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,6 +25,8 @@ services:
 
   # DATABASE
   ftc_user_manager_database:
+    env_file:
+      .env
     container_name: ftc_user_manager_database
     image: postgres:17.4
     ports:
@@ -39,6 +43,8 @@ services:
 
   # PGADMIN
   ftc_user_manager_pgadmin:
+    env_file:
+      .env
     container_name: ftc_user_manager_pgadmin
     image: dpage/pgadmin4
     ports:
