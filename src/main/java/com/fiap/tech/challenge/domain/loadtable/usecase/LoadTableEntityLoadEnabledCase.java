@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable.usecase;
 
-import com.fiap.tech.challenge.domain.loadtable.LoadTable;
+import com.fiap.tech.challenge.domain.loadtable.entity.LoadTable;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 
 public final class LoadTableEntityLoadEnabledCase {

@@ -39,7 +39,7 @@ public class OpenAPIConfig {
                         .title("Fiap Tech Challenge - User Manager API")
                         .version("v1.0")
                         .description("Documentação da API User Manager.")
-                        .contact(new Contact().name("Fiap Tech Challenge Team").email("fiaptechchallenge@tangerino.com.br")))
+                        .contact(new Contact().name("Fiap Tech Challenge Team").email("techchallenge@fiap.com.br")))
                 .servers(List.of(server));
     }
 }

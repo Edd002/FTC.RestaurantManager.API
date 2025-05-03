@@ -6,7 +6,7 @@ import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.serializer.ErrorResponseJsonSerializer;
-import com.fiap.tech.challenge.global.util.CriptoUtil;
+import com.fiap.tech.challenge.global.util.CryptoUtil;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 import com.google.gson.Gson;
@@ -48,8 +48,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-    @Value("${cripto.key}")
-    private String criptoKey;
+    @Value("${crypto.key}")
+    private String cryptoKey;
 
     private final JwtBuilder jwtBuilder;
     private final JwtService jwtService;
@@ -92,7 +92,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        return CriptoUtil.newInstance(criptoKey);
+        return CryptoUtil.newInstance(cryptoKey);
     }
 
     @Bean
@@ -114,7 +114,7 @@ public class SecurityConfig {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Cliente não autorizado."));;
+                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Cliente não autenticado."));;
                     Gson gson = new GsonBuilder().registerTypeAdapter(BaseErrorResponse.class, new ErrorResponseJsonSerializer()).setDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).create();
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))

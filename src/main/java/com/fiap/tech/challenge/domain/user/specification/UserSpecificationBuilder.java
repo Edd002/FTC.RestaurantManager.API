@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.user.specification;
 
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.dto.UserGetFilter;
 import com.fiap.tech.challenge.global.entity.enumerated.FetchDeletedEnum;
 import com.fiap.tech.challenge.global.entity.enumerated.SearchOperationEnum;

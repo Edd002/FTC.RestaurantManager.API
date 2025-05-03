@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.city.specification;
 
-import com.fiap.tech.challenge.domain.city.City;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.dto.CityGetFilter;
 import com.fiap.tech.challenge.global.entity.enumerated.FetchDeletedEnum;
 import com.fiap.tech.challenge.global.entity.enumerated.SearchOperationEnum;

@@ -1,11 +1,11 @@
 package com.fiap.tech.challenge.config;
 
-import com.fiap.tech.challenge.domain.city.City;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.loadtable.LoadTableService;
-import com.fiap.tech.challenge.domain.state.State;
+import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.domain.state.StateService;
-import com.fiap.tech.challenge.domain.user.User;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.UserService;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 import com.google.gson.reflect.TypeToken;

@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.global.audit;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -15,11 +16,14 @@ import java.util.Date;
 
 import static com.fiap.tech.challenge.global.util.HashUtil.generateHash;
 
-@Getter
-@Setter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @MappedSuperclass
 @EntityListeners({ AuditingEntityListener.class, AuditEntityListener.class })
 public abstract class Audit implements Serializable {
+
+    protected Audit() {
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -63,6 +67,4 @@ public abstract class Audit implements Serializable {
     }
 
     public abstract String getConstraintErrorMessage(String constraintName);
-
-    public abstract Audit buildWithId(Long id);
 }

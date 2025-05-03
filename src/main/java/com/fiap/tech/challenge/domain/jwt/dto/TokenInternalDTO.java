@@ -9,7 +9,7 @@ public class TokenInternalDTO {
     private String userLogin;
     private String bearerToken;
 
-    public TokenInternalDTO(@NonNull String userLogin, @NonNull String bearerToken) {
+    public TokenInternalDTO(String userLogin, String bearerToken) {
         this.userLogin = userLogin;
         this.bearerToken = bearerToken;
     }

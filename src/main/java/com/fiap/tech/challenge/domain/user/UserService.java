@@ -1,6 +1,8 @@
 package com.fiap.tech.challenge.domain.user;
 
+import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.user.dto.*;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
 import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
@@ -11,6 +13,7 @@ import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,34 +26,37 @@ import java.util.Optional;
 @Service
 public class UserService extends BaseService<IUserRepository, User> {
 
+    @Value("${crypto.key}")
+    private String cryptoKey;
+
     private final IUserRepository userRepository;
-
+    private final CityService cityService;
     private final PageableBuilder pageableBuilder;
-
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(IUserRepository userRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.cityService = cityService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
 
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
-        User newUser = new UserCreateUseCase(userPostRequestDTO).getBuiltedUser();
+        User newUser = new UserCreateUseCase(userPostRequestDTO, cryptoKey, cityService.findByHashId(userPostRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
     public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(hashId, userPutRequestDTO).getBuiltedUser();
+        User updatedUser = new UserUpdateUseCase(this.findByHashId(hashId), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
     @Transactional
     public void updatePassword(String hashId, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
-        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), userUpdatePasswordPatchRequestDTO).getBuiltedUser());
+        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.city;
 
 import com.fiap.tech.challenge.domain.city.dto.CityGetFilter;
 import com.fiap.tech.challenge.domain.city.dto.CityResponseDTO;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.specification.CitySpecificationBuilder;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;

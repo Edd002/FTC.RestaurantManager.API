@@ -41,8 +41,7 @@ public class DateUtil {
     }
 
     public static String dateToString(Date date, String pattern) {
-        if (ValidationUtil.isNull(date))
-            return Strings.EMPTY;
+        if (ValidationUtil.isNull(date)) return Strings.EMPTY;
         DateFormat dateFormat = configureDateFormat(pattern);
         return dateFormat.format(date);
     }
