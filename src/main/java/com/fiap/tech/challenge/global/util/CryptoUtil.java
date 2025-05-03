@@ -41,7 +41,17 @@ public class CryptoUtil implements PasswordEncoder {
         secretKey = secretKeyFactory.generateSecret(keySpec);
     }
 
-    public String encrypt(String value) {
+    @Override
+    public String encode(CharSequence rawPassword) {
+        return encrypt(rawPassword.toString());
+    }
+
+    @Override
+    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+        return rawPassword.toString().equals(decrypt(encodedPassword));
+    }
+
+    private String encrypt(String value) {
         try {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] cipherText = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
@@ -51,23 +61,13 @@ public class CryptoUtil implements PasswordEncoder {
         }
     }
 
-    public String decrypt(String value) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decipherText = cipher.doFinal(Base64.getDecoder().decode(value));
-        return new String(decipherText);
-    }
-
-    @Override
-    public String encode(CharSequence rawPassword) {
-        return encrypt(rawPassword.toString());
-    }
-
-    @Override
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+    private String decrypt(String value) {
         try {
-            return rawPassword.toString().equals(decrypt(encodedPassword));
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] decipherText = cipher.doFinal(Base64.getDecoder().decode(value));
+            return new String(decipherText);
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new CryptoException();
+            throw new CryptoException("Erro ao descriptografar senha criptografada.");
         }
     }
 }

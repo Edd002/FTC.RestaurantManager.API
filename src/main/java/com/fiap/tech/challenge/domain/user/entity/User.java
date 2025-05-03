@@ -39,8 +39,7 @@ public class User extends Audit implements Serializable {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
-        this.setPasswordCryptoKey(passwordCryptoKey);
-        this.setPassword(password);
+        this.setEncryptedPassword(passwordCryptoKey, password);
         this.setRole(UserRoleEnum.valueOf(role));
         this.setAddress(address);
     }
@@ -49,16 +48,9 @@ public class User extends Audit implements Serializable {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
-        this.setPasswordCryptoKey(passwordCryptoKey);
-        this.setPassword(password);
+        this.setEncryptedPassword(passwordCryptoKey, password);
         this.setRole(UserRoleEnum.valueOf(role));
         this.setAddress(address);
-    }
-
-    public User(@NonNull Long id, @NonNull String passwordCryptoKey, @NonNull String password) {
-        this.setId(id);
-        this.setPasswordCryptoKey(passwordCryptoKey);
-        this.setPassword(password);
     }
 
     @Serial
@@ -89,12 +81,9 @@ public class User extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Jwt> jwtList;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_address", nullable = false)
     private Address address;
-
-    @Transient
-    private transient String passwordCryptoKey;
 
     @Transient
     private transient User userSavedState;
@@ -108,7 +97,7 @@ public class User extends Audit implements Serializable {
         return UserConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 
-    protected void setPassword(@NonNull String password) {
-        this.password = CryptoUtil.newInstance(passwordCryptoKey).encrypt(password);
+    public void setEncryptedPassword(@NonNull String passwordCryptoKey, @NonNull String password) {
+        this.password = CryptoUtil.newInstance(passwordCryptoKey).encode(password);
     }
 }
