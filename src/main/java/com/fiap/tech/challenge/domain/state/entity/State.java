@@ -5,7 +5,10 @@ import com.fiap.tech.challenge.domain.state.StateEntityListener;
 import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -13,7 +16,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "t_state")
 @SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
@@ -23,8 +27,8 @@ public class State extends Audit implements Serializable {
 
     protected State() {}
 
-    public State(Long id) {
-        this.id = id;
+    public State(@NonNull Long id) {
+        this.setId(id);
     }
 
     @Serial

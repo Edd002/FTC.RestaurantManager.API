@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.user.usecase;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
 
@@ -8,11 +9,12 @@ public final class UserCreateUseCase {
 
     private final User user;
 
-    public UserCreateUseCase(UserPostRequestDTO userPostRequestDTO) {
+    public UserCreateUseCase(UserPostRequestDTO userPostRequestDTO, String passwordCryptoKey, City city) {
         this.user = new User(
                 userPostRequestDTO.getName(),
                 userPostRequestDTO.getEmail(),
                 userPostRequestDTO.getLogin(),
+                passwordCryptoKey,
                 userPostRequestDTO.getPassword(),
                 userPostRequestDTO.getRole(),
                 new Address(
@@ -22,7 +24,7 @@ public final class UserCreateUseCase {
                         userPostRequestDTO.getAddress().getNeighborhood(),
                         userPostRequestDTO.getAddress().getCep(),
                         userPostRequestDTO.getAddress().getPostalCode(),
-                        userPostRequestDTO.getAddress().getHashIdCity()
+                        city
                 )
         );
     }

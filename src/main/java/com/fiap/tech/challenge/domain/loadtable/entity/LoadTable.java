@@ -4,14 +4,18 @@ import com.fiap.tech.challenge.domain.loadtable.LoadTableEntityListener;
 import com.fiap.tech.challenge.domain.loadtable.enumerated.LoadTableConstraintEnum;
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Getter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "t_load_table")
 @SQLDelete(sql = "UPDATE t_load_table SET deleted = true WHERE id = ?")
@@ -21,13 +25,13 @@ public class LoadTable extends Audit implements Serializable {
 
     protected LoadTable() {}
 
-    public LoadTable(Long id) {
-        this.id = id;
+    public LoadTable(@NonNull Long id) {
+        this.setId(id);
     }
 
-    public LoadTable(String entityName) {
-        this.entityName = entityName;
-        this.entityLoadEnabled = false;
+    public LoadTable(@NonNull String entityName) {
+        this.setEntityName(entityName);
+        this.setEntityLoadEnabled(false);
     }
 
     @Serial

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
+import com.fiap.tech.challenge.global.util.EmailValidatorUtil;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringDeserializer;
 import com.fiap.tech.challenge.global.util.enumerated.validation.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -21,6 +23,7 @@ public abstract class UserRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "E-mail do usuário.", example = "robertoafonso@email.com")
     @JsonDeserialize(using = StrictStringDeserializer.class)
+    @Email(regexp = EmailValidatorUtil.EMAIL_REGEXP, message = "E-mail inválido.")
     @NotBlank(message = "O e-mail do usuário não pode ser nulo ou em branco.")
     @JsonProperty("email")
     private String email;

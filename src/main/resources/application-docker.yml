@@ -67,8 +67,8 @@ security:
       bearer-token-secret-key: cyy4KhQAOWuj94LtM6Yvt$FGOQb8KBN6lIXmFFG7!Yv6K#ewWCnH#Q5IS2MhxKp&
       bearer-token-validity-in-milliseconds: 3600000
 
-#CRIPTO
-cripto:
+#CRYPTO
+crypto:
   key: 5E50F405ACE6CBDF17379F4B9F2B0C9F4144C5E380EA0B9298CB02EBD8FFE511
 
 #SWAGGER (URL: http://localhost:8085/user-manager/swagger-ui/index.html)

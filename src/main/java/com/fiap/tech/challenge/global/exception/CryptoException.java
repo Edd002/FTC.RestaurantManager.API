@@ -6,16 +6,16 @@ import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse500;
 import java.io.Serial;
 import java.util.List;
 
-public class CriptoException extends ApiException {
+public class CryptoException extends ApiException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public CriptoException() {
+    public CryptoException() {
         super("Erro de criptografia de senha.");
     }
 
-    public CriptoException(String message) {
+    public CryptoException(String message) {
         super(message);
     }
 

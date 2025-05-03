@@ -2,20 +2,22 @@ package com.fiap.tech.challenge.domain.address.entity;
 
 import com.fiap.tech.challenge.domain.address.AddressEntityListener;
 import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
-import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.bean.BeanComponent;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Getter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "t_address")
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
@@ -25,29 +27,29 @@ public class Address extends Audit implements Serializable {
 
     protected Address() {}
 
-    public Address(Long id) {
-        this.id = id;
+    public Address(@NonNull Long id) {
+        this.setId(id);
     }
 
-    public Address(Long id, String description, String number, String complement, String neighborhood, String cep, String postalCode, String cityHashId) {
-        this.id = id;
-        this.description = description;
-        this.number = number;
-        this.complement = complement;
-        this.neighborhood = neighborhood;
-        this.cep = cep;
-        this.postalCode = postalCode;
-        this.city = BeanComponent.getBean(CityService.class).findByHashId(cityHashId);
+    public Address(@NonNull Long id, @NonNull String description, @NonNull String number, String complement, @NonNull String neighborhood, @NonNull String cep, @NonNull String postalCode, @NonNull City city) {
+        this.setId(id);
+        this.setDescription(description);
+        this.setNumber(number);
+        this.setComplement(complement);
+        this.setNeighborhood(neighborhood);
+        this.setCep(cep);
+        this.setPostalCode(postalCode);
+        this.setCity(city);
     }
 
-    public Address(String description, String number, String complement, String neighborhood, String cep, String postalCode, String cityHashId) {
-        this.description = description;
-        this.number = number;
-        this.complement = complement;
-        this.neighborhood = neighborhood;
-        this.cep = cep;
-        this.postalCode = postalCode;
-        this.city = BeanComponent.getBean(CityService.class).findByHashId(cityHashId);
+    public Address(@NonNull String description, @NonNull String number, String complement, @NonNull String neighborhood, @NonNull String cep, @NonNull String postalCode, @NonNull City city) {
+        this.setDescription(description);
+        this.setNumber(number);
+        this.setComplement(complement);
+        this.setNeighborhood(neighborhood);
+        this.setCep(cep);
+        this.setPostalCode(postalCode);
+        this.setCity(city);
     }
 
     @Serial

@@ -6,7 +6,10 @@ import com.fiap.tech.challenge.domain.city.enumerated.CityConstraintEnum;
 import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -14,7 +17,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "t_city")
 @SQLDelete(sql = "UPDATE t_city SET deleted = true WHERE id = ?")
@@ -24,8 +28,8 @@ public class City extends Audit implements Serializable {
 
     protected City() {}
 
-    public City(Long id) {
-        this.id = id;
+    public City(@NonNull Long id) {
+        this.setId(id);
     }
 
     @Serial

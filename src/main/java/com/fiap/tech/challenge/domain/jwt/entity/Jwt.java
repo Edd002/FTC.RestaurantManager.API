@@ -5,7 +5,10 @@ import com.fiap.tech.challenge.domain.jwt.enumerated.JwtConstraintEnum;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -13,7 +16,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-@Getter
+@Getter(value = AccessLevel.PUBLIC)
+@Setter(value = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "t_jwt")
 @SQLDelete(sql = "UPDATE t_jwt SET deleted = true WHERE id = ?")
@@ -23,13 +27,18 @@ public class Jwt extends Audit implements Serializable {
 
     protected Jwt() {}
 
-    public Jwt(Long id) {
-        this.id = id;
+    public Jwt(@NonNull Long id) {
+        this.setId(id);
     }
 
-    public Jwt(String bearerToken, User user) {
-        this.bearerToken = bearerToken;
-        this.user = user;
+    public Jwt(@NonNull String bearerToken, @NonNull User user) {
+        this.setBearerToken(bearerToken);
+        this.setUser(user);
+    }
+
+    public Jwt(@NonNull Long id, @NonNull Date updatedIn) {
+        this.setId(id);
+        this.setUpdatedIn(updatedIn);
     }
 
     @Serial
@@ -58,10 +67,5 @@ public class Jwt extends Audit implements Serializable {
     @Override
     public String getConstraintErrorMessage(String constraintName) {
         return JwtConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
-    }
-
-    @Override
-    public void setUpdatedIn(Date updatedIn) {
-        super.setUpdatedIn(updatedIn);
     }
 }

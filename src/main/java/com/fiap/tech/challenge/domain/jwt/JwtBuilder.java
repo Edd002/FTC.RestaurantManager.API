@@ -26,9 +26,7 @@ import java.util.Date;
 public class JwtBuilder {
 
     private final JwtSecurityProperty jwtSecurityProperty;
-
     private final JwtService jwtService;
-
     private final String bearerTokenSecretKey;
 
     @Autowired

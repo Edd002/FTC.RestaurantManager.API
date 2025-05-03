@@ -6,7 +6,7 @@ import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.serializer.ErrorResponseJsonSerializer;
-import com.fiap.tech.challenge.global.util.CriptoUtil;
+import com.fiap.tech.challenge.global.util.CryptoUtil;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 import com.google.gson.Gson;
@@ -48,8 +48,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-    @Value("${cripto.key}")
-    private String criptoKey;
+    @Value("${crypto.key}")
+    private String cryptoKey;
 
     private final JwtBuilder jwtBuilder;
     private final JwtService jwtService;
@@ -92,7 +92,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        return CriptoUtil.newInstance(criptoKey);
+        return CryptoUtil.newInstance(cryptoKey);
     }
 
     @Bean
