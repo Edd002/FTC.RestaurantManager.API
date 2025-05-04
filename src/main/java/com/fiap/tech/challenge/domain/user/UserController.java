@@ -7,7 +7,6 @@ import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse2
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -81,20 +80,20 @@ public class UserController {
         return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar usuário por hash id", description = "Buscar usuário por hash id.")
+    @Operation(method = "GET", summary = "Buscar usuário", description = "Buscar usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find() {
-        log.info("Buscando usuário por hash id...");
+        log.info("Buscando usuário...");
         return new BaseSuccessResponse200<>(userService.find()).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir usuário por hash id", description = "Excluir usuário por hash id.")
+    @Operation(method = "DELETE", summary = "Excluir usuário", description = "Excluir usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
-        log.info("Excluindo usuário por hash id...");
-        userService.delete(bearerToken);
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete() {
+        log.info("Excluindo usuário...");
+        userService.delete();
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 }

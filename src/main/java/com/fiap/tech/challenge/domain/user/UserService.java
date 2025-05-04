@@ -1,7 +1,6 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
-import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,15 +33,13 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     private final IUserRepository userRepository;
     private final CityService cityService;
-    private final JwtService jwtService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(IUserRepository userRepository, CityService cityService, JwtService jwtService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.cityService = cityService;
-        this.jwtService = jwtService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
@@ -79,9 +77,9 @@ public class UserService extends BaseService<IUserRepository, User> {
     }
 
     @Transactional
-    public void delete(String bearerToken) {
+    public void delete() {
         delete(AuthUserContextHolder.getAuthUser());
-        jwtService.invalidate(bearerToken);
+        SecurityContextHolder.clearContext();
     }
 
     public User findByLogin(String login) {

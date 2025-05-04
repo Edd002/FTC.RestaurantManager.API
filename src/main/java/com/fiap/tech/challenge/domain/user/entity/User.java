@@ -28,7 +28,8 @@ import java.util.List;
 @EntityListeners({ UserEntityListener.class })
 public class User extends Audit implements Serializable {
 
-    protected User() {}
+    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
+    public User() {}
 
     public User(@NonNull Long id) {
         this.setId(id);

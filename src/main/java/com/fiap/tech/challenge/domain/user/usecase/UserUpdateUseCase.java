@@ -13,7 +13,7 @@ public final class UserUpdateUseCase {
 
     public UserUpdateUseCase(User actualUser, String passwordCryptoKey, UserPutRequestDTO userPutRequestDTO, City city) {
         if (!new UserCheckLoggedOwnerUseCase().isLoggedOwner() && userPutRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
-            throw new AuthorizationException("Usuário não tem permissão para alterar o seu tipo para tipo DONO (OWNER).");
+            throw new AuthorizationException("Usuário não tem permissão para alterar o seu tipo para DONO (OWNER).");
         }
         this.user = new User(
                 actualUser.getId(),
@@ -21,7 +21,7 @@ public final class UserUpdateUseCase {
                 userPutRequestDTO.getEmail(),
                 userPutRequestDTO.getLogin(),
                 passwordCryptoKey,
-                userPutRequestDTO.getPassword(),
+                actualUser.getPassword(),
                 userPutRequestDTO.getRole(),
                 new Address(
                         actualUser.getAddress().getId(),
