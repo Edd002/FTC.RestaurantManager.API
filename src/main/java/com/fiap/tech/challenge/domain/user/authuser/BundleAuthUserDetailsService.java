@@ -23,7 +23,7 @@ public class BundleAuthUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String login) {
         try {
             return new BundleAuthUserDetails(userService.findByLogin(login));
         } catch (JwtNotFoundHttpException | EntityNotFoundException exception) {

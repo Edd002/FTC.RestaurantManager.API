@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -69,7 +70,7 @@ public class SecurityConfig {
     };
 
     private static final String[] OWNER_MATCHERS = {
-            "/api/v1/users/**"
+            "/api/v1/users/filter"
     };
 
     @Autowired
@@ -114,7 +115,7 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.GET, OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
                         .anyRequest()
                         .authenticated()
                 )

@@ -1,6 +1,8 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.jwt.JwtService;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
@@ -31,13 +33,15 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     private final IUserRepository userRepository;
     private final CityService cityService;
+    private final JwtService jwtService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(IUserRepository userRepository, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, CityService cityService, JwtService jwtService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.cityService = cityService;
+        this.jwtService = jwtService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
@@ -49,14 +53,14 @@ public class UserService extends BaseService<IUserRepository, User> {
     }
 
     @Transactional
-    public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(this.findByHashId(hashId), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
+    public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
+        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
     @Transactional
-    public void updatePassword(String hashId, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
-        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
+    public void updatePassword(UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        save(new UserUpdatePasswordUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
     }
 
     @Transactional
@@ -70,13 +74,14 @@ public class UserService extends BaseService<IUserRepository, User> {
     }
 
     @Transactional
-    public UserResponseDTO find(String hashId) {
-        return modelMapper.map(this.findByHashId(hashId), UserResponseDTO.class);
+    public UserResponseDTO find() {
+        return modelMapper.map(AuthUserContextHolder.getAuthUser(), UserResponseDTO.class);
     }
 
     @Transactional
-    public void delete(String hashId) {
-        deleteByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado para ser excluído.", hashId));
+    public void delete(String bearerToken) {
+        delete(AuthUserContextHolder.getAuthUser());
+        jwtService.invalidate(bearerToken);
     }
 
     public User findByLogin(String login) {

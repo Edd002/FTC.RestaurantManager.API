@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse2
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,24 +58,24 @@ public class UserController {
 
     @Operation(method = "PUT", summary = "Atualizar usuário", description = "Atualizar usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PutMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
+    @PutMapping
+    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando usuário...");
-        return new BaseSuccessResponse200<>(userService.update(hashId, userPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(userService.update(userPutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PATCH", summary = "Atualizar senha do usuário", description = "Atualizar senha do usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PatchMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@PathVariable("hashId") String hashId, @RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+    @PatchMapping
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
         log.info("Atualizando senha do usuário...");
-        userService.updatePassword(hashId, userUpdatePasswordPatchRequestDTO);
+        userService.updatePassword(userUpdatePasswordPatchRequestDTO);
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 
     @Operation(method = "GET", summary = "Buscar usuário por filtro", description = "Buscar usuário por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping
+    @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando usuários por filtro...");
         return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
@@ -82,18 +83,18 @@ public class UserController {
 
     @Operation(method = "GET", summary = "Buscar usuário por hash id", description = "Buscar usuário por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find(@PathVariable("hashId") String hashId) {
+    @GetMapping
+    public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find() {
         log.info("Buscando usuário por hash id...");
-        return new BaseSuccessResponse200<>(userService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(userService.find()).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir usuário por hash id", description = "Excluir usuário por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @DeleteMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> deleteByHashId(@PathVariable("hashId") String hashId) {
+    @DeleteMapping
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
         log.info("Excluindo usuário por hash id...");
-        userService.delete(hashId);
+        userService.delete(bearerToken);
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 }

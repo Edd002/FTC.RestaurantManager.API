@@ -15,7 +15,7 @@ public class JwtClaims {
     private final Jws<Claims> claims;
     private final String bearerToken;
 
-    public JwtClaims(String bearerToken, String bearerTokenSecretKey) throws TokenValidationException {
+    public JwtClaims(String bearerToken, String bearerTokenSecretKey) {
         try {
             this.bearerToken = bearerToken;
             claims = Jwts.parser()
@@ -27,7 +27,7 @@ public class JwtClaims {
         }
     }
 
-    public String getLogin() throws JwtException {
+    public String getLogin() {
         return this.claims.getPayload().getSubject();
     }
 }

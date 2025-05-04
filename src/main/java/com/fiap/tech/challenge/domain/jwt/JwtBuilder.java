@@ -32,11 +32,11 @@ public class JwtBuilder {
         this.bearerTokenSecretKey = jwtSecurityProperty.getBearerTokenSecretKey();
     }
 
-    public JwtClaims resolveBearerToken(HttpServletRequest httpServletRequest) throws AuthenticationHttpException {
+    public JwtClaims resolveBearerToken(HttpServletRequest httpServletRequest) {
         return resolveBearerToken(getJwtFromHeader(httpServletRequest));
     }
 
-    public JwtClaims resolveBearerToken(String bearerToken) throws TokenValidationException {
+    public JwtClaims resolveBearerToken(String bearerToken) {
         return new JwtClaims(bearerToken, jwtSecurityProperty.getBearerTokenSecretKey());
     }
 
