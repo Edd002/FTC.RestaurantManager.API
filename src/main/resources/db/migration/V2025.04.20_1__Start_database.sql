@@ -44,7 +44,7 @@ create table t_jwt
     hash_id      varchar(255) not null,
     updated_in   timestamp(6),
     updated_by   varchar(255),
-    bearer_token varchar(255) not null,
+    bearer_token text not null,
     fk_user      bigint       not null,
     primary key (id)
 );

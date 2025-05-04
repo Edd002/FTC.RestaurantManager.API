@@ -40,7 +40,7 @@ public class BundleAuthUserDetailsService implements UserDetailsService {
         return new UsernamePasswordAuthenticationToken(userDetails, Strings.EMPTY, userDetails.getAuthorities());
     }
 
-    public Authentication getAuthentication(BundleAuthUserDetails bundleOAuth2UserDetails) {
-        return new UsernamePasswordAuthenticationToken(bundleOAuth2UserDetails, Strings.EMPTY, bundleOAuth2UserDetails.getAuthorities());
+    public Authentication getAuthentication(BundleAuthUserDetails bundleAuthUserDetails) {
+        return new UsernamePasswordAuthenticationToken(bundleAuthUserDetails, Strings.EMPTY, bundleAuthUserDetails.getAuthorities());
     }
 }

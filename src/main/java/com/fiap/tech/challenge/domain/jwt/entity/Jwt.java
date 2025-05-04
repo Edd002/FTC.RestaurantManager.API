@@ -36,11 +36,6 @@ public class Jwt extends Audit implements Serializable {
         this.setUser(user);
     }
 
-    public Jwt(@NonNull Long id, @NonNull Date updatedIn) {
-        this.setId(id);
-        this.setUpdatedIn(updatedIn);
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -67,5 +62,10 @@ public class Jwt extends Audit implements Serializable {
     @Override
     public String getConstraintErrorMessage(String constraintName) {
         return JwtConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
+    }
+
+    @Override
+    public void setUpdatedIn(Date updatedIn) {
+        super.setUpdatedIn(updatedIn);
     }
 }
