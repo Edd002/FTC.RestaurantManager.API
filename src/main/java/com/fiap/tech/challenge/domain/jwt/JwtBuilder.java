@@ -4,7 +4,6 @@ import com.fiap.tech.challenge.config.properties.JwtSecurityProperty;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.EntityNullException;
-import com.fiap.tech.challenge.global.exception.TokenValidationException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

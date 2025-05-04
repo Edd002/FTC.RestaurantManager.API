@@ -4,12 +4,17 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
+import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
+import com.fiap.tech.challenge.global.exception.AuthorizationException;
 
 public final class UserUpdateUseCase {
 
     private final User user;
 
     public UserUpdateUseCase(User actualUser, String passwordCryptoKey, UserPutRequestDTO userPutRequestDTO, City city) {
+        if (!new UserCheckLoggedOwnerUseCase().isLoggedOwner() && userPutRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
+            throw new AuthorizationException("Usuário não tem permissão para alterar o seu tipo para tipo DONO (OWNER).");
+        }
         this.user = new User(
                 actualUser.getId(),
                 userPutRequestDTO.getName(),

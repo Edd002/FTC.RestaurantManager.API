@@ -40,8 +40,8 @@ public abstract class UserRequestDTO extends BaseRequestDTO {
     @JsonProperty("password")
     private String password;
 
-    @Schema(description = "Permissão do usuário.", example = "OWNER")
-    @ValueOfEnum(enumClass = UserRoleEnum.class, message = "Permissão do usuário inválida.")
+    @Schema(description = "Tipo (role) do usuário.", example = "OWNER")
+    @ValueOfEnum(enumClass = UserRoleEnum.class, message = "Tipo (role) do usuário inválido.")
     @JsonProperty("role")
     private String role;
 }
