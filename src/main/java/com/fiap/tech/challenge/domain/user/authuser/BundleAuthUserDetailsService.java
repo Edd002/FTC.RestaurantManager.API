@@ -5,6 +5,7 @@ import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.exception.JwtNotFoundHttpException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,7 @@ public class BundleAuthUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Autowired
-    public BundleAuthUserDetailsService(UserService userService) {
+    public BundleAuthUserDetailsService(@Lazy UserService userService) {
         this.userService = userService;
     }
 
