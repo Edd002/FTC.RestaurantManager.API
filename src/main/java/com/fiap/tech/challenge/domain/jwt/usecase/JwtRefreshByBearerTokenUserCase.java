@@ -13,7 +13,8 @@ public class JwtRefreshByBearerTokenUserCase {
         if (!new JwtIsActiveUseCase(existingJwt, millisecondsToExpireJwt).isActive()) {
             throw new InvalidBearerTokenHttpException();
         }
-        this.jwt = new Jwt(existingJwt.getId(), new Date());
+        this.jwt = existingJwt;
+        this.jwt.setUpdatedIn(new Date());
     }
 
     public Jwt getRefreshedJwt() {

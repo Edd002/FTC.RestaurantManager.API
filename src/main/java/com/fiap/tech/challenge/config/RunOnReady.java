@@ -1,16 +1,17 @@
 package com.fiap.tech.challenge.config;
 
-import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.loadtable.LoadTableService;
-import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.domain.state.StateService;
-import com.fiap.tech.challenge.domain.user.entity.User;
+import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.domain.user.UserService;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -21,6 +22,9 @@ import java.util.List;
 @Log
 @Configuration
 public class RunOnReady {
+
+    @Value("${crypto.key}")
+    private String cryptoKey;
 
     private static final String PATH_RESOURCE_STATE = "/runready/state.json";
     private static final String PATH_RESOURCE_CITY = "/runready/city.json";
@@ -79,6 +83,7 @@ public class RunOnReady {
 
     private void createUser(User user) {
         try {
+            user.setEncryptedPassword(cryptoKey, user.getPassword());
             userService.save(user);
         } catch (Exception exception) {
             log.severe(String.format("O usuário de nome %s não pode ser cadastrado. Erro: %s", user.getName(), exception.getMessage()));

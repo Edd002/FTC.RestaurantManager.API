@@ -53,7 +53,7 @@ public class JwtController {
         return new BaseSuccessResponse201<>(jwtService.generate(jwtGeneratePostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Verificar se o JWT está válido reiniciando o tempo de expiração", description = "Verificar se o JWT está válido reiniciando o tempo de expiração.")
+    @Operation(method = "GET", summary = "Verificar se o JWT está válido", description = "Verificar se o JWT está válido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping("/validate")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<JwtResponseDTO>> validate(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {

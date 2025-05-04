@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.config.security;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
+import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.serializer.ErrorResponseJsonSerializer;
@@ -33,10 +34,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -67,15 +64,12 @@ public class SecurityConfig {
             "/configuration/**",
             "/webjars/**",
             "/actuator/health/**",
-            "/api/v1/jwts/generate",
-
-            "/api/v1/users/**", // TODO Remove after config done
-            "/api/v1/cities/**" // TODO Remove after config done
+            "/api/v1/cities/**",
+            "/api/v1/jwts/generate"
     };
 
     private static final String[] OWNER_MATCHERS = {
-            "/api/v1/users/**",
-            "/api/v1/cities/**"
+            "/api/v1/users/**"
     };
 
     @Autowired
@@ -91,7 +85,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
+    public PasswordEncoder passwordEncoder() {
         return CryptoUtil.newInstance(cryptoKey);
     }
 
@@ -114,14 +108,15 @@ public class SecurityConfig {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Cliente não autenticado."));;
+                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Usuário não autenticado."));;
                     Gson gson = new GsonBuilder().registerTypeAdapter(BaseErrorResponse.class, new ErrorResponseJsonSerializer()).setDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).create();
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        // .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name()) TODO Add after config
-                        .anyRequest().authenticated()
+                        .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(withDefaults());
         return httpSecurity.build();

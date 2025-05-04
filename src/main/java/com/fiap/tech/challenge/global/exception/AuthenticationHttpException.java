@@ -12,7 +12,7 @@ public class AuthenticationHttpException extends ApiException {
   private static final long serialVersionUID = 1L;
 
   public AuthenticationHttpException() {
-    super("Cliente não autenticado.");
+    super("Usuário não autenticado.");
   }
 
   public AuthenticationHttpException(String message) {

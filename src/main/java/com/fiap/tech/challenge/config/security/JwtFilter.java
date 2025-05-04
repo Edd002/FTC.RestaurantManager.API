@@ -15,7 +15,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -69,8 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
-            Authentication authentication = bundleAuthUserDetailsService.getAuthentication(jwt.getLogin());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && !ArrayUtils.contains(IGNORE_RESPONSE_FILTER_PATHS, httpServletRequest.getServletPath())) {
                 jwtService.refreshByBearerToken(jwt.getBearerToken());

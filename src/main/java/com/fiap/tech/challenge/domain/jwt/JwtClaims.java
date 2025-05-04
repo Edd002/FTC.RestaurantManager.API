@@ -21,7 +21,7 @@ public class JwtClaims {
             claims = Jwts.parser()
                     .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(bearerTokenSecretKey)))
                     .build()
-                    .parseSignedClaims(bearerTokenSecretKey);
+                    .parseSignedClaims(bearerToken);
         } catch (JwtException | IllegalArgumentException e) {
             throw new TokenValidationException("O JWT expirou ou é inválido.");
         }
