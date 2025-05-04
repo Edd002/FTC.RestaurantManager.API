@@ -22,6 +22,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     networks:
       - ftc_user_manager_database_net
+    profiles: ["docker"]
 
   # DATABASE
   ftc_user_manager_database:
@@ -63,4 +64,3 @@ networks:
 volumes:
   ftc_user_manager_database:
   ftc_user_manager_database_data:
-
