@@ -23,7 +23,8 @@ import java.io.Serializable;
 @EntityListeners({ LoadTableEntityListener.class })
 public class LoadTable extends Audit implements Serializable {
 
-    protected LoadTable() {}
+    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
+    public LoadTable() {}
 
     public LoadTable(@NonNull Long id) {
         this.setId(id);

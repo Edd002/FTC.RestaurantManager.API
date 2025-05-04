@@ -23,9 +23,9 @@ public class AuthUserContextHolder {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(UserRoleEnum.OWNER.getSimpleGrantedAuthority());
     }
 
-    public static User getAuthUser() throws AuthenticationHttpException {
+    public static User getAuthUser() {
         if (hasNoAuthUser()) {
-            throw new AuthenticationHttpException("Acesso do cliente não permitido.");
+            throw new AuthenticationHttpException();
         }
         return getUserFromAuthUser();
     }

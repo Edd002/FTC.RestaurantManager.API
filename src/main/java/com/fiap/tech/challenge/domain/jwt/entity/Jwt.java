@@ -25,7 +25,8 @@ import java.util.Date;
 @EntityListeners({ JwtEntityListener.class })
 public class Jwt extends Audit implements Serializable {
 
-    protected Jwt() {}
+    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
+    public Jwt() {}
 
     public Jwt(@NonNull Long id) {
         this.setId(id);

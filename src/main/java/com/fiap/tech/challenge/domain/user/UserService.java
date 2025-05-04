@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilder;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,14 +51,14 @@ public class UserService extends BaseService<IUserRepository, User> {
     }
 
     @Transactional
-    public UserResponseDTO update(String hashId, UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(this.findByHashId(hashId), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
+    public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
+        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
     @Transactional
-    public void updatePassword(String hashId, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
-        save(new UserUpdatePasswordUseCase(this.findByHashId(hashId), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
+    public void updatePassword(UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
+        save(new UserUpdatePasswordUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
     }
 
     @Transactional
@@ -70,13 +72,14 @@ public class UserService extends BaseService<IUserRepository, User> {
     }
 
     @Transactional
-    public UserResponseDTO find(String hashId) {
-        return modelMapper.map(this.findByHashId(hashId), UserResponseDTO.class);
+    public UserResponseDTO find() {
+        return modelMapper.map(AuthUserContextHolder.getAuthUser(), UserResponseDTO.class);
     }
 
     @Transactional
-    public void delete(String hashId) {
-        deleteByHashId(hashId, String.format("O usuário com hash id %s não foi encontrado para ser excluído.", hashId));
+    public void delete() {
+        delete(AuthUserContextHolder.getAuthUser());
+        SecurityContextHolder.clearContext();
     }
 
     public User findByLogin(String login) {

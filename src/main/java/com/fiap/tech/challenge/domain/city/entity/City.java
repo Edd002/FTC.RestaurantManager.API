@@ -26,7 +26,8 @@ import java.util.List;
 @EntityListeners({ CityEntityListener.class })
 public class City extends Audit implements Serializable {
 
-    protected City() {}
+    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
+    public City() {}
 
     public City(@NonNull Long id) {
         this.setId(id);

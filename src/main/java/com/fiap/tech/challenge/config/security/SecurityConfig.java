@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -52,7 +53,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    private static final String[] PUBLIC_MATCHERS = {
+    private static final String[] PUBLIC_MATCHERS_ALL = {
             "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/api-docs/**",
@@ -68,8 +69,12 @@ public class SecurityConfig {
             "/api/v1/jwts/generate"
     };
 
-    private static final String[] OWNER_MATCHERS = {
-            "/api/v1/users/**"
+    private static final String[] PUBLIC_MATCHERS_USERS = {
+            "/api/v1/users"
+    };
+
+    private static final String[] OWNER_MATCHERS_USERS = {
+            "/api/v1/users/filter"
     };
 
     @Autowired
@@ -108,13 +113,14 @@ public class SecurityConfig {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "Usuário não autenticado."));;
+                    BaseErrorResponse baseErrorResponse = new BaseErrorResponse401(Collections.singletonList(ValidationUtil.isNotNull(request.getAttribute("jwtError")) ? request.getAttribute("jwtError").toString() : "O usuário não possui permissão para a operação solicitada."));;
                     Gson gson = new GsonBuilder().registerTypeAdapter(BaseErrorResponse.class, new ErrorResponseJsonSerializer()).setDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).create();
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        .requestMatchers(OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PUBLIC_MATCHERS_ALL).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_USERS).permitAll()
+                        .requestMatchers(HttpMethod.GET, OWNER_MATCHERS_USERS).hasAuthority(UserRoleEnum.OWNER.name())
                         .anyRequest()
                         .authenticated()
                 )
@@ -124,7 +130,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.debug(true).ignoring().requestMatchers(PUBLIC_MATCHERS);
+        return web -> web.debug(true).ignoring().requestMatchers(PUBLIC_MATCHERS_ALL);
     }
 
     @Bean

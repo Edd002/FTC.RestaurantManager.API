@@ -4,7 +4,6 @@ import com.fiap.tech.challenge.config.properties.JwtSecurityProperty;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.EntityNullException;
-import com.fiap.tech.challenge.global.exception.TokenValidationException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -32,11 +31,11 @@ public class JwtBuilder {
         this.bearerTokenSecretKey = jwtSecurityProperty.getBearerTokenSecretKey();
     }
 
-    public JwtClaims resolveBearerToken(HttpServletRequest httpServletRequest) throws AuthenticationHttpException {
+    public JwtClaims resolveBearerToken(HttpServletRequest httpServletRequest) {
         return resolveBearerToken(getJwtFromHeader(httpServletRequest));
     }
 
-    public JwtClaims resolveBearerToken(String bearerToken) throws TokenValidationException {
+    public JwtClaims resolveBearerToken(String bearerToken) {
         return new JwtClaims(bearerToken, jwtSecurityProperty.getBearerTokenSecretKey());
     }
 

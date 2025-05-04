@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -70,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && !ArrayUtils.contains(IGNORE_RESPONSE_FILTER_PATHS, httpServletRequest.getServletPath())) {
+            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(IGNORE_RESPONSE_FILTER_PATHS, httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
                 jwtService.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
@@ -83,5 +84,9 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
+    }
+
+    private boolean isDeletingUser(HttpServletRequest httpServletRequest) {
+        return httpServletRequest.getServletPath().equals("/api/v1/users") && httpServletRequest.getMethod().equals(HttpMethod.DELETE.name());
     }
 }

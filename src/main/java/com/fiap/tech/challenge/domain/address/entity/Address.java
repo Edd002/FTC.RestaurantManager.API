@@ -25,7 +25,8 @@ import java.io.Serializable;
 @EntityListeners({ AddressEntityListener.class })
 public class Address extends Audit implements Serializable {
 
-    protected Address() {}
+    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
+    public Address() {}
 
     public Address(@NonNull Long id) {
         this.setId(id);
