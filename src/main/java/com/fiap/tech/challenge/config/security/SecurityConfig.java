@@ -53,7 +53,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    private static final String[] PUBLIC_MATCHERS = {
+    private static final String[] PUBLIC_MATCHERS_ALL = {
             "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/api-docs/**",
@@ -69,7 +69,11 @@ public class SecurityConfig {
             "/api/v1/jwts/generate"
     };
 
-    private static final String[] OWNER_MATCHERS = {
+    private static final String[] PUBLIC_MATCHERS_USERS = {
+            "/api/v1/users"
+    };
+
+    private static final String[] OWNER_MATCHERS_USERS = {
             "/api/v1/users/filter"
     };
 
@@ -114,8 +118,9 @@ public class SecurityConfig {
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
-                        .requestMatchers(HttpMethod.GET, OWNER_MATCHERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PUBLIC_MATCHERS_ALL).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_USERS).permitAll()
+                        .requestMatchers(HttpMethod.GET, OWNER_MATCHERS_USERS).hasAuthority(UserRoleEnum.OWNER.name())
                         .anyRequest()
                         .authenticated()
                 )
@@ -125,7 +130,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.debug(true).ignoring().requestMatchers(PUBLIC_MATCHERS);
+        return web -> web.debug(true).ignoring().requestMatchers(PUBLIC_MATCHERS_ALL);
     }
 
     @Bean

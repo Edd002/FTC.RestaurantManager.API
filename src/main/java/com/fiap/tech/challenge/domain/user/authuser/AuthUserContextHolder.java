@@ -25,7 +25,7 @@ public class AuthUserContextHolder {
 
     public static User getAuthUser() {
         if (hasNoAuthUser()) {
-            throw new AuthenticationHttpException("Acesso do cliente não permitido.");
+            throw new AuthenticationHttpException("Acesso do usuário não permitido.");
         }
         return getUserFromAuthUser();
     }
