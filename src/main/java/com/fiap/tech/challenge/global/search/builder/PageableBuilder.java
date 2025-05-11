@@ -1,7 +1,7 @@
-package com.fiap.tech.challenge.global.entity.builder;
+package com.fiap.tech.challenge.global.search.builder;
 
 import com.fiap.tech.challenge.global.base.BasePaginationFilter;
-import com.fiap.tech.challenge.global.entity.enumerated.SortOrderEnum;
+import com.fiap.tech.challenge.global.search.enumerated.SortOrderEnum;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -1,8 +1,8 @@
 package com.fiap.tech.challenge.domain.user.specification;
 
 import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.global.entity.specification.BasicSpecification;
-import com.fiap.tech.challenge.global.entity.specification.SearchCriteria;
+import com.fiap.tech.challenge.global.search.specification.BasicSpecification;
+import com.fiap.tech.challenge.global.search.specification.SearchCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

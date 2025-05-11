@@ -2,7 +2,7 @@ package com.fiap.tech.challenge.global.base;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse422;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse500;
@@ -76,21 +76,17 @@ public class BaseController {
         return new BaseErrorResponse400(errors).buildResponse();
     }
 
-    @SuppressWarnings("unchecked")
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
         try {
-            Class<?> entityClass = entityManager.getMetamodel().getEntities().stream().
+            String constraintErrorMessage = entityManager.getMetamodel().getEntities().stream().
                     filter(entityType -> Objects.requireNonNull(constraintViolationException.getConstraintName()).contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
                     .findFirst()
+                    .map(entityType -> Objects.requireNonNull(entityType.getJavaType().getAnnotation(ConstraintMapper.class)).constraintClass())
                     .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
-                    .getJavaType();
-            if (Audit.class.isAssignableFrom(entityClass)) {
-                Audit entity = ((Class<Audit>) entityClass).getDeclaredConstructor().newInstance();
-                return new BaseErrorResponse422(List.of(entity.getConstraintErrorMessage(constraintViolationException.getConstraintName()))).buildResponse();
-            }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
-                 ConstraintNotAssociatedWithEntityException ignored) {
+                    .getDeclaredConstructor().newInstance().getErrorMessage(constraintViolationException.getConstraintName());
+            return new BaseErrorResponse422(List.of(constraintErrorMessage)).buildResponse();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ConstraintNotAssociatedWithEntityException ignored) {
         }
         return new BaseErrorResponse422(List.of(String.format("Violação do restritor %s do banco de dados.", constraintViolationException.getConstraintName()))).buildResponse();
     }

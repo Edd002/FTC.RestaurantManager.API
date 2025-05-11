@@ -3,9 +3,10 @@ package com.fiap.tech.challenge.domain.user.entity;
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
 import com.fiap.tech.challenge.domain.user.UserEntityListener;
-import com.fiap.tech.challenge.domain.user.enumerated.UserConstraintEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
+import com.fiap.tech.challenge.domain.user.enumerated.constraint.UserConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,10 +27,10 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE t_user SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ UserEntityListener.class })
+@ConstraintMapper(constraintClass = UserConstraint.class)
 public class User extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public User() {}
+    protected User() {}
 
     public User(@NonNull Long id) {
         this.setId(id);
@@ -91,11 +92,6 @@ public class User extends Audit implements Serializable {
 
     public void saveState(User userSavedState) {
         this.userSavedState = userSavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return UserConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 
     public void setEncryptedPassword(@NonNull String passwordCryptoKey, @NonNull String password) {

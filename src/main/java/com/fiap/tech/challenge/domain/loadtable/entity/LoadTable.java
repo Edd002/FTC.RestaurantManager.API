@@ -1,8 +1,9 @@
 package com.fiap.tech.challenge.domain.loadtable.entity;
 
 import com.fiap.tech.challenge.domain.loadtable.LoadTableEntityListener;
-import com.fiap.tech.challenge.domain.loadtable.enumerated.LoadTableConstraintEnum;
+import com.fiap.tech.challenge.domain.loadtable.enumerated.constraint.LoadTableConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,10 +22,10 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE t_load_table SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ LoadTableEntityListener.class })
+@ConstraintMapper(constraintClass = LoadTableConstraint.class)
 public class LoadTable extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public LoadTable() {}
+    protected LoadTable() {}
 
     public LoadTable(@NonNull Long id) {
         this.setId(id);
@@ -55,10 +56,5 @@ public class LoadTable extends Audit implements Serializable {
 
     public void saveState(LoadTable loadTableSavedState) {
         this.loadTableSavedState = loadTableSavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return LoadTableConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 }

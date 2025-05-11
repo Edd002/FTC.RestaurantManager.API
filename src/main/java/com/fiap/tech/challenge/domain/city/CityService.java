@@ -5,7 +5,7 @@ import com.fiap.tech.challenge.domain.city.dto.CityResponseDTO;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.specification.CitySpecificationBuilder;
 import com.fiap.tech.challenge.global.base.BaseService;
-import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;
+import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

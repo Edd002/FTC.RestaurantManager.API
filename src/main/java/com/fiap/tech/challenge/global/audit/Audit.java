@@ -65,6 +65,4 @@ public abstract class Audit implements Serializable {
     public void saveState(Audit auditSavedState) {
         this.auditSavedState = auditSavedState;
     }
-
-    public abstract String getConstraintErrorMessage(String constraintName);
 }

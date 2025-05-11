@@ -2,8 +2,9 @@ package com.fiap.tech.challenge.domain.state.entity;
 
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.state.StateEntityListener;
-import com.fiap.tech.challenge.domain.state.enumerated.StateConstraintEnum;
+import com.fiap.tech.challenge.domain.state.enumerated.constraint.StateConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,10 +24,10 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE t_state SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ StateEntityListener.class })
+@ConstraintMapper(constraintClass = StateConstraint.class)
 public class State extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public State() {}
+    protected State() {}
 
     public State(@NonNull Long id) {
         this.setId(id);
@@ -55,10 +56,5 @@ public class State extends Audit implements Serializable {
 
     public void saveState(State stateSavedState) {
         this.stateSavedState = stateSavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return StateConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 }

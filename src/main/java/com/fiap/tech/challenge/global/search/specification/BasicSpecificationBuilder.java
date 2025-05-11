@@ -1,7 +1,7 @@
-package com.fiap.tech.challenge.global.entity.specification;
+package com.fiap.tech.challenge.global.search.specification;
 
-import com.fiap.tech.challenge.global.entity.enumerated.FetchDeletedEnum;
-import com.fiap.tech.challenge.global.entity.enumerated.SearchOperationEnum;
+import com.fiap.tech.challenge.global.search.enumerated.FetchDeletedEnum;
+import com.fiap.tech.challenge.global.search.enumerated.SearchOperationEnum;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import lombok.extern.java.Log;
 import org.springframework.data.jpa.domain.Specification;

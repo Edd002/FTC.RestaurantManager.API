@@ -2,9 +2,10 @@ package com.fiap.tech.challenge.domain.city.entity;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.CityEntityListener;
-import com.fiap.tech.challenge.domain.city.enumerated.CityConstraintEnum;
+import com.fiap.tech.challenge.domain.city.enumerated.constraint.CityConstraint;
 import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,10 +25,10 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE t_city SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ CityEntityListener.class })
+@ConstraintMapper(constraintClass = CityConstraint.class)
 public class City extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public City() {}
+    protected City() {}
 
     public City(@NonNull Long id) {
         this.setId(id);
@@ -45,7 +46,7 @@ public class City extends Audit implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_state", nullable = false)
     private State state;
 
@@ -57,10 +58,5 @@ public class City extends Audit implements Serializable {
 
     public void saveState(City citySavedState) {
         this.citySavedState = citySavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return CityConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 }

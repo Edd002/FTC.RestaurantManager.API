@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.domain.jwt.enumerated;
+package com.fiap.tech.challenge.domain.jwt.enumerated.constraint;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

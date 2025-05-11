@@ -9,7 +9,7 @@ import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
-import com.fiap.tech.challenge.global.entity.builder.PageableBuilder;
+import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
