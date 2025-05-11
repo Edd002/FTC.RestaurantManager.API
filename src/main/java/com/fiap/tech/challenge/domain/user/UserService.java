@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -46,19 +47,23 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
-        User newUser = new UserCreateUseCase(userPostRequestDTO, cryptoKey, cityService.findByHashId(userPostRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
+        City city = cityService.findByHashId(userPostRequestDTO.getAddress().getHashIdCity());
+        User newUser = AuthUserContextHolder.getAuthUserIfExists()
+                .map(loggedUser -> new UserCreateUseCase(loggedUser, city, userPostRequestDTO, cryptoKey).getBuiltedUser())
+                .orElseGet(() -> new UserCreateUseCase(city, userPostRequestDTO, cryptoKey).getBuiltedUser());
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
     public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
-        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userPutRequestDTO, cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity())).getBuiltedUser();
+        City city = cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity());
+        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), city, userPutRequestDTO, cryptoKey).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
     @Transactional
     public void updatePassword(UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
-        save(new UserUpdatePasswordUseCase(AuthUserContextHolder.getAuthUser(), cryptoKey, userUpdatePasswordPatchRequestDTO).getBuiltedUser());
+        save(new UserUpdatePasswordUseCase(AuthUserContextHolder.getAuthUser(), userUpdatePasswordPatchRequestDTO, cryptoKey).getBuiltedUser());
     }
 
     @Transactional
