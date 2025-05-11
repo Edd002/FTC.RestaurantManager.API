@@ -11,11 +11,22 @@ public final class UserCreateUseCase {
 
     private final User user;
 
-    public UserCreateUseCase(UserPostRequestDTO userPostRequestDTO, String passwordCryptoKey, City city) {
-        if (!new UserCheckLoggedOwnerUseCase().isLoggedOwner() && userPostRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
-            throw new AuthorizationException("Apenas usuários do tipo DONO (OWNER) podem criar outros usuários com esse mesmo tipo.");
+    public UserCreateUseCase(User loggedUser, City city, UserPostRequestDTO userPostRequestDTO, String passwordCryptoKey) {
+        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER) && userPostRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
+            throw new AuthorizationException("O usuário deve ser do tipo DONO (OWNER) para criar outros usuários com esse mesmo tipo.");
         }
-        this.user = new User(
+        this.user = buildUser(city, userPostRequestDTO, passwordCryptoKey);
+    }
+
+    public UserCreateUseCase(City city, UserPostRequestDTO userPostRequestDTO, String passwordCryptoKey) {
+        if (userPostRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
+            throw new AuthorizationException("Para criar um usuário do tipo DONO (OWNER) é necessário estar autenticado com um usuário com esse mesmo tipo.");
+        }
+        this.user = buildUser(city, userPostRequestDTO, passwordCryptoKey);
+    }
+
+    private User buildUser(City city, UserPostRequestDTO userPostRequestDTO, String passwordCryptoKey) {
+        return new User(
                 userPostRequestDTO.getName(),
                 userPostRequestDTO.getEmail(),
                 userPostRequestDTO.getLogin(),

@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.domain.state.enumerated;
+package com.fiap.tech.challenge.domain.state.enumerated.constraint;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -2,10 +2,10 @@ package com.fiap.tech.challenge.domain.city.specification;
 
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.dto.CityGetFilter;
-import com.fiap.tech.challenge.global.entity.enumerated.FetchDeletedEnum;
-import com.fiap.tech.challenge.global.entity.enumerated.SearchOperationEnum;
-import com.fiap.tech.challenge.global.entity.specification.BasicSpecificationBuilder;
-import com.fiap.tech.challenge.global.entity.specification.SearchCriteria;
+import com.fiap.tech.challenge.global.search.enumerated.FetchDeletedEnum;
+import com.fiap.tech.challenge.global.search.enumerated.SearchOperationEnum;
+import com.fiap.tech.challenge.global.search.specification.BasicSpecificationBuilder;
+import com.fiap.tech.challenge.global.search.specification.SearchCriteria;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.springframework.stereotype.Component;
 

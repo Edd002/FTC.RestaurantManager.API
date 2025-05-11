@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.entity.enumerated;
+package com.fiap.tech.challenge.global.search.enumerated;
 
 public enum FetchDeletedEnum {
 

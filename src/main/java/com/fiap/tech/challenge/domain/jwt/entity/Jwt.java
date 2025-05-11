@@ -1,9 +1,10 @@
 package com.fiap.tech.challenge.domain.jwt.entity;
 
 import com.fiap.tech.challenge.domain.jwt.JwtEntityListener;
-import com.fiap.tech.challenge.domain.jwt.enumerated.JwtConstraintEnum;
+import com.fiap.tech.challenge.domain.jwt.enumerated.constraint.JwtConstraint;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,10 +24,10 @@ import java.util.Date;
 @SQLDelete(sql = "UPDATE t_jwt SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ JwtEntityListener.class })
+@ConstraintMapper(constraintClass = JwtConstraint.class)
 public class Jwt extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public Jwt() {}
+    protected Jwt() {}
 
     public Jwt(@NonNull Long id) {
         this.setId(id);
@@ -49,7 +50,7 @@ public class Jwt extends Audit implements Serializable {
     @Column(name = "bearer_token", nullable = false)
     private String bearerToken;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.EAGER)
     @JoinColumn(name = "fk_user", nullable = false)
     private User user;
 
@@ -58,11 +59,6 @@ public class Jwt extends Audit implements Serializable {
 
     public void saveState(Jwt jwtSavedState) {
         this.jwtSavedState = jwtSavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return JwtConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 
     @Override

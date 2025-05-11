@@ -1,10 +1,11 @@
 package com.fiap.tech.challenge.domain.address.entity;
 
 import com.fiap.tech.challenge.domain.address.AddressEntityListener;
-import com.fiap.tech.challenge.domain.address.enumerated.AddressConstraintEnum;
+import com.fiap.tech.challenge.domain.address.enumerated.constraint.AddressConstraint;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
+import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,10 +24,10 @@ import java.io.Serializable;
 @SQLDelete(sql = "UPDATE t_address SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
 @EntityListeners({ AddressEntityListener.class })
+@ConstraintMapper(constraintClass = AddressConstraint.class)
 public class Address extends Audit implements Serializable {
 
-    // TODO Achar alternativa para getDeclaredConstructor().newInstance() de BaseController e alterar construtor para protected
-    public Address() {}
+    protected Address() {}
 
     public Address(@NonNull Long id) {
         this.setId(id);
@@ -80,7 +81,7 @@ public class Address extends Audit implements Serializable {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_city", nullable = false)
     private City city;
 
@@ -92,10 +93,5 @@ public class Address extends Audit implements Serializable {
 
     public void saveState(Address addressSavedState) {
         this.addressSavedState = addressSavedState;
-    }
-
-    @Override
-    public String getConstraintErrorMessage(String constraintName) {
-        return AddressConstraintEnum.valueOf(constraintName.toUpperCase()).getErrorMessage();
     }
 }

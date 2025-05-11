@@ -1,6 +1,6 @@
-package com.fiap.tech.challenge.global.entity.specification;
+package com.fiap.tech.challenge.global.search.specification;
 
-import com.fiap.tech.challenge.global.entity.enumerated.SearchOperationEnum;
+import com.fiap.tech.challenge.global.search.enumerated.SearchOperationEnum;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
