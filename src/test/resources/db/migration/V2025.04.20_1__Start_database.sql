@@ -111,18 +111,27 @@ alter table if exists t_jwt add constraint t_jwt_fk_user foreign key (fk_user) r
 alter table if exists t_user add constraint t_user_fk_address foreign key (fk_address) references t_address;
 
 CREATE UNIQUE INDEX T_ADDRESS_HASH_ID_UK ON public.t_address (hash_id);
+ALTER TABLE public.t_city ADD FK_STATE_UK_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_state END);
+ALTER TABLE public.t_city ADD FK_NAME_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE name END);
 CREATE UNIQUE INDEX T_CITY_HASH_ID_UK ON public.t_city (hash_id);
-CREATE UNIQUE INDEX T_CITY_FK_STATE_AND_NAME_UK ON public.t_city (fk_state, name, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_JWT_HASH_ID_UK ON public.t_jwt (hash_id);
-CREATE UNIQUE INDEX T_JWT_BEARER_TOKEN_UK ON public.t_jwt (bearer_token, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_LOAD_TABLE_HASH_ID_UK ON public.t_load_table (hash_id);
-CREATE UNIQUE INDEX T_LOAD_TABLE_ENTITY_NAME_UK ON public.t_load_table (entity_name, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_STATE_HASH_ID_UK ON public.t_state (hash_id);
-CREATE UNIQUE INDEX T_STATE_NAME_UK ON public.t_state (name, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_STATE_UF_UK ON public.t_state (uf, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_CITY_FK_STATE_AND_NAME_UK ON public.t_city (FK_STATE_UK_FIELD, FK_NAME_UK_FIELD);
+ALTER TABLE public.t_jwt ADD BEARER_TOKEN_UK_FIELD VARCHAR(1024) AS (CASE deleted WHEN TRUE THEN NULL ELSE bearer_token END);
+CREATE UNIQUE INDEX T_JWT_HASH_ID_UK ON public.t_jwt(hash_id);
+CREATE UNIQUE INDEX T_JWT_BEARER_TOKEN_UK ON public.t_jwt(BEARER_TOKEN_UK_FIELD);
+ALTER TABLE public.t_load_table ADD ENTITY_NAME_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE entity_name END);
+CREATE UNIQUE INDEX T_LOAD_TABLE_HASH_ID_UK ON public.t_load_table(hash_id);
+CREATE UNIQUE INDEX T_LOAD_TABLE_ENTITY_NAME_UK ON public.t_load_table(ENTITY_NAME_UK_FIELD);
+ALTER TABLE public.t_state ADD NAME_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE name END);
+ALTER TABLE public.t_state ADD UF_UK_FIELD VARCHAR(2) AS (CASE deleted WHEN TRUE THEN NULL ELSE uf END);
+CREATE UNIQUE INDEX T_STATE_HASH_ID_UK ON public.t_state(hash_id);
+CREATE UNIQUE INDEX T_STATE_NAME_UK ON public.t_state(NAME_UK_FIELD);
+CREATE UNIQUE INDEX T_STATE_UF_UK ON public.t_state(UF_UK_FIELD);
+ALTER TABLE public.t_user ADD EMAIL_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE email END);
+ALTER TABLE public.t_user ADD LOGIN_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE login END);
+ALTER TABLE public.t_user ADD FK_ADDRESS_UK_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_address END);
 CREATE UNIQUE INDEX T_USER_HASH_ID_UK ON public.t_user (hash_id);
-CREATE UNIQUE INDEX T_USER_EMAIL_UK ON public.t_user (email, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_USER_LOGIN_UK ON public.t_user (login, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_USER_FK_ADDRESS_UK ON public.t_user (fk_address, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_USER_EMAIL_UK ON public.t_user(EMAIL_UK_FIELD);
+CREATE UNIQUE INDEX T_USER_LOGIN_UK ON public.t_user(LOGIN_UK_FIELD);
+CREATE UNIQUE INDEX T_USER_FK_ADDRESS_UK ON public.t_user(FK_ADDRESS_UK_FIELD);
 
 ALTER TABLE public.t_user ADD CONSTRAINT T_USER_ROLE_CHECK CHECK (role IN ('OWNER', 'CLIENT'));

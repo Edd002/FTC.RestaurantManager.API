@@ -11,14 +11,14 @@ import lombok.Getter;
 @Getter
 public class JwtGeneratePostRequestDTO {
 
-    @Schema(description = "Login do usuário.", example = "roberto_afonso_001")
+    @Schema(description = "Login do usuário.", example = "roberto_afonso_001", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o login do usuário é 255 caracteres.")
     @NotBlank(message = "O login do usuário deve ser informado.")
     @JsonDeserialize(using = StrictStringDeserializer.class)
     @JsonProperty("login")
     private String login;
 
-    @Schema(description = "Senha do usuário.", example = "robertoafonso2025")
+    @Schema(description = "Senha do usuário.", example = "robertoafonso2025", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para a senha do usuário é 255 caracteres.")
     @NotBlank(message = "A senha do usuário deve ser informada.")
     @JsonDeserialize(using = StrictStringDeserializer.class)
