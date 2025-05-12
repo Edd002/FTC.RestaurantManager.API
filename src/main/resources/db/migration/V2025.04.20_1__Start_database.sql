@@ -105,14 +105,10 @@ create sequence public.sq_load_table start with 1 increment by 1;
 create sequence public.sq_state start with 1 increment by 1;
 create sequence public.sq_user start with 1 increment by 1;
 
-alter table if exists t_address
-    add constraint t_address_fk_city foreign key (fk_city) references t_city;;
-alter table if exists t_city
-    add constraint t_city_fk_state foreign key (fk_state) references t_state;
-alter table if exists t_jwt
-    add constraint t_jwt_fk_user foreign key (fk_user) references t_user;
-alter table if exists t_user
-    add constraint t_user_fk_address foreign key (fk_address) references t_address;
+alter table if exists t_address add constraint t_address_fk_city foreign key (fk_city) references t_city;;
+alter table if exists t_city add constraint t_city_fk_state foreign key (fk_state) references t_state;
+alter table if exists t_jwt add constraint t_jwt_fk_user foreign key (fk_user) references t_user;
+alter table if exists t_user add constraint t_user_fk_address foreign key (fk_address) references t_address;
 
 CREATE UNIQUE INDEX T_ADDRESS_HASH_ID_UK ON public.t_address (hash_id);
 CREATE UNIQUE INDEX T_CITY_HASH_ID_UK ON public.t_city (hash_id);
@@ -126,7 +122,7 @@ CREATE UNIQUE INDEX T_STATE_NAME_UK ON public.t_state (name, deleted) WHERE dele
 CREATE UNIQUE INDEX T_STATE_UF_UK ON public.t_state (uf, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_USER_HASH_ID_UK ON public.t_user (hash_id);
 CREATE UNIQUE INDEX T_USER_EMAIL_UK ON public.t_user (email, deleted) WHERE deleted IS NULL OR deleted = false;
-CREATE UNIQUE INDEX T_USER_LOGIN_ID_UK ON public.t_user (login, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_USER_LOGIN_UK ON public.t_user (login, deleted) WHERE deleted IS NULL OR deleted = false;
 CREATE UNIQUE INDEX T_USER_FK_ADDRESS_UK ON public.t_user (fk_address, deleted) WHERE deleted IS NULL OR deleted = false;
 
 ALTER TABLE public.t_user ADD CONSTRAINT T_USER_ROLE_CHECK CHECK (role IN ('OWNER', 'CLIENT'));
