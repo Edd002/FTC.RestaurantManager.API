@@ -33,7 +33,7 @@ public final class BaseErrorResponse412 extends BaseErrorResponse {
         return this.status;
     }
 
-    @Schema(description = "URI do endpoint.", example = "/user-manager/api/v1/path")
+    @Schema(description = "URI do endpoint.", example = "/restaurant-manager/api/v1/path")
     public String getPath() {
         return this.path;
     }

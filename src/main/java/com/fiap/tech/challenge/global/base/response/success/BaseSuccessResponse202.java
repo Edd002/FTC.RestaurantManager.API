@@ -33,7 +33,7 @@ public class BaseSuccessResponse202<T extends BaseResponseDTO> extends BaseSucce
 		return this.status;
 	}
 
-	@Schema(description = "URI do endpoint.", example = "/user-manager/api/v1/path")
+	@Schema(description = "URI do endpoint.", example = "/restaurant-manager/api/v1/path")
 	public String getPath() {
 		return this.path;
 	}
