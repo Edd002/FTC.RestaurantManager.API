@@ -30,9 +30,11 @@ public class CityControllerTest {
     @BeforeEach
     public void populateDatabase() {
         List<String> sqlFileScripts = List.of(
-                "persistence/user/before_test_user.sql",
                 "persistence/state/before_test_state.sql",
-                "persistence/city/before_test_city.sql"
+                "persistence/city/before_test_city.sql",
+                "persistence/user/before_test_address.sql",
+                "persistence/user/before_test_load_table.sql",
+                "persistence/user/before_test_user.sql"
         );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
@@ -44,7 +46,7 @@ public class CityControllerTest {
 
     @DisplayName(value = "Teste de sucesso - Cidade existe ao verificar por hashId")
     @Test
-    public void existsByHashIdOrCodigoIbgeOrCodigoIbge7_ExistingWithHashIdAndCodigoIbgeAndCodigoIbge7ParamsSuccess() {
+    public void shouldExceptionXWhenCreate_Success() {
         final String EXISTING_CITY_HASH_ID = "0bb456675ed54168b207606ce026a8f8";
         //Assertions.assertThrows();
         TestRestTemplate testRestTemplate;
