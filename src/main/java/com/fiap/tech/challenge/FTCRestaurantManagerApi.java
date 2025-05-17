@@ -14,9 +14,9 @@ import org.springframework.cache.annotation.EnableCaching;
 @ServletComponentScan
 @SpringBootApplication(exclude = {RepositoryRestMvcAutoConfiguration.class})
 @EnableConfigurationProperties(value = {JwtSecurityProperty.class})
-public class FTCMsUserManagerApiApplication {
+public class FTCRestaurantManagerApi {
 
     public static void main(String[] args) {
-        SpringApplication.run(FTCMsUserManagerApiApplication.class, args);
+        SpringApplication.run(FTCRestaurantManagerApi.class, args);
     }
 }

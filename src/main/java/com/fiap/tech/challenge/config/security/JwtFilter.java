@@ -30,17 +30,17 @@ public class JwtFilter extends OncePerRequestFilter {
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
     private static final String[] IGNORE_FILTER_PATHS = {
-            "/user-manager/swagger-ui/index.html",
-            "/user-manager/swagger-ui/swagger-ui.css",
-            "/user-manager/swagger-ui/swagger-ui-standalone-preset.js",
-            "/user-manager/swagger-ui/swagger-ui-bundle.js",
-            "/user-manager/v3/api-docs/swagger-config",
-            "/user-manager/swagger-ui/favicon-32x32.png",
-            "/user-manager/swagger-ui/favicon-16x16.png",
-            "/user-manager/v3/api-docs",
-            "/user-manager/h2-console",
+            "/restaurant-manager/swagger-ui/index.html",
+            "/restaurant-manager/swagger-ui/swagger-ui.css",
+            "/restaurant-manager/swagger-ui/swagger-ui-standalone-preset.js",
+            "/restaurant-manager/swagger-ui/swagger-ui-bundle.js",
+            "/restaurant-manager/v3/api-docs/swagger-config",
+            "/restaurant-manager/swagger-ui/favicon-32x32.png",
+            "/restaurant-manager/swagger-ui/favicon-16x16.png",
+            "/restaurant-manager/v3/api-docs",
+            "/restaurant-manager/h2-console",
             "/actuator/health",
-            "/user-manager/api/v1/jwts/generate"
+            "/restaurant-manager/api/v1/jwts/generate"
     };
 
     private static final String[] IGNORE_RESPONSE_FILTER_PATHS = {

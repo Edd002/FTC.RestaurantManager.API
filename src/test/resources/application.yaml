@@ -6,7 +6,7 @@ server:
     enabled: true
   port: 8084
   servlet:
-    context-path: /user-manager
+    context-path: /restaurant-manager
     encoding:
       charset: UTF-8
       enabled: true
@@ -14,7 +14,7 @@ server:
 # SPRING CONFIG
 spring:
   application:
-    name: FTC.UserManager.API
+    name: FTC.RestaurantManager.API
   profiles:
     active: test
   datasource:
@@ -79,8 +79,8 @@ security:
 crypto:
   key: 5E50F405ACE6CBDF17379F4B9F2B0C9F4144C5E380EA0B9298CB02EBD8FFE511
 
-#SWAGGER (URL: http://localhost:8084/user-manager/swagger-ui/index.html)
-server.swagger.base.url: http://localhost:8084/user-manager
+#SWAGGER (URL: http://localhost:8084/restaurant-manager/swagger-ui/index.html)
+server.swagger.base.url: http://localhost:8084/restaurant-manager
 springdoc:
   swagger-ui:
     operationsSorter: method

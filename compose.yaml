@@ -1,52 +1,49 @@
 services:
-  example:
-    container_name: nginx
-    image: nginx
 
-  # FTC UserManager API
+  # FTC RestaurantManager API
   app:
     env_file:
       .env
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ftc_user_manager_api
+    container_name: ftc_restaurant_manager_api
     ports:
       - "8085:8085"
     depends_on:
-      - ftc_user_manager_database
+      - ftc_restaurant_manager_database
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_user_manager_database:5432/ftc_user_manager_database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_restaurant_manager_database:5432/ftc_restaurant_manager_database
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     networks:
-      - ftc_user_manager_database_net
+      - ftc_restaurant_manager_database_net
     profiles: ["docker"]
 
   # DATABASE
-  ftc_user_manager_database:
+  ftc_restaurant_manager_database:
     env_file:
       .env
-    container_name: ftc_user_manager_database
+    container_name: ftc_restaurant_manager_database
     image: postgres:17.4
     ports:
       - '5453:5432'
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ftc_user_manager_database
+      POSTGRES_DB: ftc_restaurant_manager_database
     networks:
-      - ftc_user_manager_database_net
+      - ftc_restaurant_manager_database_net
     volumes:
-      - ftc_user_manager_database:/var/lib/postgresql
-      - ftc_user_manager_database_data:/var/lib/postgresql/data
+      - ftc_restaurant_manager_database:/var/lib/postgresql
+      - ftc_restaurant_manager_database_data:/var/lib/postgresql/data
 
   # PGADMIN
-  ftc_user_manager_pgadmin:
+  ftc_restaurant_manager_pgadmin:
     env_file:
       .env
-    container_name: ftc_user_manager_pgadmin
+    container_name: ftc_restaurant_manager_pgadmin
     image: dpage/pgadmin4
     ports:
       - "80:80"
@@ -54,13 +51,13 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     networks:
-      - ftc_user_manager_database_net
+      - ftc_restaurant_manager_database_net
     depends_on:
-      - ftc_user_manager_database
+      - ftc_restaurant_manager_database
 
 networks:
-  ftc_user_manager_database_net:
+  ftc_restaurant_manager_database_net:
 
 volumes:
-  ftc_user_manager_database:
-  ftc_user_manager_database_data:
+  ftc_restaurant_manager_database:
+  ftc_restaurant_manager_database_data:

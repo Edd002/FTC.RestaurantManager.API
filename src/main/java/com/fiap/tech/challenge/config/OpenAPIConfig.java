@@ -36,9 +36,9 @@ public class OpenAPIConfig {
                                 .bearerFormat("JWT")
                 ))
                 .info(new Info()
-                        .title("Fiap Tech Challenge - User Manager API")
+                        .title("Fiap Tech Challenge - Restaurant Manager API")
                         .version("v1.0")
-                        .description("Documentação da API User Manager.")
+                        .description("Documentação da API Restaurant Manager.")
                         .contact(new Contact().name("Fiap Tech Challenge Team").email("techchallenge@fiap.com.br")))
                 .servers(List.of(server));
     }

@@ -7,7 +7,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(value = {SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class FTCMsUserManagerApiApplicationTests {
+public class FTCRestaurantManagerApiTests {
 
 	@Test
 	void contextLoads() {
