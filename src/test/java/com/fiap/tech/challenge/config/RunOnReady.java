@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.config.properties;
+package com.fiap.tech.challenge.config;
 
 import org.springframework.context.annotation.Configuration;
 

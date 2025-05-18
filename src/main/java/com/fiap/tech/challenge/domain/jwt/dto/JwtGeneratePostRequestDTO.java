@@ -6,9 +6,11 @@ import com.fiap.tech.challenge.global.util.deserializer.StrictStringDeserializer
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class JwtGeneratePostRequestDTO {
 
     @Schema(description = "Login do usuário.", example = "roberto_afonso_001", maxLength = 255)

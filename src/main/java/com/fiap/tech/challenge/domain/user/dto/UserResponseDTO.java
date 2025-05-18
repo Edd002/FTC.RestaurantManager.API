@@ -5,8 +5,10 @@ import com.fiap.tech.challenge.domain.address.dto.AddressResponseDTO;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 @Setter
 public class UserResponseDTO extends BaseResponseDTO {
 

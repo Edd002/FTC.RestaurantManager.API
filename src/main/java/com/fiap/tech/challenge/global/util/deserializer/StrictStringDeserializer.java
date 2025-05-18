@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
@@ -16,6 +17,6 @@ public class StrictStringDeserializer extends StringDeserializer {
             deserializationContext.reportInputMismatch(String.class, jsonParser.currentName() + " não é um valor do tipo `String`.", token.toString());
             return null;
         }
-        return super.deserialize(jsonParser, deserializationContext);
+        return StringUtils.normalizeSpace(super.deserialize(jsonParser, deserializationContext));
     }
 }

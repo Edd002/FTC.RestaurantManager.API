@@ -40,7 +40,6 @@ public class JsonUtil {
         if (StringUtils.isBlank(test)) {
             return false;
         }
-
         try {
             new JSONObject(test);
             return true;
@@ -53,7 +52,6 @@ public class JsonUtil {
         if (StringUtils.isBlank(test)) {
             return false;
         }
-
         try {
             new JSONArray(test);
             return true;
