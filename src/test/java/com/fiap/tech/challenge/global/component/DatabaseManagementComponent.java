@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@SuppressWarnings({"unchecked", "SqlSourceToSinkFlow"})
 public class DatabaseManagementComponent {
 
     @Value("${spring.flyway.table}")
@@ -55,8 +56,7 @@ public class DatabaseManagementComponent {
     private List<String> getTableNames(JdbcTemplate jdbcTemplate) {
         Object tableNames = jdbcTemplate.execute((ConnectionCallback<Object>) callback -> {
             ArrayList<String> names = new ArrayList<>();
-            try (ResultSet tables = callback.getMetaData().getTables(
-                    null, null, "%", new String[]{"TABLE"})) {
+            try (ResultSet tables = callback.getMetaData().getTables(null, null, "T_%", new String[]{"TABLE"})) {
                 while (tables.next()) {
                     names.add(tables.getString("TABLE_NAME"));
                 }

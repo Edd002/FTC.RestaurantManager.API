@@ -29,8 +29,8 @@ public abstract class BasePaginationFilter {
 	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Ordenação (crescente ou decrescente).", example = "ASC")
 	protected String sortDirection;
 
-	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Se todos os elementos serão buscados.", example = "false", defaultValue = "false")
-	protected Boolean all = Boolean.FALSE;
+	@Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Se todos os elementos serão buscados.", example = "false")
+	protected Boolean all;
 
 	@Hidden
 	protected List<Sort.Order> sortFields;

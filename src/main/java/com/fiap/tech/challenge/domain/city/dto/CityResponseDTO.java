@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.domain.state.dto.StateResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 @Setter
 public class CityResponseDTO extends BaseResponseDTO {
 

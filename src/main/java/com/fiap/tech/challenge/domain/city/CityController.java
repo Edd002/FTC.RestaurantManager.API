@@ -51,7 +51,7 @@ public class CityController {
 
     @Operation(method = "GET", summary = "Buscar cidade por filtro", description = "Buscar cidade por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @GetMapping
+    @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<CityResponseDTO>> find(@ParameterObject @Valid CityGetFilter filter) {
         log.info("Buscando cidades por filtro...");
         return new BasePageableSuccessResponse200<>(cityService.find(filter)).buildPageableResponse();

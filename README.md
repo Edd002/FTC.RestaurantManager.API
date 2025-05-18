@@ -11,7 +11,7 @@ Para executar o projeto utilizando Docker Compose:
 <details>
 <summary>Criar usuário - Exemplo</summary>
 
-- Encontre um hashID válido `SELECT * FROM t_city;`
+- Encontre um hash id de cidade válido em http://localhost:8085/restaurant-manager/swagger-ui/index.html#/Cidades%20-%20Endpoints%20de%20Cidades/find_3 com a aplicação em execução.
 
 ```json
 {
@@ -30,4 +30,14 @@ Para executar o projeto utilizando Docker Compose:
   "password": "manu2025"
 }
 ```
+
+### Como acessar o banco de dados em memória H2 de testes automatizados via console?
+Enquanto os testes estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
+
+Driver Class: org.h2.Driver<br>
+JDBC URL: jdbc:h2:tcp://localhost:9092/mem:db<br>
+User Name: sa<br>
+Password:<br>
+
+O breakpoint pode ser configurado para suspender apenas uma única thread para que o acesso ao H2-console seja possível (https://hrrbrt.medium.com/using-h2-during-test-debugging-in-spring-f6a3db355e3a).
 </details>

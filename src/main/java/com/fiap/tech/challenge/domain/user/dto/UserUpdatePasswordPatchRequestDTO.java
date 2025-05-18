@@ -7,9 +7,11 @@ import com.fiap.tech.challenge.global.util.deserializer.StrictStringDeserializer
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UserUpdatePasswordPatchRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Senha atual do usuário.", example = "robertoafonso2025", maxLength = 255)
