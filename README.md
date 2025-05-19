@@ -26,7 +26,7 @@ Essa estrutura modular possibilita:
 - Manutenção facilitada
 - Maior flexibilidade para futuras expansões
 
-### Como rodar? 🚀
+## Como rodar? 🚀
 Para executar o projeto utilizando Docker Compose:
 1. Crie um arquivo **.env** na raiz do projeto com suas configurações (PS.: Utilize como base o arquivo [.env.example](.env.example))
 2. Rode `docker compose --profile docker up` na raiz do projeto
