@@ -41,7 +41,7 @@ public class User extends Audit implements Serializable {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
-        this.setEncryptedPassword(passwordCryptoKey, password);
+        this.setEncryptedPassword(passwordCryptoKey, CryptoUtil.newInstance(passwordCryptoKey).decrypt(password));
         this.setRole(UserRoleEnum.valueOf(role));
         this.setAddress(address);
     }
