@@ -61,7 +61,7 @@ public class CryptoUtil implements PasswordEncoder {
         }
     }
 
-    private String decrypt(String value) {
+    public String decrypt(String value) {
         try {
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             byte[] decipherText = cipher.doFinal(Base64.getDecoder().decode(value));
