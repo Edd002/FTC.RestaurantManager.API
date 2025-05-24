@@ -11,6 +11,7 @@ Este sistema foi desenvolvido utilizando **Java 21** e **Spring Boot**, proporci
 - **PostgreSQL** como banco de dados, garantindo confiabilidade e desempenho
 - **Flyway** para gerenciamento de migrações do banco de dados
 - **H2 Database Engine** como banco de dados para ambiente de testes automatizados
+- **Swagger OpenAPI Specification** como documentação interativa da API
 
 ### Estrutura Arquitetural
 A arquitetura do sistema segue uma abordagem baseada em **domínios**, promovendo a separação de responsabilidades e facilitando a escalabilidade. Os principais componentes dentro de cada domínio incluem:
