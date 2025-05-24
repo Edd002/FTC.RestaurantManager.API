@@ -35,6 +35,9 @@ Para executar o projeto utilizando Docker Compose:
 3. Acesse o swagger: [link](http://localhost:8085/restaurant-manager/swagger-ui/index.html)
 4. Acesse o pgAdmin utilizando as credencias do .env: [link](http://localhost:80)
 
+## Documentação Postman
+[link](https://documenter.getpostman.com/view/43787842/2sB2qcBfps)
+
 <details>
 <summary>Criar usuário - Exemplo</summary>
 
