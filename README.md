@@ -10,6 +10,7 @@ Este sistema foi desenvolvido utilizando **Java 21** e **Spring Boot**, proporci
 - **Docker** e **Docker Compose** para execução e gerenciamento de ambientes
 - **PostgreSQL** como banco de dados, garantindo confiabilidade e desempenho
 - **Flyway** para gerenciamento de migrações do banco de dados
+- **H2 Database Engine** como banco de dados para ambiente de testes automatizados
 
 ### Estrutura Arquitetural
 A arquitetura do sistema segue uma abordagem baseada em **domínios**, promovendo a separação de responsabilidades e facilitando a escalabilidade. Os principais componentes dentro de cada domínio incluem:
@@ -55,6 +56,7 @@ Para executar o projeto utilizando Docker Compose:
   "password": "manu2025"
 }
 ```
+</details>
 
 ### Como acessar o banco de dados em memória H2 de testes automatizados via console?
 Enquanto os testes estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
@@ -65,4 +67,3 @@ User Name: sa<br>
 Password:<br>
 
 O breakpoint pode ser configurado para suspender apenas uma única thread para que o acesso ao H2-console seja possível (https://hrrbrt.medium.com/using-h2-during-test-debugging-in-spring-f6a3db355e3a).
-</details>
