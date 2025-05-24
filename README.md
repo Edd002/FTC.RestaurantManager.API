@@ -36,30 +36,6 @@ Para executar o projeto utilizando Docker Compose:
 4. Acesse o pgAdmin utilizando as credencias do .env: [link](http://localhost:80)
 5. Acesse a documentação Postman: [link](https://documenter.getpostman.com/view/43787842/2sB2qcBfps)
 
-<details>
-<summary>Criar usuário - Exemplo</summary>
-
-- Encontre um hash id de cidade válido em http://localhost:8085/restaurant-manager/swagger-ui/index.html#/Cidades%20-%20Endpoints%20de%20Cidades/find_3 com a aplicação em execução.
-
-```json
-{
-  "address": {
-    "cep": "35090-650",
-    "complement": "Complemento 123",
-    "description": "Rua 123",
-    "hashIdCity": "258eece0f1df410ea8c706085397d812",
-    "neighborhood": "Alta Floresta D´oeste",
-    "number": "100",
-    "postalCode": "1234-5678"
-  },
-  "email": "manu@example.com",
-  "login": "manu_002",
-  "name": "manu",
-  "password": "manu2025"
-}
-```
-</details>
-
 ### Como acessar o banco de dados em memória H2 de testes automatizados via console?
 Enquanto os testes estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
 
