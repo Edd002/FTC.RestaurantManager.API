@@ -6,7 +6,7 @@
 Este sistema foi desenvolvido utilizando **Java 21**, **Spring Boot 3.4.4** e **PostgreSQL 17.4**.
 
 ### Tecnologias Utilizadas
-- **Java 21** e **Spring Boot** para a criação da aplicação
+- **Java 21** e **Spring Boot 3.4.4** para a criação da aplicação web
 - **Docker** e **Docker Compose** para execução e gerenciamento de ambientes
 - **PostgreSQL** como banco de dados, garantindo confiabilidade e desempenho
 - **Flyway** para gerenciamento de migrações do banco de dados
