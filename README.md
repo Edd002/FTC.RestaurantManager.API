@@ -37,7 +37,7 @@ Para executar o projeto utilizando Docker Compose:
 5. Acesse a documentação Postman: [link](https://documenter.getpostman.com/view/43787842/2sB2qcBfps)
 
 ### Como acessar o banco de dados em memória H2 de testes automatizados via console?
-Enquanto os testes estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
+Em contexto de desenvolvimento, enquanto os testes automatizados estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
 
 Driver Class: org.h2.Driver<br>
 JDBC URL: jdbc:h2:tcp://localhost:9092/mem:db<br>
