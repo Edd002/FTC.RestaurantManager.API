@@ -3,7 +3,7 @@
 
 ## Arquitetura do Sistema
 
-Este sistema foi desenvolvido utilizando **Java 21** e **Spring Boot**, proporcionando uma base robusta para a construção de serviços web.
+Este sistema foi desenvolvido utilizando **Java 21**, **Spring Boot 3.4.4** e **PostgreSQL 17.4**.
 
 ### Tecnologias Utilizadas
 - **Java 21** e **Spring Boot** para a criação da aplicação
@@ -14,13 +14,14 @@ Este sistema foi desenvolvido utilizando **Java 21** e **Spring Boot**, proporci
 - **Swagger OpenAPI Specification** como documentação interativa da API
 
 ### Estrutura Arquitetural
-A arquitetura do sistema segue uma abordagem baseada em **domínios**, promovendo a separação de responsabilidades e facilitando a escalabilidade. Os principais componentes dentro de cada domínio incluem:
+A arquitetura do sistema segue uma abordagem baseada em **Domínios** e **Clean Architecture**, promovendo a separação de responsabilidades e facilitando a escalabilidade. Os principais componentes dentro de cada domínio incluem:
 
+- **Config**: Configuração de dependências necessárias para o levantamento e funcionamento do container de aplicação.
 - **Controller**: Gerencia requisições HTTP e as direciona para os serviços apropriados.
-- **Service**: Contém a lógica de negócios e coordena interações entre componentes.
+- **Service**: Coordena acessos sistêmicos como arquivos de configuração e repositórios.
 - **Repository**: Interface para acesso e manipulação de dados armazenados no banco de dados.
-- **Entity**: Representação das tabelas do banco de dados como classes Java.
-- **Use Cases**: Implementações específicas para cada caso de uso dentro do domínio, como operações relacionadas a usuários.
+- **Entity**: Representação das tabelas do banco de dados como classes Java (ORM) e core de domínio.
+- **UseCases**: Implementações de regras de negócio para cada caso de uso de cada domínio.
 
 ### Benefícios da Arquitetura
 Essa estrutura modular possibilita:
