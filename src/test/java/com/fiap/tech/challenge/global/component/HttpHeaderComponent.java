@@ -43,6 +43,12 @@ public class HttpHeaderComponent {
         return headers;
     }
 
+    public HttpHeaders generateHeaderWithExpiredBearerToken() {
+        HttpHeaders headers = generateHeaderWithoutBearerToken();
+        headers.set(AUTH_HEADER, TOKEN_PREFIX_HEADER + JsonUtil.objectFromJson("headerExpiredBearerToken", PATH_RESOURCE_JWT, String.class));
+        return headers;
+    }
+
     public HttpHeaders generateHeaderWithOwnerBearerToken() {
         return generateHeaderWithBearerToken(JsonUtil.objectFromJson("jwtGeneratePostRequestDTOOwner", PATH_RESOURCE_JWT, JwtGeneratePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue()));
     }

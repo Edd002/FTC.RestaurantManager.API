@@ -1,4 +1,5 @@
 {
+  "headerExpiredBearerToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsInVzZXJOYW1lIjoiQWRtaW4iLCJ1c2VyQ3JlYXRlZEluIjoxNzQ3NDk2NTQyOTQ1LCJ1c2VyUmVxdWVzdGVkSW4iOjE3NDgxMTU1MDM0MzJ9.o5jaHRgkWnVsUIqJ6HO8W0-tOWKVpm0sxuoET2kNlI1uR0sE15kSfYxUfhqnqh10TyeiEOXuk1IqqW29UH6ywg",
   "jwtGeneratePostRequestDTOOwner": {
     "login": "admin",
     "password": "admin"
