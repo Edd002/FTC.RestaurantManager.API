@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageabl
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
 import com.fiap.tech.challenge.global.component.HttpBodyComponent;
 import com.fiap.tech.challenge.global.component.HttpHeaderComponent;
+import com.fiap.tech.challenge.global.util.ValidationUtil;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.*;
@@ -122,5 +123,6 @@ public class CityControllerTest {
         BaseErrorResponse404 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), responseObject.getStatus());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
     }
 }

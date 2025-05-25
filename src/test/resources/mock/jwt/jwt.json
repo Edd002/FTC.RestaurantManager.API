@@ -1,0 +1,14 @@
+{
+  "jwtGeneratePostRequestDTOOwner": {
+    "login": "admin",
+    "password": "admin"
+  },
+  "jwtGeneratePostRequestDTOClient": {
+    "login": "client",
+    "password": "client"
+  },
+  "jwtGeneratePostRequestDTOInvalidCredentials": {
+    "login": "notExistingUser",
+    "password": "notExistingUser"
+  }
+}
