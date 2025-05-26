@@ -92,7 +92,7 @@ public class JwtControllerTest {
     public void validateJwtSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/jwts/validate", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        NoPayloadBaseSuccessResponse200<JwtResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertNull(responseObject);
     }
@@ -119,5 +119,23 @@ public class JwtControllerTest {
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Invalidar um JWT")
+    @Test
+    public void invalidateJwtSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+
+        ResponseEntity<?> responseEntityInvalidate = testRestTemplate.exchange("/api/v1/jwts/invalidate", HttpMethod.POST, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObjectInvalidate = httpBodyComponent.responseEntityToObject(responseEntityInvalidate, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntityInvalidate.getStatusCode().value());
+        Assertions.assertNull(responseObjectInvalidate);
+
+        ResponseEntity<?> responseEntityValidate = testRestTemplate.exchange("/api/v1/jwts/validate", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse401 responseObjectValidate = httpBodyComponent.responseEntityToObject(responseEntityValidate, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntityValidate.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObjectValidate.getStatus());
+        Assertions.assertFalse(responseObjectValidate.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObjectValidate.getMessages()));
     }
 }
