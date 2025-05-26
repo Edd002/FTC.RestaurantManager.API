@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageabl
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
 import com.fiap.tech.challenge.global.component.HttpBodyComponent;
 import com.fiap.tech.challenge.global.component.HttpHeaderComponent;
+import com.fiap.tech.challenge.global.util.ValidationUtil;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.*;
@@ -47,7 +48,8 @@ public class CityControllerTest {
                 "persistence/city/before_test_city.sql",
                 "persistence/address/before_test_address.sql",
                 "persistence/loadtable/before_test_load_table.sql",
-                "persistence/user/before_test_user.sql"
+                "persistence/user/before_test_user.sql",
+                "persistence/jwt/before_test_jwt.sql"
         );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
@@ -68,8 +70,9 @@ public class CityControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
-        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(1, responseObject.getList().size());
         Assertions.assertEquals(1, responseObject.getTotalElements());
         Assertions.assertEquals(name, responseObject.getList().stream().toList().get(NumberUtils.INTEGER_ZERO).getName());
@@ -86,8 +89,9 @@ public class CityControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
-        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(22, responseObject.getList().size());
         Assertions.assertEquals(22, responseObject.getTotalElements());
         Assertions.assertEquals(UfState, responseObject.getList().stream().toList().get(NumberUtils.INTEGER_ZERO).getState().getUf());
@@ -104,8 +108,9 @@ public class CityControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
-        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(hashId, responseObject.getItem().getHashId());
     }
 
@@ -120,7 +125,9 @@ public class CityControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse404 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
-        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
     }
 }

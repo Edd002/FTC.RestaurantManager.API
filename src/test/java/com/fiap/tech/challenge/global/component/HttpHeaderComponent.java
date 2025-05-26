@@ -3,6 +3,8 @@ package com.fiap.tech.challenge.global.component;
 import com.fiap.tech.challenge.domain.jwt.dto.JwtGeneratePostRequestDTO;
 import com.fiap.tech.challenge.domain.jwt.dto.JwtResponseDTO;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.util.JsonUtil;
+import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,6 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class HttpHeaderComponent {
+
+    private static final String PATH_RESOURCE_JWT = "/mock/jwt/jwt.json";
 
     final String VALIDATE_JWT_URI = "/api/v1/jwts/validate";
     final String GENERATE_JWT_URI = "/api/v1/jwts/generate";
@@ -39,17 +43,22 @@ public class HttpHeaderComponent {
         return headers;
     }
 
+    public HttpHeaders generateHeaderWithExpiredBearerToken() {
+        HttpHeaders headers = generateHeaderWithoutBearerToken();
+        headers.set(AUTH_HEADER, TOKEN_PREFIX_HEADER + JsonUtil.objectFromJson("headerExpiredBearerToken", PATH_RESOURCE_JWT, String.class));
+        return headers;
+    }
+
     public HttpHeaders generateHeaderWithOwnerBearerToken() {
-        return generateHeaderWithBearerToken(new JwtGeneratePostRequestDTO("admin", "admin"));
+        return generateHeaderWithBearerToken(JsonUtil.objectFromJson("jwtGeneratePostRequestDTOOwner", PATH_RESOURCE_JWT, JwtGeneratePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue()));
     }
 
     public HttpHeaders generateHeaderWithClientBearerToken() {
-        return generateHeaderWithBearerToken(new JwtGeneratePostRequestDTO("client", "client"));
+        return generateHeaderWithBearerToken(JsonUtil.objectFromJson("jwtGeneratePostRequestDTOClient", PATH_RESOURCE_JWT, JwtGeneratePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue()));
     }
 
     private HttpHeaders generateHeaderWithBearerToken(JwtGeneratePostRequestDTO jwtGeneratePostRequestDTO) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = generateHeaderWithoutBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange(GENERATE_JWT_URI, HttpMethod.POST, new HttpEntity<>(jwtGeneratePostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<JwtResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         headers.set(AUTH_HEADER, TOKEN_PREFIX_HEADER + responseObject.getItem().getBearerToken());

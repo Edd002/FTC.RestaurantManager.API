@@ -1,0 +1,3 @@
+INSERT INTO public.t_jwt
+(id, created_in, created_by, deleted, deleted_in, deleted_by, hash_id, updated_in, updated_by, bearer_token, fk_user)
+VALUES(nextval('SQ_JWT'), '2025-05-24 19:38:23.492', 'admin', true, '2025-05-24 20:02:56.772', NULL, '13b876ab20b744de8b12040c7cc42c5c', '2025-05-24 20:02:56.789', 'admin', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsInVzZXJOYW1lIjoiQWRtaW4iLCJ1c2VyQ3JlYXRlZEluIjoxNzQ3NDk2NTQyOTQ1LCJ1c2VyUmVxdWVzdGVkSW4iOjE3NDgxMTU1MDM0MzJ9.o5jaHRgkWnVsUIqJ6HO8W0-tOWKVpm0sxuoET2kNlI1uR0sE15kSfYxUfhqnqh10TyeiEOXuk1IqqW29UH6ywg', 1);
