@@ -42,10 +42,10 @@
     "password": "newadmin",
     "role": "OWNER",
     "address": {
-      "description": "Description",
+      "description": "New Description",
       "number": "00",
-      "complement": "Complement",
-      "neighborhood": "Neighborhood",
+      "complement": "New Complement",
+      "neighborhood": "New Neighborhood",
       "cep": "00000-000",
       "postalCode": "0000-0000",
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
@@ -58,10 +58,40 @@
     "password": "newclient",
     "role": "CLIENT",
     "address": {
-      "description": "Description",
+      "description": "New Description",
       "number": "00",
-      "complement": "Complement",
-      "neighborhood": "Neighborhood",
+      "complement": "New Complement",
+      "neighborhood": "New Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userPutRequestDTOOwner": {
+    "name": "Updated Admin",
+    "email": "updatedadmin@email.com",
+    "login": "updatedadmin",
+    "role": "OWNER",
+    "address": {
+      "description": "Updated Description",
+      "number": "00",
+      "complement": "Updated Complement",
+      "neighborhood": "Updated Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userPutRequestDTOClient": {
+    "name": "Updated Client",
+    "email": "updatedclient@email.com",
+    "login": "updatedclient",
+    "role": "CLIENT",
+    "address": {
+      "description": "Updated Description",
+      "number": "00",
+      "complement": "Updated Complement",
+      "neighborhood": "Updated Neighborhood",
       "cep": "00000-000",
       "postalCode": "0000-0000",
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"

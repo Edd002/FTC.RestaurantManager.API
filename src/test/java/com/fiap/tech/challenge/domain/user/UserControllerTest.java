@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
+import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -106,6 +107,47 @@ public class UserControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
         UserPostRequestDTO userPostRequestDTO = JsonUtil.objectFromJson("userPostRequestDTOOwner", PATH_RESOURCE_USER, UserPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.POST, new HttpEntity<>(userPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Atualizar um usuário dono")
+    @Test
+    public void updateUserOwnerSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOOwner", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getHashId()));
+        Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Atualizar um usuário cliente")
+    @Test
+    public void updateUserClientSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOClient", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getHashId()));
+        Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
+    }
+
+    @DisplayName(value = "Teste de falha - Atualizar role para dono estando autenticado como cliente")
+    @Test
+    public void updateOwnerUserWithoutBeingAuthenticatedFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOOwner", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseObject.getStatus());
