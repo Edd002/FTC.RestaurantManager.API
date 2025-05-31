@@ -96,5 +96,30 @@
       "postalCode": "0000-0000",
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
     }
+  },
+  "userUpdatePasswordPatchRequestDTOOwner": {
+    "actualPassword": "admin",
+    "newPassword": "newadmin",
+    "newPasswordConfirmation": "newadmin"
+  },
+  "userUpdatePasswordPatchRequestDTOClient": {
+    "actualPassword": "client",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "newclient"
+  },
+  "userUpdatePasswordPatchRequestDTOClientWrongActualPassword": {
+    "actualPassword": "wrongactualpassword",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "newclient"
+  },
+  "userUpdatePasswordPatchRequestDTOClientSamePassword": {
+    "actualPassword": "client",
+    "newPassword": "client",
+    "newPasswordConfirmation": "client"
+  },
+  "userUpdatePasswordPatchRequestDTOClientWrongPasswordConfirmation": {
+    "actualPassword": "client",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "wrongconfirmationpassword"
   }
 }

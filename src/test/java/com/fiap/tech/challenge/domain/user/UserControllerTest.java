@@ -3,8 +3,12 @@ package com.fiap.tech.challenge.domain.user;
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
+import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
 import com.fiap.tech.challenge.global.component.HttpBodyComponent;
 import com.fiap.tech.challenge.global.component.HttpHeaderComponent;
@@ -120,7 +124,7 @@ public class UserControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOOwner", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
-        BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        BaseSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
@@ -134,7 +138,7 @@ public class UserControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
         UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOClient", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
-        BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        BaseSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
@@ -151,6 +155,67 @@ public class UserControllerTest {
         BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Atualizar senha de um usuário dono")
+    @Test
+    public void updateUserPasswordOwnerSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO = JsonUtil.objectFromJson("userUpdatePasswordPatchRequestDTOOwner", PATH_RESOURCE_USER, UserUpdatePasswordPatchRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(userUpdatePasswordPatchRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertNull(responseObject);
+    }
+
+    @DisplayName(value = "Teste de sucesso - Atualizar senha de um usuário cliente")
+    @Test
+    public void updateUserPasswordClientSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO = JsonUtil.objectFromJson("userUpdatePasswordPatchRequestDTOClient", PATH_RESOURCE_USER, UserUpdatePasswordPatchRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(userUpdatePasswordPatchRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertNull(responseObject);
+    }
+
+    @DisplayName(value = "Teste de falha - Atualizar senha de um usuário cliente com a senha atual informada incorretamente")
+    @Test
+    public void updateUserPasswordClientWrongActualPasswordFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO = JsonUtil.objectFromJson("userUpdatePasswordPatchRequestDTOClientWrongActualPassword", PATH_RESOURCE_USER, UserUpdatePasswordPatchRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(userUpdatePasswordPatchRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de falha - Atualizar senha de um usuário cliente com a senha cadastrada igual a nova")
+    @Test
+    public void updateUserPasswordClientSamePasswordFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO = JsonUtil.objectFromJson("userUpdatePasswordPatchRequestDTOClientSamePassword", PATH_RESOURCE_USER, UserUpdatePasswordPatchRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(userUpdatePasswordPatchRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de falha - Atualizar senha de um usuário cliente com a senha cadastrada igual a nova")
+    @Test
+    public void updateUserPasswordClientWrongPasswordConfirmationFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO = JsonUtil.objectFromJson("userUpdatePasswordPatchRequestDTOClientWrongPasswordConfirmation", PATH_RESOURCE_USER, UserUpdatePasswordPatchRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(userUpdatePasswordPatchRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
     }
