@@ -276,10 +276,32 @@ public class UserControllerTest {
 
     @DisplayName(value = "Teste de falha - Busca de informações de usuário sem estar autenticado")
     @Test
-    public void findFailure() {
+    public void findWithoutBeingAuthenticatedFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse401 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Deletar usuário")
+    @Test
+    public void deleteUserSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertNull(responseObject);
+    }
+
+    @DisplayName(value = "Teste de falha - Deletar usuário não estando autenticado")
+    @Test
+    public void deleteUserWithoutBeingAuthenticatedFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PATCH, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
