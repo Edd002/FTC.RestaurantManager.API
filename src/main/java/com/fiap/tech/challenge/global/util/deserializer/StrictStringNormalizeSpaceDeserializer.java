@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
-public class StrictStringDeserializer extends StringDeserializer {
+public class StrictStringNormalizeSpaceDeserializer extends StringDeserializer {
 
     @Override
     public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {

@@ -1,5 +1,5 @@
 {
-  "existing_owner_user": {
+  "userOwner": {
     "name": "Admin",
     "email": "admin@email.com",
     "login": "admin",
@@ -17,7 +17,7 @@
       }
     }
   },
-  "existing_client_user": {
+  "userClient": {
     "name": "Client",
     "email": "client@email.com",
     "login": "client",
@@ -34,5 +34,92 @@
         "id": 1
       }
     }
+  },
+  "userPostRequestDTOOwner": {
+    "name": "New Admin",
+    "email": "newadmin@email.com",
+    "login": "newadmin",
+    "password": "newadmin",
+    "role": "OWNER",
+    "address": {
+      "description": "New Description",
+      "number": "00",
+      "complement": "New Complement",
+      "neighborhood": "New Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userPostRequestDTOClient": {
+    "name": "New Client",
+    "email": "newclient@email.com",
+    "login": "newclient",
+    "password": "newclient",
+    "role": "CLIENT",
+    "address": {
+      "description": "New Description",
+      "number": "00",
+      "complement": "New Complement",
+      "neighborhood": "New Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userPutRequestDTOOwner": {
+    "name": "Updated Admin",
+    "email": "updatedadmin@email.com",
+    "login": "updatedadmin",
+    "role": "OWNER",
+    "address": {
+      "description": "Updated Description",
+      "number": "00",
+      "complement": "Updated Complement",
+      "neighborhood": "Updated Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userPutRequestDTOClient": {
+    "name": "Updated Client",
+    "email": "updatedclient@email.com",
+    "login": "updatedclient",
+    "role": "CLIENT",
+    "address": {
+      "description": "Updated Description",
+      "number": "00",
+      "complement": "Updated Complement",
+      "neighborhood": "Updated Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
+  "userUpdatePasswordPatchRequestDTOOwner": {
+    "actualPassword": "admin",
+    "newPassword": "newadmin",
+    "newPasswordConfirmation": "newadmin"
+  },
+  "userUpdatePasswordPatchRequestDTOClient": {
+    "actualPassword": "client",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "newclient"
+  },
+  "userUpdatePasswordPatchRequestDTOClientWrongActualPassword": {
+    "actualPassword": "wrongactualpassword",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "newclient"
+  },
+  "userUpdatePasswordPatchRequestDTOClientSamePassword": {
+    "actualPassword": "client",
+    "newPassword": "client",
+    "newPasswordConfirmation": "client"
+  },
+  "userUpdatePasswordPatchRequestDTOClientWrongPasswordConfirmation": {
+    "actualPassword": "client",
+    "newPassword": "newclient",
+    "newPasswordConfirmation": "wrongconfirmationpassword"
   }
 }

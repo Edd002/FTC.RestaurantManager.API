@@ -23,12 +23,12 @@ public class MockAuthenticationComponent {
     }
 
     public void mockAuthenticationOwner() {
-        User user = JsonUtil.objectFromJson("existing_owner_user", PATH_RESOURCE_USER, User.class);
+        User user = JsonUtil.objectFromJson("userOwner", PATH_RESOURCE_USER, User.class);
         mockAuthentication(user);
     }
 
     public void mockAuthenticationClient() {
-        User user = JsonUtil.objectFromJson("existing_client_user", PATH_RESOURCE_USER, User.class);
+        User user = JsonUtil.objectFromJson("userClient", PATH_RESOURCE_USER, User.class);
         mockAuthentication(user);
     }
 
