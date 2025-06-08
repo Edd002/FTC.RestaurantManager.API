@@ -97,7 +97,7 @@ public class UserControllerTest {
 
     @DisplayName(value = "Teste de falha - Criar um outro usuário dono estando autenticado como um outro tipo de usuário")
     @Test
-    public void createAnotherOwnerUserWithoutBeingAuthenticatedAsOwnerFailure() {
+    public void createAnotherUserOwnerWithoutBeingAuthenticatedAsOwnerFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
         UserPostRequestDTO userPostRequestDTO = JsonUtil.objectFromJson("userPostRequestDTOOwner", PATH_RESOURCE_USER, UserPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.POST, new HttpEntity<>(userPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
@@ -110,7 +110,7 @@ public class UserControllerTest {
 
     @DisplayName(value = "Teste de falha - Criar um outro usuário dono não estando autenticado")
     @Test
-    public void createOwnerUserWithoutBeingAuthenticatedFailure() {
+    public void createUserOwnerWithoutBeingAuthenticatedFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
         UserPostRequestDTO userPostRequestDTO = JsonUtil.objectFromJson("userPostRequestDTOOwner", PATH_RESOURCE_USER, UserPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.POST, new HttpEntity<>(userPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
@@ -151,7 +151,7 @@ public class UserControllerTest {
 
     @DisplayName(value = "Teste de falha - Atualizar role para dono estando autenticado como cliente")
     @Test
-    public void updateOwnerUserWithoutBeingAuthenticatedFailure() {
+    public void updateUserOwnerWithoutBeingAuthenticatedFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
         UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOOwner", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
