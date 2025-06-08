@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.user.entity;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
+import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.UserEntityListener;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.constraint.UserConstraint;
@@ -80,12 +81,15 @@ public class User extends Audit implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-    private List<Jwt> jwtList;
-
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_address", nullable = false)
     private Address address;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private List<RestaurantUser> restaurantUsers;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private List<Jwt> jwts;
 
     @Transient
     private transient User userSavedState;

@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.address.entity;
 import com.fiap.tech.challenge.domain.address.AddressEntityListener;
 import com.fiap.tech.challenge.domain.address.enumerated.constraint.AddressConstraint;
 import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
@@ -87,6 +88,9 @@ public class Address extends Audit implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private User user;
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "address", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    private Restaurant restaurant;
 
     @Transient
     private transient Address addressSavedState;
