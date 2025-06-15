@@ -1,0 +1,9 @@
+package com.fiap.tech.challenge.domain.menuitem;
+
+import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
+import com.fiap.tech.challenge.global.base.IBaseRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface IMenuItemRepository extends IBaseRepository<MenuItem> {
+}
