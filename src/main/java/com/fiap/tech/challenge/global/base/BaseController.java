@@ -43,7 +43,7 @@ public class BaseController {
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, BindException.class, InvalidPropertyException.class})
-    public ResponseEntity<?> handleMethodArgumentNotValid(Exception exception) {
+    public ResponseEntity<?> handleBeanValidationException(Exception exception) {
         List<String> errors = new ArrayList<>();
         if (exception instanceof MethodArgumentNotValidException) {
             errors.addAll(((MethodArgumentNotValidException) exception).getBindingResult()
@@ -92,7 +92,7 @@ public class BaseController {
     }
 
     @ExceptionHandler(value = {ApiException.class})
-    public ResponseEntity<?> handleExceptionApiException(ApiException apiException) {
+    public ResponseEntity<?> handleApiException(ApiException apiException) {
         return apiException.getBaseErrorResponse().buildResponse();
     }
 
