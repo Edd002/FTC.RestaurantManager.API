@@ -50,7 +50,7 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonProperty("type")
     private RestaurantTypeEnum type;
 
-    @Schema(description = "Tipo do restaurante.", example = "STEAKHOUSE")
+    @Schema(description = "Tipo do restaurante.")
     @JsonProperty("address")
     private AddressResponseDTO address;
 }

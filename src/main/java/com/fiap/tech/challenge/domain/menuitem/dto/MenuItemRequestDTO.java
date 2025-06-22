@@ -32,7 +32,7 @@ public class MenuItemRequestDTO extends BaseRequestDTO {
     @JsonProperty("description")
     private String description;
 
-    @Schema(description = "Preço do item do menu.", example = "25.00")
+    @Schema(description = "Preço do item do menu.", example = "19.99")
     @Positive(message = "O preço do item do menu deve ser positivo.")
     @NotNull(message = "O preço do item do menu não pode ser nulo.")
     @JsonDeserialize(using = StrictPriceDeserializer.class)

@@ -28,7 +28,7 @@ import java.util.List;
 @ConstraintMapper(constraintClass = MenuConstraint.class)
 public class Menu extends Audit implements Serializable {
 
-    protected Menu() {}
+    public Menu() {}
 
     public Menu(@NonNull Long id, @NonNull List<MenuItem> menuItems) {
         this.setId(id);

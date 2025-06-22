@@ -11,8 +11,6 @@ import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-
 public class RestaurantCreateUseCase {
 
     private final Restaurant restaurant;
@@ -34,10 +32,7 @@ public class RestaurantCreateUseCase {
                 restaurantPostRequestDTO.getDinnerOpeningHoursStart(),
                 restaurantPostRequestDTO.getDinnerClosingHoursStart(),
                 RestaurantTypeEnum.valueOf(restaurantPostRequestDTO.getType()),
-                new Menu(
-                        0L,
-                        new ArrayList<>()
-                ),
+                new Menu(),
                 new Address(
                         restaurantPostRequestDTO.getAddress().getDescription(),
                         restaurantPostRequestDTO.getAddress().getNumber(),

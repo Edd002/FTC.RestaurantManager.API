@@ -1,6 +1,8 @@
 package com.fiap.tech.challenge.domain.menuitem.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fiap.tech.challenge.domain.menu.dto.MenuResponseDTO;
+import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +11,17 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class MenuItemResponseDTO {
+public class MenuItemResponseDTO extends BaseResponseDTO {
 
-    @Schema(description = "Nome do item do menu.", example = "Espaguete", maxLength = 255)
+    @Schema(description = "Nome do item do menu.", example = "Espaguete")
     @JsonProperty("name")
     private String name;
 
-    @Schema(description = "Descrição do item do menu.", example = "Espaguete à bolonhesa.", maxLength = 255)
+    @Schema(description = "Descrição do item do menu.", example = "Espaguete à bolonhesa.")
     @JsonProperty("description")
     private String description;
 
-    @Schema(description = "Preço do item do menu.", example = "25.00")
+    @Schema(description = "Preço do item do menu.", example = "19.99")
     @JsonProperty("price")
     private BigDecimal price;
 
@@ -27,7 +29,11 @@ public class MenuItemResponseDTO {
     @JsonProperty("availability")
     private Boolean availability;
 
-    @Schema(description = "URL da foto do item do menu.", example = "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808", maxLength = 255)
+    @Schema(description = "URL da foto do item do menu.", example = "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808")
     @JsonProperty("photoUrl")
     private String photoUrl;
+
+    @Schema(description = "Menu do item.")
+    @JsonProperty("menu")
+    private MenuResponseDTO menu;
 }
