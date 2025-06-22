@@ -51,15 +51,15 @@ public class RunOnReady {
         }.getType());
         List<User> userList = JsonUtil.objectListFromJson("user", PATH_RESOURCE_USER, new TypeToken<ArrayList<User>>() {
         }.getType());
-        if ((loadTableService.entityLoadEnabled(State.class.getSimpleName()))) {
+        if ((loadTableService.isEntityLoadEnabled(State.class.getSimpleName()))) {
             stateList.forEach(this::createState);
             loadTableService.create(State.class.getSimpleName());
         }
-        if ((loadTableService.entityLoadEnabled(City.class.getSimpleName()))) {
+        if ((loadTableService.isEntityLoadEnabled(City.class.getSimpleName()))) {
             cityList.forEach(this::createCity);
             loadTableService.create(City.class.getSimpleName());
         }
-        if ((loadTableService.entityLoadEnabled(User.class.getSimpleName()))) {
+        if ((loadTableService.isEntityLoadEnabled(User.class.getSimpleName()))) {
             userList.forEach(this::createUser);
             loadTableService.create(User.class.getSimpleName());
         }

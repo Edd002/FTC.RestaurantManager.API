@@ -5,13 +5,13 @@ import com.fiap.tech.challenge.global.util.ValidationUtil;
 
 public final class LoadTableEntityLoadEnabledCase {
 
-    private final LoadTable loadTable;
+    private final Boolean isEntityLoadEnabled;
 
     public LoadTableEntityLoadEnabledCase(LoadTable loadTable) {
-        this.loadTable = loadTable;
+        this.isEntityLoadEnabled = ValidationUtil.isNull(loadTable) || loadTable.getEntityLoadEnabled();
     }
 
-    public boolean entityLoadEnabled() {
-        return ValidationUtil.isNull(this.loadTable) || this.loadTable.getEntityLoadEnabled();
+    public Boolean isEntityLoadEnabled() {
+        return this.isEntityLoadEnabled;
     }
 }

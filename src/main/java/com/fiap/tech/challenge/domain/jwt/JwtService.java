@@ -81,7 +81,7 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
     }
 
     public void refreshByBearerToken(String bearerToken) {
-        save(new JwtRefreshByBearerTokenUserCase(jwtRepository.findByBearerToken(bearerToken), millisecondsToExpireJwt).getRefreshedJwt());
+        save(new JwtRefreshByBearerTokenUserCase(jwtRepository.findByBearerToken(bearerToken), millisecondsToExpireJwt).getBuiltedJwt());
     }
 
     @Override

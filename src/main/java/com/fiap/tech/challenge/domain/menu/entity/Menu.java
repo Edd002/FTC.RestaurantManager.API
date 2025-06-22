@@ -9,6 +9,7 @@ import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -27,6 +28,17 @@ import java.util.List;
 @ConstraintMapper(constraintClass = MenuConstraint.class)
 public class Menu extends Audit implements Serializable {
 
+    protected Menu() {}
+
+    public Menu(@NonNull Long id, @NonNull List<MenuItem> menuItems) {
+        this.setId(id);
+        this.setMenuItems(menuItems);
+    }
+
+    public Menu(@NonNull List<MenuItem> menuItems) {
+        this.setMenuItems(menuItems);
+    }
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +48,7 @@ public class Menu extends Audit implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     private List<MenuItem> menuItems;
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })

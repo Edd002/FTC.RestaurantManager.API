@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springdoc.core.annotations.ParameterObject;
@@ -43,7 +42,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService, EntityManager entityManager) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

@@ -17,7 +17,7 @@ public class JwtRefreshByBearerTokenUserCase {
         this.jwt.setUpdatedIn(new Date());
     }
 
-    public Jwt getRefreshedJwt() {
+    public Jwt getBuiltedJwt() {
         return this.jwt;
     }
 }
