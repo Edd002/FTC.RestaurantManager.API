@@ -64,7 +64,7 @@ public class UserController {
 
     @Operation(method = "PATCH", summary = "Atualizar senha do usuário", description = "Atualizar senha do usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PatchMapping
+    @PatchMapping(value = "/change-password")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
         log.info("Atualizando senha do usuário...");
         userService.updatePassword(userUpdatePasswordPatchRequestDTO);
