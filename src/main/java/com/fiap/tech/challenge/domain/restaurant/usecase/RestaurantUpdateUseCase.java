@@ -2,7 +2,6 @@ package com.fiap.tech.challenge.domain.restaurant.usecase;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
-import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
@@ -10,8 +9,6 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
 import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
-
-import java.util.ArrayList;
 
 public class RestaurantUpdateUseCase {
 
@@ -35,10 +32,6 @@ public class RestaurantUpdateUseCase {
                 restaurantPutRequestDTO.getDinnerOpeningHoursStart(),
                 restaurantPutRequestDTO.getDinnerClosingHoursStart(),
                 RestaurantTypeEnum.valueOf(restaurantPutRequestDTO.getType()),
-                new Menu(
-                        0L,
-                        new ArrayList<>()
-                ),
                 new Address(
                         restaurantPutRequestDTO.getAddress().getDescription(),
                         restaurantPutRequestDTO.getAddress().getNumber(),

@@ -9,7 +9,6 @@ import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse2
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Hidden
 @Log
 @Validated
 @RestController

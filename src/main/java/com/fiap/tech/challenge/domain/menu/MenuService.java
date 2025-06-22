@@ -1,8 +1,14 @@
 package com.fiap.tech.challenge.domain.menu;
 
+import com.fiap.tech.challenge.domain.menu.dto.MenuBatchPutRequestDTO;
+import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
+import com.fiap.tech.challenge.domain.menu.usecase.MenuCreateUseCase;
+import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
+import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.base.BaseService;
-import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,15 +16,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class MenuService extends BaseService<IMenuRepository, Menu> {
 
-    private final IMenuRepository menuRepository;
-    private final PageableBuilder pageableBuilder;
+    private final RestaurantService restaurantService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public MenuService(IMenuRepository menuRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
-        this.menuRepository = menuRepository;
-        this.pageableBuilder = pageableBuilder;
+    public MenuService(RestaurantService restaurantService, ModelMapper modelMapper) {
+        this.restaurantService = restaurantService;
         this.modelMapper = modelMapper;
+    }
+
+    @Transactional
+    public MenuBatchResponseDTO createOrUpdate(MenuBatchPutRequestDTO menuBatchPostRequestDTO) {
+        Restaurant restaurant = restaurantService.findByHashId(menuBatchPostRequestDTO.getHashIdRestaurant());
+        Menu newMenu = new MenuCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant, menuBatchPostRequestDTO).getBuiltedMenu();
+        return modelMapper.map(save(newMenu), MenuBatchResponseDTO.class);
     }
 
     @Override

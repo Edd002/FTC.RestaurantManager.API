@@ -2,6 +2,10 @@ package com.fiap.tech.challenge.config;
 
 import com.fiap.tech.challenge.domain.jwt.dto.JwtResponseDTO;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
+import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
+import com.fiap.tech.challenge.domain.menu.entity.Menu;
+import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemResponseDTO;
+import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +25,8 @@ public class MapperConfig {
                 .setAmbiguityIgnored(true)
                 .setSkipNullEnabled(true);
         configModelMapper(modelMapper);
+        configMenuToMenuBatchResponseDTOMapper(modelMapper);
+        configMenuItemToMenuItemResponseDTOMapper(modelMapper);
         return modelMapper;
     }
 
@@ -31,5 +37,15 @@ public class MapperConfig {
     private void configJwtToJwtResponseDTOMapper(ModelMapper modelMapper) {
         modelMapper.typeMap(Jwt.class, JwtResponseDTO.class)
                 .addMappings(mapper -> mapper.map(jwt -> jwt.getUser().getLogin(), JwtResponseDTO::setUserLogin));
+    }
+
+    private void configMenuToMenuBatchResponseDTOMapper(ModelMapper modelMapper) {
+        modelMapper.typeMap(Menu.class, MenuBatchResponseDTO.class)
+                .addMappings(mapper -> mapper.map(menu -> menu.getRestaurant().getHashId(), (menuBatchResponseDTO, hashIdRestaurant) -> menuBatchResponseDTO.setHashIdRestaurant((String) hashIdRestaurant)));
+    }
+
+    private void configMenuItemToMenuItemResponseDTOMapper(ModelMapper modelMapper) {
+        modelMapper.typeMap(MenuItem.class, MenuItemResponseDTO.class)
+                .addMappings(mapper -> mapper.map(menuItem -> menuItem.getMenu().getRestaurant().getHashId(), (menuItemResponseDTO, hashIdRestaurant) -> menuItemResponseDTO.getMenu().setHashIdRestaurant((String) hashIdRestaurant)));
     }
 }

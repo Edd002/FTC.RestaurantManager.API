@@ -16,7 +16,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 @Getter
-public class MenuItemRequestDTO extends BaseRequestDTO {
+public abstract class MenuItemRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Nome do item do menu.", example = "Espaguete", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o nome do item do menu é 255 caracteres.")
@@ -32,7 +32,7 @@ public class MenuItemRequestDTO extends BaseRequestDTO {
     @JsonProperty("description")
     private String description;
 
-    @Schema(description = "Preço do item do menu.", example = "25.00")
+    @Schema(description = "Preço do item do menu.", example = "19.99")
     @Positive(message = "O preço do item do menu deve ser positivo.")
     @NotNull(message = "O preço do item do menu não pode ser nulo.")
     @JsonDeserialize(using = StrictPriceDeserializer.class)

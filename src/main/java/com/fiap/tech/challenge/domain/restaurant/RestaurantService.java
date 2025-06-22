@@ -29,14 +29,12 @@ import java.util.Optional;
 @Service
 public class RestaurantService extends BaseService<IRestaurantRepository, Restaurant> {
 
-    private final IRestaurantRepository restaurantRepository;
     private final CityService cityService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public RestaurantService(IRestaurantRepository restaurantRepository, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
-        this.restaurantRepository = restaurantRepository;
+    public RestaurantService(CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.cityService = cityService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
