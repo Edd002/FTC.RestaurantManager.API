@@ -35,10 +35,6 @@ public class Menu extends Audit implements Serializable {
         this.setMenuItems(menuItems);
     }
 
-    public Menu(@NonNull List<MenuItem> menuItems) {
-        this.setMenuItems(menuItems);
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +44,7 @@ public class Menu extends Audit implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     private List<MenuItem> menuItems;
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "menu", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
