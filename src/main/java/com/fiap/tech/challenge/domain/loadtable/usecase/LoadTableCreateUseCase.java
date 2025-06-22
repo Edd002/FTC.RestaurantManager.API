@@ -7,11 +7,11 @@ public final class LoadTableCreateUseCase {
 
     private final LoadTable loadTable;
 
-    public LoadTableCreateUseCase(LoadTable loadTable) {
-        this.loadTable = loadTable;
+    public LoadTableCreateUseCase(LoadTable loadTable, String entityName) {
+        this.loadTable = ValidationUtil.isNotNull(loadTable) ? loadTable : new LoadTable(entityName);
     }
 
-    public LoadTable buildLoadTable(String entityName) {
-        return ValidationUtil.isNotNull(this.loadTable) ? this.loadTable : new LoadTable(entityName);
+    public LoadTable getBuiltedLoadTable() {
+        return this.loadTable;
     }
 }

@@ -4,12 +4,13 @@ import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.exception.InvalidUserPasswordException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
+import lombok.NonNull;
 
 public final class UserUpdatePasswordUseCase {
 
     private final User user;
 
-    public UserUpdatePasswordUseCase(User loggedlUser, UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO, String passwordCryptoKey) {
+    public UserUpdatePasswordUseCase(@NonNull User loggedlUser, @NonNull UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO, @NonNull String passwordCryptoKey) {
         CryptoUtil crypto = CryptoUtil.newInstance(passwordCryptoKey);
         if (!crypto.matches(userUpdatePasswordPatchRequestDTO.getActualPassword(), loggedlUser.getPassword())) {
             throw new InvalidUserPasswordException("A senha cadastrada é diferente da senha atual.");

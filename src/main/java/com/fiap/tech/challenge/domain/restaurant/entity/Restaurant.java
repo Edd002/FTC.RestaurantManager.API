@@ -11,6 +11,7 @@ import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -31,6 +32,33 @@ import java.util.List;
 public class Restaurant extends Audit implements Serializable {
 
     protected Restaurant() {}
+
+    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHoursStart, @NonNull Date breakfastClosingHoursStart, @NonNull Date lunchOpeningHoursStart, @NonNull Date lunchClosingHoursStart, @NonNull Date dinnerOpeningHoursStart, @NonNull Date dinnerClosingHoursStart, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
+        this.setId(id);
+        this.setName(name);
+        this.setBreakfastOpeningHoursStart(breakfastOpeningHoursStart);
+        this.setBreakfastClosingHoursStart(breakfastClosingHoursStart);
+        this.setLunchOpeningHoursStart(lunchOpeningHoursStart);
+        this.setLunchClosingHoursStart(lunchClosingHoursStart);
+        this.setDinnerOpeningHoursStart(dinnerOpeningHoursStart);
+        this.setDinnerClosingHoursStart(dinnerClosingHoursStart);
+        this.setType(type);
+        this.setMenu(menu);
+        this.setAddress(address);
+    }
+
+    public Restaurant(@NonNull String name, @NonNull Date breakfastOpeningHoursStart, @NonNull Date breakfastClosingHoursStart, @NonNull Date lunchOpeningHoursStart, @NonNull Date lunchClosingHoursStart, @NonNull Date dinnerOpeningHoursStart, @NonNull Date dinnerClosingHoursStart, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
+        this.setName(name);
+        this.setBreakfastOpeningHoursStart(breakfastOpeningHoursStart);
+        this.setBreakfastClosingHoursStart(breakfastClosingHoursStart);
+        this.setLunchOpeningHoursStart(lunchOpeningHoursStart);
+        this.setLunchClosingHoursStart(lunchClosingHoursStart);
+        this.setDinnerOpeningHoursStart(dinnerOpeningHoursStart);
+        this.setDinnerClosingHoursStart(dinnerClosingHoursStart);
+        this.setType(type);
+        this.setMenu(menu);
+        this.setAddress(address);
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -8,6 +8,7 @@ import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -25,6 +26,27 @@ import java.math.BigDecimal;
 @EntityListeners({ MenuItemEntityListener.class })
 @ConstraintMapper(constraintClass = MenuItemConstraint.class)
 public class MenuItem extends Audit implements Serializable {
+
+    protected MenuItem() {}
+
+    public MenuItem(@NonNull Long id, @NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Boolean availability, @NonNull String photoUrl, @NonNull Menu menu) {
+        this.setId(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.setPrice(price);
+        this.setAvailability(availability);
+        this.setPhotoUrl(photoUrl);
+        this.setMenu(menu);
+    }
+
+    public MenuItem(@NonNull String name, @NonNull String description, @NonNull BigDecimal price, @NonNull Boolean availability, @NonNull String photoUrl, @NonNull Menu menu) {
+        this.setName(name);
+        this.setDescription(description);
+        this.setPrice(price);
+        this.setAvailability(availability);
+        this.setPhotoUrl(photoUrl);
+        this.setMenu(menu);
+    }
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -47,7 +69,7 @@ public class MenuItem extends Audit implements Serializable {
     @Column(name = "availability", nullable = false)
     private Boolean availability;
 
-    @Column(name = "photoUrl", nullable = false)
+    @Column(name = "photo_url", nullable = false)
     private String photoUrl;
 
     @ManyToOne(fetch= FetchType.LAZY)

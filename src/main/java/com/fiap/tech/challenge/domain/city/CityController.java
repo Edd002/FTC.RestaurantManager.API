@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springdoc.core.annotations.ParameterObject;
@@ -45,7 +44,7 @@ public class CityController {
     private final CityService cityService;
 
     @Autowired
-    public CityController(CityService cityService, EntityManager entityManager) {
+    public CityController(CityService cityService) {
         this.cityService = cityService;
     }
 

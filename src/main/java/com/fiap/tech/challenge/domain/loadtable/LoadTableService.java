@@ -19,16 +19,15 @@ public class LoadTableService extends BaseService<ILoadTableRepository, LoadTabl
         this.loadTableRepository = loadTableRepository;
     }
 
-    public boolean entityLoadEnabled(String entityName) {
-        return new LoadTableEntityLoadEnabledCase(loadTableRepository.findByEntityName(entityName)).entityLoadEnabled();
+    public boolean isEntityLoadEnabled(String entityName) {
+        return new LoadTableEntityLoadEnabledCase(loadTableRepository.findByEntityName(entityName)).isEntityLoadEnabled();
     }
 
     public void create(String entityName) {
         if (ValidationUtil.isBlank(entityName)) {
             throw new EntityNullException("Nenhuma entidade foi informada para ser cadastrada ou atualizada.");
         }
-        LoadTable loadTable = loadTableRepository.findByEntityName(entityName);
-        save(new LoadTableCreateUseCase(loadTable).buildLoadTable(entityName));
+        save(new LoadTableCreateUseCase(loadTableRepository.findByEntityName(entityName), entityName).getBuiltedLoadTable());
     }
 
     @Override
