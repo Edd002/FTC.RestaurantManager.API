@@ -54,7 +54,7 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonSerialize(using = TimeSerializer.class)
     private Date dinnerClosingHoursStart;
 
-    @Schema(description = "Tipo do restaurante.", example = "OWNER")
+    @Schema(description = "Tipo do restaurante.")
     @JsonProperty("type")
     private RestaurantTypeEnum type;
 
