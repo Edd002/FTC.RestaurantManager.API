@@ -33,27 +33,27 @@ public class Restaurant extends Audit implements Serializable {
 
     protected Restaurant() {}
 
-    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHoursStart, @NonNull Date breakfastClosingHoursStart, @NonNull Date lunchOpeningHoursStart, @NonNull Date lunchClosingHoursStart, @NonNull Date dinnerOpeningHoursStart, @NonNull Date dinnerClosingHoursStart, @NonNull RestaurantTypeEnum type, @NonNull Address address) {
+    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Address address) {
         this.setId(id);
         this.setName(name);
-        this.setBreakfastOpeningHoursStart(breakfastOpeningHoursStart);
-        this.setBreakfastClosingHoursStart(breakfastClosingHoursStart);
-        this.setLunchOpeningHoursStart(lunchOpeningHoursStart);
-        this.setLunchClosingHoursStart(lunchClosingHoursStart);
-        this.setDinnerOpeningHoursStart(dinnerOpeningHoursStart);
-        this.setDinnerClosingHoursStart(dinnerClosingHoursStart);
+        this.setBreakfastOpeningHours(breakfastOpeningHours);
+        this.setBreakfastClosingHours(breakfastClosingHours);
+        this.setLunchOpeningHours(lunchOpeningHours);
+        this.setLunchClosingHours(lunchClosingHours);
+        this.setDinnerOpeningHours(dinnerOpeningHours);
+        this.setDinnerClosingHours(dinnerClosingHours);
         this.setType(type);
         this.setAddress(address);
     }
 
-    public Restaurant(@NonNull String name, @NonNull Date breakfastOpeningHoursStart, @NonNull Date breakfastClosingHoursStart, @NonNull Date lunchOpeningHoursStart, @NonNull Date lunchClosingHoursStart, @NonNull Date dinnerOpeningHoursStart, @NonNull Date dinnerClosingHoursStart, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
+    public Restaurant(@NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
         this.setName(name);
-        this.setBreakfastOpeningHoursStart(breakfastOpeningHoursStart);
-        this.setBreakfastClosingHoursStart(breakfastClosingHoursStart);
-        this.setLunchOpeningHoursStart(lunchOpeningHoursStart);
-        this.setLunchClosingHoursStart(lunchClosingHoursStart);
-        this.setDinnerOpeningHoursStart(dinnerOpeningHoursStart);
-        this.setDinnerClosingHoursStart(dinnerClosingHoursStart);
+        this.setBreakfastOpeningHours(breakfastOpeningHours);
+        this.setBreakfastClosingHours(breakfastClosingHours);
+        this.setLunchOpeningHours(lunchOpeningHours);
+        this.setLunchClosingHours(lunchClosingHours);
+        this.setDinnerOpeningHours(dinnerOpeningHours);
+        this.setDinnerClosingHours(dinnerClosingHours);
         this.setType(type);
         this.setMenu(menu);
         this.setAddress(address);
@@ -73,27 +73,27 @@ public class Restaurant extends Audit implements Serializable {
 
     @Column(name = "breakfast_opening_hours")
     @Temporal(TemporalType.TIME)
-    private Date breakfastOpeningHoursStart;
+    private Date breakfastOpeningHours;
 
     @Column(name = "breakfast_closing_hours")
     @Temporal(TemporalType.TIME)
-    private Date breakfastClosingHoursStart;
+    private Date breakfastClosingHours;
 
     @Column(name = "lunch_opening_hours")
     @Temporal(TemporalType.TIME)
-    private Date lunchOpeningHoursStart;
+    private Date lunchOpeningHours;
 
     @Column(name = "lunch_closing_hours")
     @Temporal(TemporalType.TIME)
-    private Date lunchClosingHoursStart;
+    private Date lunchClosingHours;
 
     @Column(name = "dinner_opening_hours")
     @Temporal(TemporalType.TIME)
-    private Date dinnerOpeningHoursStart;
+    private Date dinnerOpeningHours;
 
     @Column(name = "dinner_closing_hours")
     @Temporal(TemporalType.TIME)
-    private Date dinnerClosingHoursStart;
+    private Date dinnerClosingHours;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)

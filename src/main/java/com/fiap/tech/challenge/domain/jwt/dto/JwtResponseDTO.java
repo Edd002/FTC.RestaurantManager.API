@@ -3,11 +3,13 @@ package com.fiap.tech.challenge.domain.jwt.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class JwtResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Login usuário do JWT.", example = "roberto_afonso_001")

@@ -3,11 +3,13 @@ package com.fiap.tech.challenge.domain.state.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class StateResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Hash id do estado.", example = "d7966ee2323f4b9886d4ac0941942a21")

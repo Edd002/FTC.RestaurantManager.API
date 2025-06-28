@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.domain.menu.dto.MenuResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class MenuItemResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Hash id do item do menu.", example = "265465616547661as61c65a4s15f4164")

@@ -25,12 +25,12 @@ public class RestaurantCreateUseCase {
     private Restaurant buildRestaurant(City city, RestaurantPostRequestDTO restaurantPostRequestDTO) {
         return new Restaurant(
                 restaurantPostRequestDTO.getName(),
-                restaurantPostRequestDTO.getBreakfastOpeningHoursStart(),
-                restaurantPostRequestDTO.getBreakfastClosingHoursStart(),
-                restaurantPostRequestDTO.getLunchOpeningHoursStart(),
-                restaurantPostRequestDTO.getLunchClosingHoursStart(),
-                restaurantPostRequestDTO.getDinnerOpeningHoursStart(),
-                restaurantPostRequestDTO.getDinnerClosingHoursStart(),
+                restaurantPostRequestDTO.getBreakfastOpeningHours(),
+                restaurantPostRequestDTO.getBreakfastClosingHours(),
+                restaurantPostRequestDTO.getLunchOpeningHours(),
+                restaurantPostRequestDTO.getLunchClosingHours(),
+                restaurantPostRequestDTO.getDinnerOpeningHours(),
+                restaurantPostRequestDTO.getDinnerClosingHours(),
                 RestaurantTypeEnum.valueOf(restaurantPostRequestDTO.getType()),
                 new Menu(),
                 new Address(

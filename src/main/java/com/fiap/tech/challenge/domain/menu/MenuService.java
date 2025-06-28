@@ -3,7 +3,13 @@ package com.fiap.tech.challenge.domain.menu;
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchPutRequestDTO;
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
-import com.fiap.tech.challenge.domain.menu.usecase.MenuCreateUseCase;
+import com.fiap.tech.challenge.domain.menuitem.MenuItemService;
+import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemBatchResponseDTO;
+import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemPostRequestDTO;
+import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemPutRequestDTO;
+import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
+import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemCreateUseCase;
+import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
@@ -13,23 +19,33 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MenuService extends BaseService<IMenuRepository, Menu> {
 
     private final RestaurantService restaurantService;
     private final ModelMapper modelMapper;
+    private final MenuItemService menuItemService;
 
     @Autowired
-    public MenuService(RestaurantService restaurantService, ModelMapper modelMapper) {
+    public MenuService(RestaurantService restaurantService, ModelMapper modelMapper, MenuItemService menuItemService) {
         this.restaurantService = restaurantService;
         this.modelMapper = modelMapper;
+        this.menuItemService = menuItemService;
     }
 
     @Transactional
     public MenuBatchResponseDTO createOrUpdate(MenuBatchPutRequestDTO menuBatchPostRequestDTO) {
         Restaurant restaurant = restaurantService.findByHashId(menuBatchPostRequestDTO.getHashIdRestaurant());
-        Menu newMenu = new MenuCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant, menuBatchPostRequestDTO).getBuiltedMenu();
-        return modelMapper.map(save(newMenu), MenuBatchResponseDTO.class);
+        List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
+                menuItemService.save(
+                        Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())
+                                .map(manuItemHashId -> new MenuItemUpdateUseCase(AuthUserContextHolder.getAuthUser(), menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getBuiltedMenuItem())
+                                .orElseGet(() -> new MenuItemCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
+                )).toList();
+        return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapper.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());
     }
 
     @Override

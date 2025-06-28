@@ -30,43 +30,43 @@ public abstract class RestaurantRequestDTO extends BaseRequestDTO {
     @NotNull(message = "O horário de abertura do restaurante para o café da manhã não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("breakfastOpeningHoursStart")
-    private Date breakfastOpeningHoursStart;
+    @JsonProperty("breakfastOpeningHours")
+    private Date breakfastOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para o café da manhã.", example = "10:00")
     @NotNull(message = "O horário de fechamento do restaurante para o café da manhã não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("breakfastClosingHoursStart")
-    private Date breakfastClosingHoursStart;
+    @JsonProperty("breakfastClosingHours")
+    private Date breakfastClosingHours;
 
     @Schema(description = "Horário de abertura do restaurante para o almoço.", example = "11:00")
     @NotNull(message = "O horário de abertura do restaurante para o almoço não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("lunchOpeningHoursStart")
-    private Date lunchOpeningHoursStart;
+    @JsonProperty("lunchOpeningHours")
+    private Date lunchOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para o almoço.", example = "14:30")
     @NotNull(message = "O horário de fechamento do restaurante para o almoço não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("lunchClosingHoursStart")
-    private Date lunchClosingHoursStart;
+    @JsonProperty("lunchClosingHours")
+    private Date lunchClosingHours;
 
     @Schema(description = "Horário de abertura do restaurante para a janta.", example = "19:00")
     @NotNull(message = "O horário de abertura do restaurante para a janta não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("dinnerOpeningHoursStart")
-    private Date dinnerOpeningHoursStart;
+    @JsonProperty("dinnerOpeningHours")
+    private Date dinnerOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para a janta.", example = "23:00")
     @NotNull(message = "O horário de fechamento do restaurante para a janta não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
-    @JsonProperty("dinnerClosingHoursStart")
-    private Date dinnerClosingHoursStart;
+    @JsonProperty("dinnerClosingHours")
+    private Date dinnerClosingHours;
 
     @Schema(description = "Tipo do restaurante.", example = "STEAKHOUSE", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o tipo do restaurante é 255 caracteres.")

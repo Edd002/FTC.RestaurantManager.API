@@ -5,6 +5,7 @@ import com.fiap.tech.challenge.domain.address.dto.AddressResponseDTO;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class RestaurantResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Hash id do restaurante.", example = "c57469e0cf8245d0b9a9b3e39b303dc0")
@@ -23,28 +25,28 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     private String name;
 
     @Schema(description = "Horário de abertura do restaurante para o café da manhã.", example = "07:00")
-    @JsonProperty("breakfastOpeningHoursStart")
-    private Date breakfastOpeningHoursStart;
+    @JsonProperty("breakfastOpeningHours")
+    private Date breakfastOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para o café da manhã.", example = "10:00")
-    @JsonProperty("breakfastClosingHoursStart")
-    private Date breakfastClosingHoursStart;
+    @JsonProperty("breakfastClosingHours")
+    private Date breakfastClosingHours;
 
     @Schema(description = "Horário de abertura do restaurante para o almoço.", example = "11:00")
-    @JsonProperty("lunchOpeningHoursStart")
-    private Date lunchOpeningHoursStart;
+    @JsonProperty("lunchOpeningHours")
+    private Date lunchOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para o almoço.", example = "14:30")
-    @JsonProperty("lunchClosingHoursStart")
-    private Date lunchClosingHoursStart;
+    @JsonProperty("lunchClosingHours")
+    private Date lunchClosingHours;
 
     @Schema(description = "Horário de abertura do restaurante para a janta.", example = "19:00")
-    @JsonProperty("dinnerOpeningHoursStart")
-    private Date dinnerOpeningHoursStart;
+    @JsonProperty("dinnerOpeningHours")
+    private Date dinnerOpeningHours;
 
     @Schema(description = "Horário de fechamento do restaurante para a janta.", example = "23:00")
-    @JsonProperty("dinnerClosingHoursStart")
-    private Date dinnerClosingHoursStart;
+    @JsonProperty("dinnerClosingHours")
+    private Date dinnerClosingHours;
 
     @Schema(description = "Permissão do usuário.", example = "OWNER")
     @JsonProperty("type")
