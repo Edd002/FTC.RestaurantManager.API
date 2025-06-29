@@ -15,7 +15,7 @@ public class RestaurantUserGetFilter extends BasePaginationFilter {
     @Schema(description = "Nome do usuário.", example = "Roberto Afonso")
     private String userName;
 
-    public RestaurantUserGetFilter(int pageNumber, int pageSize) {
+    public RestaurantUserGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 }

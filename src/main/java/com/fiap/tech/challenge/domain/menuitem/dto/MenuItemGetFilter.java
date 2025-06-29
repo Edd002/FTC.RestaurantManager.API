@@ -23,7 +23,7 @@ public class MenuItemGetFilter extends BasePaginationFilter {
     @Schema(description = "Se o item do menu está disponível.", example = "true")
     private Boolean availability;
 
-    public MenuItemGetFilter(int pageNumber, int pageSize) {
+    public MenuItemGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 }

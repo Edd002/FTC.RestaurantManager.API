@@ -18,7 +18,7 @@ public final class RestaurantGetFilter extends BasePaginationFilter {
     @ValueOfEnum(enumClass = RestaurantTypeEnum.class, message = "Tipo do restaurante inválido.")
     private String type;
 
-    public RestaurantGetFilter(int pageNumber, int pageSize) {
+    public RestaurantGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 }

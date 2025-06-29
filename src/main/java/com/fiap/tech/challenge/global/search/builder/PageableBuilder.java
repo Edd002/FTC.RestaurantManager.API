@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.global.search.builder;
 import com.fiap.tech.challenge.global.base.BasePaginationFilter;
 import com.fiap.tech.challenge.global.search.enumerated.SortOrderEnum;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,16 +16,15 @@ import java.util.List;
 public class PageableBuilder {
 
 	public Pageable build(BasePaginationFilter filter) {
-		int pageNumber = filter.getPageNumber() - 1;
-		int pageSize = filter.getAll() ? Integer.MAX_VALUE : filter.getPageSize();
+		int pageNumber = ValidationUtil.isNotNull(filter.getPageNumber()) ? (filter.getPageNumber() - NumberUtils.INTEGER_ONE) : NumberUtils.INTEGER_ZERO;
+		int pageSize = filter.getAll() || ValidationUtil.isNull(filter.getPageSize()) ? Integer.MAX_VALUE : filter.getPageSize();
 		List<String> sortBy = filter.getSortBy();
 		List<Sort.Order> sortFields = ValidationUtil.isNotEmpty(sortBy) ? orderProperties(sortBy) : new ArrayList<>();
-		SortOrderEnum sortDirection = ValidationUtil.isNull(filter.getSortDirection()) ? SortOrderEnum.EMPTY : SortOrderEnum.valueOfIgnoreCase(filter.getSortDirection());
+		SortOrderEnum sortDirection = ValidationUtil.isNotNull(filter.getSortDirection()) ? filter.getSortDirection() : SortOrderEnum.NONE;
         return switch (sortDirection) {
-            case ASC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields));
-            case DESC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields).descending());
-            case EMPTY -> PageRequest.of(pageNumber, pageSize);
-            case BOTH -> PageRequest.of(pageNumber, pageSize, Sort.by(ValidationUtil.isNotNull(filter.getSortFields()) ? filter.getSortFields() : new ArrayList<>()));
+			case NONE -> PageRequest.of(pageNumber, pageSize);
+			case ASC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields));
+			case DESC -> PageRequest.of(pageNumber, pageSize, Sort.by(sortFields).descending());
         };
 	}
 

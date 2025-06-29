@@ -15,7 +15,7 @@ public final class CityGetFilter extends BasePaginationFilter {
     @Schema(description = "UF do estado da cidade.", example = "AC")
     private String ufState;
 
-    public CityGetFilter(int pageNumber, int pageSize) {
+    public CityGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 }

@@ -2,10 +2,9 @@ package com.fiap.tech.challenge.global.search.enumerated;
 
 public enum SortOrderEnum {
 
+    NONE,
     ASC,
-    DESC,
-    EMPTY,
-    BOTH;
+    DESC;
 
     public static SortOrderEnum valueOfIgnoreCase(String sortOrder) {
         return valueOf(sortOrder.toUpperCase());
