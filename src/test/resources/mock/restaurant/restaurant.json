@@ -1,11 +1,11 @@
 {
   "restaurant": {
     "name": "Churrascaria teste",
-    "breakfastOpeningHoursStart": "07:00",
-    "breakfastClosingHoursStart": "08:00",
-    "lunchOpeningHoursStart": "14:30",
-    "dinnerOpeningHoursStart": "19:00",
-    "dinnerClosingHoursStart": "23:00",
+    "breakfastOpeningHours": "07:00",
+    "breakfastClosingHours": "08:00",
+    "lunchOpeningHours": "14:30",
+    "dinnerOpeningHours": "19:00",
+    "dinnerClosingHours": "23:00",
     "type": "STEAKHOUSE",
     "address": {
       "description": "Teste Descrição",
@@ -21,12 +21,12 @@
   },
   "restaurantPostRequestDTO": {
     "name": "Churrascaria teste",
-    "breakfastOpeningHoursStart": "07:00",
-    "breakfastClosingHoursStart": "10:00",
-    "lunchOpeningHoursStart": "14:30",
-    "lunchClosingHoursStart": "19:00",
-    "dinnerOpeningHoursStart": "19:00",
-    "dinnerClosingHoursStart": "23:00",
+    "breakfastOpeningHours": "07:00",
+    "breakfastClosingHours": "10:00",
+    "lunchOpeningHours": "14:30",
+    "lunchClosingHours": "19:00",
+    "dinnerOpeningHours": "19:00",
+    "dinnerClosingHours": "23:00",
     "type": "STEAKHOUSE",
     "address": {
       "description": "Teste Descrição New",

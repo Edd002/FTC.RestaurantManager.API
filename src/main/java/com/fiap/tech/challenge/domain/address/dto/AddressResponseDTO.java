@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.domain.city.dto.CityResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class AddressResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Hash id do endereço.", example = "b062d4e007fe40368950d7d84927f3d4")
