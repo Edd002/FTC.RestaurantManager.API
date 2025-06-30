@@ -12,7 +12,6 @@ import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemCreateUseCase;
 import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
-import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.base.BaseService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -42,8 +41,8 @@ public class MenuService extends BaseService<IMenuRepository, Menu> {
         List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
                 menuItemService.save(
                         Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())
-                                .map(manuItemHashId -> new MenuItemUpdateUseCase(AuthUserContextHolder.getAuthUser(), menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getBuiltedMenuItem())
-                                .orElseGet(() -> new MenuItemCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
+                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getBuiltedMenuItem())
+                                .orElseGet(() -> new MenuItemCreateUseCase(restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
                 )).toList();
         return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapper.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());
     }

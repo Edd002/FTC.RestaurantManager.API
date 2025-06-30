@@ -2,7 +2,6 @@ package com.fiap.tech.challenge.domain.restaurant.specification;
 
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantGetFilter;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
-import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.global.search.enumerated.FetchDeletedEnum;
 import com.fiap.tech.challenge.global.search.enumerated.SearchOperationEnum;
 import com.fiap.tech.challenge.global.search.specification.BasicSpecificationBuilder;
@@ -17,8 +16,8 @@ public class RestaurantSpecificationBuilder extends BasicSpecificationBuilder<Re
             where("name", SearchOperationEnum.LIKE, filter.getName());
         }
 
-        if (ValidationUtil.isNotBlank(filter.getType())) {
-            where("type", SearchOperationEnum.EQUAL, RestaurantTypeEnum.valueOf(filter.getType()));
+        if (ValidationUtil.isNotNull(filter.getType())) {
+            where("type", SearchOperationEnum.EQUAL, filter.getType());
         }
     }
 

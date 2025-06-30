@@ -15,7 +15,7 @@ public final class UserGetFilter extends BasePaginationFilter {
     @Schema(description = "E-mail do usuário.", example = "robertoafonso@email.com")
     private String email;
 
-    public UserGetFilter(int pageNumber, int pageSize) {
+    public UserGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 }

@@ -5,19 +5,13 @@ import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
-import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
-import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
 
 public class RestaurantUpdateUseCase {
 
     private final Restaurant restaurant;
 
-    public RestaurantUpdateUseCase(@NonNull User loggedUser, @NonNull Restaurant existingRestaurant, @NonNull City city, @NonNull RestaurantPutRequestDTO restaurantPutRequestDTO) {
-        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER)) {
-            throw new AuthorizationException("O usuário deve ser do tipo DONO (OWNER) para atualizar um restaurante.");
-        }
+    public RestaurantUpdateUseCase(@NonNull Restaurant existingRestaurant, @NonNull City city, @NonNull RestaurantPutRequestDTO restaurantPutRequestDTO) {
         this.restaurant = buildRestaurant(existingRestaurant, city, restaurantPutRequestDTO);
     }
 
@@ -32,6 +26,7 @@ public class RestaurantUpdateUseCase {
                 restaurantPutRequestDTO.getDinnerOpeningHours(),
                 restaurantPutRequestDTO.getDinnerClosingHours(),
                 RestaurantTypeEnum.valueOf(restaurantPutRequestDTO.getType()),
+                existingRestaurant.getMenu(),
                 new Address(
                         restaurantPutRequestDTO.getAddress().getDescription(),
                         restaurantPutRequestDTO.getAddress().getNumber(),

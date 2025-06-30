@@ -33,7 +33,7 @@ public class Restaurant extends Audit implements Serializable {
 
     protected Restaurant() {}
 
-    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Address address) {
+    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
         this.setId(id);
         this.setName(name);
         this.setBreakfastOpeningHours(breakfastOpeningHours);
@@ -43,6 +43,7 @@ public class Restaurant extends Audit implements Serializable {
         this.setDinnerOpeningHours(dinnerOpeningHours);
         this.setDinnerClosingHours(dinnerClosingHours);
         this.setType(type);
+        this.setMenu(menu);
         this.setAddress(address);
     }
 

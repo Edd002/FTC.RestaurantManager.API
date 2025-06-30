@@ -30,8 +30,8 @@ public class RestaurantUser extends Audit implements Serializable {
     protected RestaurantUser() {}
 
     public RestaurantUser(@NonNull Restaurant restaurant, @NonNull User user) {
-        this.restaurant = restaurant;
-        this.user = user;
+        this.setRestaurant(restaurant);
+        this.setUser(user);
     }
 
     @Serial

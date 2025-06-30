@@ -10,12 +10,15 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.specification.RestaurantSpecificationBuilder;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantCreateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
+import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserService;
+import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +32,14 @@ import java.util.Optional;
 public class RestaurantService extends BaseService<IRestaurantRepository, Restaurant> {
 
     private final CityService cityService;
+    private final RestaurantUserService restaurantUserService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public RestaurantService(CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public RestaurantService(CityService cityService, @Lazy RestaurantUserService restaurantUserService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.cityService = cityService;
+        this.restaurantUserService = restaurantUserService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
@@ -42,15 +47,16 @@ public class RestaurantService extends BaseService<IRestaurantRepository, Restau
     @Transactional
     public RestaurantResponseDTO create(RestaurantPostRequestDTO restaurantPostRequestDTO) {
         City city = cityService.findByHashId(restaurantPostRequestDTO.getAddress().getHashIdCity());
-        Restaurant newRestaurant = new RestaurantCreateUseCase(AuthUserContextHolder.getAuthUser(), city, restaurantPostRequestDTO).getBuiltedRestaurant();
-        return modelMapper.map(save(newRestaurant), RestaurantResponseDTO.class);
+        Restaurant newSavedRestaurant = save(new RestaurantCreateUseCase(city, restaurantPostRequestDTO).getBuiltedRestaurant());
+        restaurantUserService.save(new RestaurantUser(newSavedRestaurant, AuthUserContextHolder.getAuthUser()));
+        return modelMapper.map(newSavedRestaurant, RestaurantResponseDTO.class);
     }
 
     @Transactional
     public RestaurantResponseDTO update(String hashId, RestaurantPutRequestDTO restaurantPutRequestDTO) {
-        Restaurant existingRestaurant = findByHashId(hashId);
+        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
         City city = cityService.findByHashId(restaurantPutRequestDTO.getAddress().getHashIdCity());
-        Restaurant updatedRestaurant = new RestaurantUpdateUseCase(AuthUserContextHolder.getAuthUser(), existingRestaurant, city, restaurantPutRequestDTO).getBuiltedRestaurant();
+        Restaurant updatedRestaurant = new RestaurantUpdateUseCase(existingRestaurant, city, restaurantPutRequestDTO).getBuiltedRestaurant();
         return modelMapper.map(save(updatedRestaurant), RestaurantResponseDTO.class);
     }
 

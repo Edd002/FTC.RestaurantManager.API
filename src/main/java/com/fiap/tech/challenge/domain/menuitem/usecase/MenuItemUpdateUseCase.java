@@ -12,10 +12,7 @@ public class MenuItemUpdateUseCase {
 
     private final MenuItem menuItem;
 
-    public MenuItemUpdateUseCase(@NonNull User loggedUser, @NonNull MenuItem existingMenuItem, @NonNull Restaurant restaurant, @NonNull MenuItemPutRequestDTO menuItemPutRequestDTO) {
-        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER)) {
-            throw new AuthorizationException("O usuário deve ser do tipo DONO (OWNER) para atualizar um item de menu.");
-        }
+    public MenuItemUpdateUseCase(@NonNull MenuItem existingMenuItem, @NonNull Restaurant restaurant, @NonNull MenuItemPutRequestDTO menuItemPutRequestDTO) {
         this.menuItem = buildMenuItem(existingMenuItem, restaurant, menuItemPutRequestDTO);
     }
 
