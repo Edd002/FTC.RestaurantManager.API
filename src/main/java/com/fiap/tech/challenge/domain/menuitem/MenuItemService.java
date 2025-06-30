@@ -10,7 +10,6 @@ import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemCreateUseCase;
 import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
-import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -42,7 +41,7 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
     @Transactional
     public MenuItemResponseDTO create(MenuItemPostRequestDTO menuItemPostRequestDTO) {
         Restaurant restaurant = restaurantService.findByHashId(menuItemPostRequestDTO.getMenu().getHashIdRestaurant());
-        MenuItem newMenuItem = new MenuItemCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant, menuItemPostRequestDTO).getBuiltedMenuItem();
+        MenuItem newMenuItem = new MenuItemCreateUseCase(restaurant, menuItemPostRequestDTO).getBuiltedMenuItem();
         return modelMapper.map(save(newMenuItem), MenuItemResponseDTO.class);
     }
 
@@ -50,7 +49,7 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
     public MenuItemResponseDTO update(String hashId, MenuItemPutRequestDTO menuItemPutRequestDTO) {
         MenuItem existingMenuItem = findByHashId(hashId);
         Restaurant restaurant = restaurantService.findByHashId(menuItemPutRequestDTO.getMenu().getHashIdRestaurant());
-        MenuItem updatedMenuItem = new MenuItemUpdateUseCase(AuthUserContextHolder.getAuthUser(), existingMenuItem, restaurant, menuItemPutRequestDTO).getBuiltedMenuItem();
+        MenuItem updatedMenuItem = new MenuItemUpdateUseCase(existingMenuItem, restaurant, menuItemPutRequestDTO).getBuiltedMenuItem();
         return modelMapper.map(save(updatedMenuItem), MenuItemResponseDTO.class);
     }
 

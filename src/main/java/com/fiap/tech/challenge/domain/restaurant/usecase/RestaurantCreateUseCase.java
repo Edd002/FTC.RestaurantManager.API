@@ -6,19 +6,13 @@ import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPostRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
-import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
-import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
 
 public class RestaurantCreateUseCase {
 
     private final Restaurant restaurant;
 
-    public RestaurantCreateUseCase(@NonNull User loggedUser, @NonNull City city, @NonNull RestaurantPostRequestDTO restaurantPostRequestDTO) {
-        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER)) {
-            throw new AuthorizationException("O usuário deve ser do tipo DONO (OWNER) para cadastrar um restaurante.");
-        }
+    public RestaurantCreateUseCase(@NonNull City city, @NonNull RestaurantPostRequestDTO restaurantPostRequestDTO) {
         this.restaurant = buildRestaurant(city, restaurantPostRequestDTO);
     }
 

@@ -53,7 +53,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    private static final String[] PUBLIC_MATCHERS_ALL = {
+    private static final String[] CONFIG_PUBLIC_MATCHERS_ALL = {
             "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/api-docs/**",
@@ -65,16 +65,7 @@ public class SecurityConfig {
             "/configuration/**",
             "/webjars/**",
             "/actuator/health/**",
-            "/api/v1/cities/**",
-            "/api/v1/jwts/generate"
-    };
-
-    private static final String[] PUBLIC_MATCHERS_USERS = {
-            "/api/v1/users"
-    };
-
-    private static final String[] OWNER_MATCHERS_USERS = {
-            "/api/v1/users/filter"
+            "/error"
     };
 
     @Autowired
@@ -118,9 +109,17 @@ public class SecurityConfig {
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_MATCHERS_ALL).permitAll()
-                        .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_USERS).permitAll()
-                        .requestMatchers(HttpMethod.GET, OWNER_MATCHERS_USERS).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(CONFIG_PUBLIC_MATCHERS_ALL).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/cities/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/jwts/generate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/filter").hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants", "/api/v1/restaurants/filter").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurant-users").hasAuthority(UserRoleEnum.OWNER.name())
                         .anyRequest()
                         .authenticated()
                 )
@@ -130,7 +129,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.debug(true).ignoring().requestMatchers(PUBLIC_MATCHERS_ALL);
+        return web -> web.debug(true).ignoring().requestMatchers(CONFIG_PUBLIC_MATCHERS_ALL);
     }
 
     @Bean

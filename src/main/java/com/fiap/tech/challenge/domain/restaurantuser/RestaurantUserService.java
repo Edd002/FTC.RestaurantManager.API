@@ -9,7 +9,9 @@ import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.restaurantuser.specification.RestaurantUserSpecificationBuilder;
 import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -26,12 +28,14 @@ import java.util.Optional;
 @Service
 public class RestaurantUserService extends BaseService<IRestaurantUserRepository, RestaurantUser> {
 
+    private final IRestaurantUserRepository restaurantUserRepository;
     private final RestaurantService restaurantService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public RestaurantUserService(RestaurantService restaurantService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public RestaurantUserService(IRestaurantUserRepository restaurantUserRepository, RestaurantService restaurantService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+        this.restaurantUserRepository = restaurantUserRepository;
         this.restaurantService = restaurantService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
@@ -64,8 +68,13 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
         deleteByHashId(hashId);
     }
 
+    @Transactional
+    public RestaurantUser findByRestaurantAndUser(Restaurant restaurant, User user) {
+        return restaurantUserRepository.findByRestaurantAndUser(restaurant, user).orElseThrow(() -> new EntityNotFoundException("Nenhuma associação do usuário com o restaurante foi encontrada."));
+    }
+
     @Override
     public RestaurantUser findByHashId(String hashId) {
-        return super.findByHashId(hashId, String.format("O associação de usuário com restaurante com o hash id %s não foi encontrada.", hashId));
+        return super.findByHashId(hashId, String.format("A associação do usuário com restaurante com o hash id %s não foi encontrada.", hashId));
     }
 }

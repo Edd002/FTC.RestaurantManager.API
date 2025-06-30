@@ -12,10 +12,7 @@ public class MenuItemCreateUseCase {
 
     private final MenuItem menuItem;
 
-    public MenuItemCreateUseCase(@NonNull User loggedUser, @NonNull Restaurant restaurant, @NonNull MenuItemPostRequestDTO menuItemPostRequestDTO) {
-        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER)) {
-            throw new AuthorizationException("O usuário deve ser do tipo DONO (OWNER) para cadastrar um item de menu.");
-        }
+    public MenuItemCreateUseCase(@NonNull Restaurant restaurant, @NonNull MenuItemPostRequestDTO menuItemPostRequestDTO) {
         this.menuItem = buildMenuItem(restaurant, menuItemPostRequestDTO);
     }
 
