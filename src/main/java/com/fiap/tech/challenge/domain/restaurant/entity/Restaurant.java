@@ -100,7 +100,7 @@ public class Restaurant extends Audit implements Serializable {
     @Enumerated(EnumType.STRING)
     private RestaurantTypeEnum type;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<RestaurantUser> restaurantUsers;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })

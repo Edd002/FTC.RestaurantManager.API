@@ -6,10 +6,15 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.IBaseRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IRestaurantUserRepository extends IBaseRepository<RestaurantUser> {
+
+    List<RestaurantUser> findByRestaurant(Restaurant restaurant);
+
+    Optional<RestaurantUser> findByHashIdAndUser(String hashId, User user);
 
     Optional<RestaurantUser> findByRestaurantAndUser(Restaurant restaurant, User user);
 }

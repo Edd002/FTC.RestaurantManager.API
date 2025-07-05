@@ -85,7 +85,7 @@ public class User extends Audit implements Serializable {
     @JoinColumn(name = "fk_address", nullable = false)
     private Address address;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<RestaurantUser> restaurantUsers;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })

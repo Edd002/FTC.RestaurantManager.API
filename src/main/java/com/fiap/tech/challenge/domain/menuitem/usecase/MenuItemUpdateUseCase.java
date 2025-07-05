@@ -3,9 +3,6 @@ package com.fiap.tech.challenge.domain.menuitem.usecase;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemPutRequestDTO;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
-import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
-import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
 
 public class MenuItemUpdateUseCase {

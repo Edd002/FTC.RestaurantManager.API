@@ -13,6 +13,6 @@ public class JwtIsActiveUseCase {
     }
 
     public Boolean isActive() {
-        return isActive;
+        return this.isActive;
     }
 }

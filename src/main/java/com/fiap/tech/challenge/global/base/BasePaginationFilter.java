@@ -29,11 +29,9 @@ public abstract class BasePaginationFilter {
 	protected List<String> sortBy;
 
 	@Schema(description = "Ordenação (ascendente ou descendente).", example = "ASC")
-	@NotNull(message = "A ordenação da página deve ser informada.")
 	protected SortOrderEnum sortDirection;
 
-	@Schema(description = "Se todos os elementos serão buscados (pode afetar o desempenho da busca).", example = "false")
-	@NotNull(message = "A opção de se todos os elementos serão buscados deve ser informada.")
+	@Schema(description = "Se todos os elementos serão buscados (pode afetar o desempenho da busca).", example = "false", defaultValue = "false")
 	protected Boolean all;
 
 	public BasePaginationFilter(Integer pageNumber, Integer pageSize) {

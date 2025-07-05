@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostReque
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.restaurantuser.specification.RestaurantUserSpecificationBuilder;
+import com.fiap.tech.challenge.domain.restaurantuser.usecase.CheckForDeleteRestaurantUserOnlyOwnerUseCase;
 import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -60,12 +61,20 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
 
     @Transactional
     public RestaurantUserResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId), RestaurantUserResponseDTO.class);
+        return modelMapper.map(findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser()), RestaurantUserResponseDTO.class);
     }
 
     @Transactional
     public void delete(String hashId) {
-        deleteByHashId(hashId);
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        RestaurantUser existingRestaurantUser = findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser());
+        new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant()));
+        delete(existingRestaurantUser);
+    }
+
+    @Transactional
+    public RestaurantUser findByHashIdAndUser(String hashId, User user) {
+        return restaurantUserRepository.findByHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma associação para o usuário com o restaurante com hash id %s foi encontrada.", hashId)));
     }
 
     @Transactional
