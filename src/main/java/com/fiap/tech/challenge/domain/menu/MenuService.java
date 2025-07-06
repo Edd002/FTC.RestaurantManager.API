@@ -12,6 +12,8 @@ import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemCreateUseCase;
 import com.fiap.tech.challenge.domain.menuitem.usecase.MenuItemUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
+import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserService;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.global.base.BaseService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -25,19 +27,21 @@ import java.util.Optional;
 public class MenuService extends BaseService<IMenuRepository, Menu> {
 
     private final RestaurantService restaurantService;
+    private final RestaurantUserService restaurantUserService;
     private final ModelMapper modelMapper;
     private final MenuItemService menuItemService;
 
     @Autowired
-    public MenuService(RestaurantService restaurantService, ModelMapper modelMapper, MenuItemService menuItemService) {
+    public MenuService(RestaurantService restaurantService, RestaurantUserService restaurantUserService, ModelMapper modelMapper, MenuItemService menuItemService) {
         this.restaurantService = restaurantService;
+        this.restaurantUserService = restaurantUserService;
         this.modelMapper = modelMapper;
         this.menuItemService = menuItemService;
     }
 
     @Transactional
     public MenuBatchResponseDTO createOrUpdate(MenuBatchPutRequestDTO menuBatchPostRequestDTO) {
-        Restaurant restaurant = restaurantService.findByHashId(menuBatchPostRequestDTO.getHashIdRestaurant());
+        Restaurant restaurant = restaurantUserService.findByRestaurantAndUser(restaurantService.findByHashId(menuBatchPostRequestDTO.getHashIdRestaurant()), AuthUserContextHolder.getAuthUser()).getRestaurant();
         List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
                 menuItemService.save(
                         Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())

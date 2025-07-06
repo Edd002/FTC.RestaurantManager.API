@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.menu;
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchPutRequestDTO;
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.global.base.response.error.*;
-import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,8 +50,8 @@ public class MenuController {
     @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu", description = "Criar ou atualizar lista de itens do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping
-    public ResponseEntity<BaseSuccessResponse201<MenuBatchResponseDTO>> createOrUpdate(@RequestBody @Valid MenuBatchPutRequestDTO menuBatchPutRequestDTO) {
+    public ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> createOrUpdate(@RequestBody @Valid MenuBatchPutRequestDTO menuBatchPutRequestDTO) {
         log.info("Atualizando menu com lista de itens...");
-        return new BaseSuccessResponse201<>(menuService.createOrUpdate(menuBatchPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(menuService.createOrUpdate(menuBatchPutRequestDTO)).buildResponse();
     }
 }
