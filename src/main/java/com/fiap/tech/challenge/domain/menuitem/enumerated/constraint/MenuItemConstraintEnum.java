@@ -10,7 +10,7 @@ import lombok.experimental.FieldNameConstants;
 public enum MenuItemConstraintEnum {
 
     @FieldNameConstants.Include T_MENU_ITEM_HASH_ID_UK("O hash id informado para o item do menu já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_MENU_ITEM_NAME_UK("O nome informado para o item do menu já encontra-se cadastrado.");
+    @FieldNameConstants.Include T_MENU_ITEM_NAME_AND_FK_MENU_UK("O nome informado para o item do menu já encontra-se cadastrado para o menu.");
 
     private final String errorMessage;
 }

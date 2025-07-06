@@ -20,4 +20,4 @@ CREATE TABLE public.t_menu_item (
 CREATE SEQUENCE public.sq_menu_item START WITH 1 INCREMENT BY 1;
 
 CREATE UNIQUE INDEX T_MENU_ITEM_HASH_ID_UK ON public.t_menu_item (hash_id);
-CREATE UNIQUE INDEX T_MENU_ITEM_NAME_UK ON public.t_menu_item (name, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_MENU_ITEM_NAME_AND_FK_MENU_UK ON public.t_menu_item (name, fk_menu, deleted) WHERE deleted IS NULL OR deleted = false;

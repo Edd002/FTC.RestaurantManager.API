@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
-import com.fiap.tech.challenge.config.security.enumerated.SecurityPathEnum;
+import com.fiap.tech.challenge.config.enumerated.PathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
@@ -110,21 +110,22 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(IGNORE_SECURITY_CONFIG_PATHS).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_CITIES_GET.getHttpMethod(), SecurityPathEnum.API_V1_CITIES_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod(), SecurityPathEnum.API_V1_JWTS_GENERATE_POST.getPath()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_USERS_FILTER_GET.getHttpMethod(), SecurityPathEnum.API_V1_USERS_FILTER_GET.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_USERS_POST.getHttpMethod(), SecurityPathEnum.API_V1_USERS_POST.getPath()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_GET.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_POST.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_PUT.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_GET.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_POST.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_POST.getPath()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_DELETE.getPath()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_GET.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_POST.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_PUT.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_CITIES_GET.getHttpMethod(), PathEnum.API_V1_CITIES_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_DELETE.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_GET.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_POST.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_PUT.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod(), PathEnum.API_V1_JWTS_GENERATE_POST.getPath()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_MENUS_PUT.getHttpMethod(), PathEnum.API_V1_MENUS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_DELETE.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_GET.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_POST.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_PUT.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_USERS_FILTER_GET.getHttpMethod(), PathEnum.API_V1_USERS_FILTER_GET.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(PathEnum.API_V1_USERS_POST.getHttpMethod(), PathEnum.API_V1_USERS_POST.getPath()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_USERS_DELETE.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_USERS_DELETE.getPath()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_USERS_GET.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_USERS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_USERS_POST.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_USERS_POST.getPath()).permitAll()
                         .anyRequest()
                         .authenticated()
                 )

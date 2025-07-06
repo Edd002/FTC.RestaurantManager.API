@@ -15,9 +15,9 @@ public interface IBaseRepository<E> extends JpaRepository<E, Long>, JpaSpecifica
 
     List<E> findAllByHashIdIn(List<String> hashIds);
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     Long deleteByHashId(String hashId);
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     List<E> removeByHashId(String hashId);
 }
