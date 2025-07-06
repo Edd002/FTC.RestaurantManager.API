@@ -68,8 +68,9 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
     public void delete(String hashId) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
         RestaurantUser existingRestaurantUser = findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser());
-        new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant()));
-        delete(existingRestaurantUser);
+        if (new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant())).isAllowedToDelete()) {
+            delete(existingRestaurantUser);
+        }
     }
 
     @Transactional

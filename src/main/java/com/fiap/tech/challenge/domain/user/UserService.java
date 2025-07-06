@@ -11,8 +11,8 @@ import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
-import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
+import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,9 +85,10 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public void delete() {
         User loggedUser = AuthUserContextHolder.getAuthUser();
-        new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, loggedUser.getRestaurantUsers());
-        delete(loggedUser);
-        SecurityContextHolder.clearContext();
+        if (new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, loggedUser.getRestaurantUsers()).isAllowedToDelete()) {
+            delete(loggedUser);
+            SecurityContextHolder.clearContext();
+        }
     }
 
     public User findByLogin(String login) {

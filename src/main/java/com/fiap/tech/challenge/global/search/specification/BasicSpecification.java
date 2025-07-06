@@ -2,14 +2,13 @@ package com.fiap.tech.challenge.global.search.specification;
 
 import com.fiap.tech.challenge.global.search.enumerated.SearchOperationEnum;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 public abstract class BasicSpecification<TYPE> {
 
@@ -23,46 +22,39 @@ public abstract class BasicSpecification<TYPE> {
         boolean isChild = ValidationUtil.isNotBlank(criteria.getKey()) && criteria.getKey().contains(".");
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.EQUAL) && criteria.getValue() instanceof Date) {
-            String[] params = criteria.getKey().split("\\.");
             return builder.equal(
-                    builder.function("date", Date.class, root.join(params[0]).get(params[1])),
+                    builder.function("date", Date.class, buildExpressionWithChild(root)),
                     builder.function("date", Date.class, builder.literal(criteria.getValue())));
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.EQUAL)) {
-            String[] params = criteria.getKey().split("\\.");
-            return builder.equal(root.join(params[0]).get(params[1]), criteria.getValue());
+            return builder.equal(buildExpressionWithChild(root), criteria.getValue());
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.EQUAL_IGNORE_CASE)) {
-            String[] params = criteria.getKey().split("\\.");
-            return builder.like(builder.lower(root.join(params[0]).get(params[1])), StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase());
+            return builder.like(builder.lower(buildExpressionWithChild(root)), StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase());
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.LIKE)) {
-            String[] params = criteria.getKey().split("\\.");
             return builder.like(
-                    builder.lower(root.join(params[0]).get(params[1])),
+                    builder.lower(buildExpressionWithChild(root)),
                     "%" + StringUtils.normalizeSpace(String.valueOf(criteria.getValue())).toLowerCase() + "%"
             );
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.BETWEEN) && criteria.getValue() instanceof Date) {
-            String[] params = criteria.getKey().split("\\.");
             return builder.between(
-                    builder.function("date", Date.class, root.join(params[0]).get(params[1])),
+                    builder.function("date", Date.class, buildExpressionWithChild(root)),
                     builder.function("date", Date.class, builder.literal((Date) criteria.getValue())),
                     builder.function("date", Date.class, builder.literal((Date) criteria.getParam())));
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.IN)) {
-            String[] params = criteria.getKey().split("\\.");
-            return root.join(params[0]).get(params[1]).in((Collection<?>) criteria.getValue());
+            return buildExpressionWithChild(root).in((Collection<?>) criteria.getValue());
         }
 
         if (isChild && criteria.getOperation().equals(SearchOperationEnum.IN_JOIN)) {
-            String[] params = criteria.getKey().split("\\.");
-            return root.join(params[0]).join(params[1]).in((Collection<?>) criteria.getValue());
+            return buildExpressionWithChild(root).in((Collection<?>) criteria.getValue());
         }
 
         if (criteria.getOperation().equals(SearchOperationEnum.EQUAL) && criteria.getValue() instanceof Date) {
@@ -153,5 +145,15 @@ public abstract class BasicSpecification<TYPE> {
         }
 
         return null;
+    }
+
+    private <Y> Path<Y> buildExpressionWithChild(Root<TYPE> root) {
+        String[] params = criteria.getKey().split("\\.");
+        Path<Y> expression = root.join(params[0]);
+        for (String param : params) {
+            if (Objects.equals(param, params[0])) continue;
+            expression = expression.get(param);
+        }
+        return expression;
     }
 }

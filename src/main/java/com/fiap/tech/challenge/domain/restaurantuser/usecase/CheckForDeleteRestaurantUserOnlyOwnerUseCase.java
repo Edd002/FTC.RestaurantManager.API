@@ -11,9 +11,16 @@ import java.util.List;
 
 public class CheckForDeleteRestaurantUserOnlyOwnerUseCase {
 
+    private final Boolean isAllowedToDelete;
+
     public CheckForDeleteRestaurantUserOnlyOwnerUseCase(@NonNull User loggedUser, @NonNull List<RestaurantUser> restaurantUsers) {
         if (loggedUser.getRole().equals(UserRoleEnum.OWNER) && restaurantUsers.stream().filter(restaurantUser -> restaurantUser.getUser().getRole().equals(UserRoleEnum.OWNER)).count() == NumberUtils.LONG_ONE) {
             throw new EntityCannotBeDeletedException("Não foi possível realizar a exclusão pois deve existir pelo menos uma associação de usuário DONO (OWNER) com o restaurante.");
         }
+        this.isAllowedToDelete = true;
+    }
+
+    public Boolean isAllowedToDelete() {
+        return this.isAllowedToDelete;
     }
 }

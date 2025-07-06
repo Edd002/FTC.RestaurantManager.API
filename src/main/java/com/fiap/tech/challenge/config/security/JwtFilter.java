@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
-import com.fiap.tech.challenge.config.security.enumerated.SecurityPathEnum;
+import com.fiap.tech.challenge.config.enumerated.PathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtClaims;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
@@ -51,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest httpServletRequest) {
         return Arrays.stream(IGNORE_FILTER_CONFIG_PATHS).anyMatch(path -> httpServletRequest.getRequestURI().contains(path)) ||
-                SecurityPathEnum.getIgnoreRequestFilterPaths().stream().anyMatch(securityPathEnum -> httpServletRequest.getRequestURI().contains(securityPathEnum.getCompletePath()) && httpServletRequest.getMethod().equals(securityPathEnum.getHttpMethod().name()));
+                PathEnum.getIgnoreRequestFilterPaths().stream().anyMatch(securityPathEnum -> httpServletRequest.getRequestURI().contains(securityPathEnum.getCompletePath()) && httpServletRequest.getMethod().equals(securityPathEnum.getHttpMethod().name()));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(SecurityPathEnum.getIgnoreResponseFilterPaths().stream().map(SecurityPathEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
+            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(PathEnum.getIgnoreResponseFilterPaths().stream().map(PathEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
                 jwtService.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
@@ -81,6 +81,6 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isDeletingUser(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getServletPath().equals(SecurityPathEnum.API_V1_USERS_DELETE.getPath()) && httpServletRequest.getMethod().equals(SecurityPathEnum.API_V1_USERS_DELETE.getHttpMethod().name());
+        return httpServletRequest.getServletPath().equals(PathEnum.API_V1_USERS_DELETE.getPath()) && httpServletRequest.getMethod().equals(PathEnum.API_V1_USERS_DELETE.getHttpMethod().name());
     }
 }
