@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
+import com.fiap.tech.challenge.config.security.enumerated.SecurityPathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -53,7 +53,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    private static final String[] CONFIG_PUBLIC_MATCHERS_ALL = {
+    private static final String[] IGNORE_SECURITY_CONFIG_PATHS = {
             "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/api-docs/**",
@@ -109,18 +109,22 @@ public class SecurityConfig {
                     response.getWriter().write(gson.toJson(baseErrorResponse));
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(CONFIG_PUBLIC_MATCHERS_ALL).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/cities/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/jwts/generate").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/filter").hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants").hasAuthority(UserRoleEnum.OWNER.name())
-                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurant-users/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurant-users").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurant-users").permitAll()
+                        .requestMatchers(IGNORE_SECURITY_CONFIG_PATHS).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_CITIES_GET.getHttpMethod(), SecurityPathEnum.API_V1_CITIES_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod(), SecurityPathEnum.API_V1_JWTS_GENERATE_POST.getPath()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_USERS_FILTER_GET.getHttpMethod(), SecurityPathEnum.API_V1_USERS_FILTER_GET.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_USERS_POST.getHttpMethod(), SecurityPathEnum.API_V1_USERS_POST.getPath()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_GET.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_POST.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_PUT.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_GET.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_POST.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_POST.getPath()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_RESTAURANTS_USERS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_RESTAURANTS_USERS_DELETE.getPath()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_GET.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_GET.getPathMatchingAll()).permitAll()
+                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_POST.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_POST.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_PUT.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_PUT.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
+                        .requestMatchers(SecurityPathEnum.API_V1_MENU_ITEMS_DELETE.getHttpMethod(), SecurityPathEnum.API_V1_MENU_ITEMS_DELETE.getPath()).hasAuthority(UserRoleEnum.OWNER.name())
                         .anyRequest()
                         .authenticated()
                 )
@@ -130,7 +134,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.debug(true).ignoring().requestMatchers(CONFIG_PUBLIC_MATCHERS_ALL);
+        return web -> web.debug(true).ignoring().requestMatchers(IGNORE_SECURITY_CONFIG_PATHS);
     }
 
     @Bean
