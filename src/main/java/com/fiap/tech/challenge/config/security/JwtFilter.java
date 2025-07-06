@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
+import com.fiap.tech.challenge.config.security.enumerated.SecurityPathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtClaims;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
@@ -14,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    private static final String[] IGNORE_FILTER_PATHS = {
+    private static final String[] IGNORE_FILTER_CONFIG_PATHS = {
             "/restaurant-manager/swagger-ui/index.html",
             "/restaurant-manager/swagger-ui/swagger-ui.css",
             "/restaurant-manager/swagger-ui/swagger-ui-standalone-preset.js",
@@ -40,13 +40,6 @@ public class JwtFilter extends OncePerRequestFilter {
             "/restaurant-manager/v3/api-docs",
             "/restaurant-manager/h2-console",
             "/actuator/health",
-            "/restaurant-manager/api/v1/jwts/generate"
-    };
-
-    private static final String[] IGNORE_RESPONSE_FILTER_PATHS = {
-            "/api/v1/jwts/generate",
-            "/api/v1/jwts/validate",
-            "/api/v1/jwts/invalidate"
     };
 
     public JwtFilter(JwtBuilder jwtBuilder, JwtService jwtService, BundleAuthUserDetailsService bundleAuthUserDetailsService) {
@@ -57,7 +50,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest httpServletRequest) {
-        return Arrays.stream(IGNORE_FILTER_PATHS).anyMatch(path -> httpServletRequest.getRequestURI().contains(path));
+        return Arrays.stream(IGNORE_FILTER_CONFIG_PATHS).anyMatch(path -> httpServletRequest.getRequestURI().contains(path)) ||
+                SecurityPathEnum.getIgnoreRequestFilterPaths().stream().anyMatch(securityPathEnum -> httpServletRequest.getRequestURI().contains(securityPathEnum.getCompletePath()) && httpServletRequest.getMethod().equals(securityPathEnum.getHttpMethod().name()));
     }
 
     @Override
@@ -71,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(IGNORE_RESPONSE_FILTER_PATHS, httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
+            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(SecurityPathEnum.getIgnoreResponseFilterPaths().stream().map(SecurityPathEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
                 jwtService.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
@@ -87,6 +81,6 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isDeletingUser(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getServletPath().equals("/api/v1/users") && httpServletRequest.getMethod().equals(HttpMethod.DELETE.name());
+        return httpServletRequest.getServletPath().equals(SecurityPathEnum.API_V1_USERS_DELETE.getPath()) && httpServletRequest.getMethod().equals(SecurityPathEnum.API_V1_USERS_DELETE.getHttpMethod().name());
     }
 }

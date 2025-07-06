@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.restaurantuser.usecase.CheckForDeleteRestaurantUserOnlyOwnerUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -83,7 +84,9 @@ public class UserService extends BaseService<IUserRepository, User> {
 
     @Transactional
     public void delete() {
-        delete(AuthUserContextHolder.getAuthUser());
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, loggedUser.getRestaurantUsers());
+        delete(loggedUser);
         SecurityContextHolder.clearContext();
     }
 

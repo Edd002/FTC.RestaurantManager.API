@@ -12,7 +12,9 @@ import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantCreateUseCase
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserService;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
+import com.fiap.tech.challenge.domain.restaurantuser.usecase.CheckForDeleteRestaurantUserOnlyOwnerUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -77,7 +79,10 @@ public class RestaurantService extends BaseService<IRestaurantRepository, Restau
 
     @Transactional
     public void delete(String hashId) {
-        deleteByHashId(hashId);
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
+        new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, existingRestaurant.getRestaurantUsers());
+        delete(existingRestaurant);
     }
 
     @Override

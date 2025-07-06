@@ -16,6 +16,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RestaurantUserResponseDTO extends BaseResponseDTO {
 
+    @Schema(description = "Hash id da associação de usuário com restaurante.", example = "0ef6f7abed4b48e89c77901b1bcd4e33")
+    @JsonProperty("hashId")
+    private String hashId;
+
     @Schema(description = "Restaurante associado ao usuário.")
     @JsonProperty("restaurant")
     private RestaurantResponseDTO restaurant;

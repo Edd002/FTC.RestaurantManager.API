@@ -1,5 +1,7 @@
 package com.fiap.tech.challenge.global.audit;
 
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class DeleteAuditorComponent {
     @Transactional(value = REQUIRES_NEW)
     public void deleteAudit(Audit auditEntity) {
         auditEntity.setDeletedIn(new Date());
-        auditEntity.setDeletedBy(null);
+        auditEntity.setDeletedBy(AuthUserContextHolder.getAuthUserIfExists().map(User::getName).orElse(null));
         entityManager.merge(auditEntity);
         entityManager.flush();
     }
