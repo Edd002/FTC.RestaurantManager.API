@@ -7,7 +7,7 @@ import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostReque
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.restaurantuser.specification.RestaurantUserSpecificationBuilder;
-import com.fiap.tech.challenge.domain.restaurantuser.usecase.CheckForDeleteRestaurantUserOnlyOwnerUseCase;
+import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCheckForDeleteOnlyOwnerUseCase;
 import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -68,7 +68,7 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
     public void delete(String hashId) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
         RestaurantUser existingRestaurantUser = findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser());
-        if (new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant())).isAllowedToDelete()) {
+        if (new RestaurantUserCheckForDeleteOnlyOwnerUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant())).isAllowedToDelete()) {
             delete(existingRestaurantUser);
         }
     }

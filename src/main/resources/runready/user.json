@@ -5,7 +5,7 @@
       "email": "admin@email.com",
       "login": "admin",
       "password": "admin",
-      "role": "OWNER",
+      "type": "OWNER",
       "address": {
         "description": "Description",
         "number": "00",

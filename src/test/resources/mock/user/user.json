@@ -4,7 +4,7 @@
     "email": "admin@email.com",
     "login": "admin",
     "password": "admin",
-    "role": "OWNER",
+    "type": "OWNER",
     "address": {
       "description": "Description",
       "number": "00",
@@ -22,7 +22,7 @@
     "email": "client@email.com",
     "login": "client",
     "password": "client",
-    "role": "CLIENT",
+    "type": "CLIENT",
     "address": {
       "description": "Description",
       "number": "00",
@@ -40,7 +40,7 @@
     "email": "newadmin@email.com",
     "login": "newadmin",
     "password": "newadmin",
-    "role": "OWNER",
+    "type": "OWNER",
     "address": {
       "description": "New Description",
       "number": "00",
@@ -56,7 +56,7 @@
     "email": "newclient@email.com",
     "login": "newclient",
     "password": "newclient",
-    "role": "CLIENT",
+    "type": "CLIENT",
     "address": {
       "description": "New Description",
       "number": "00",
@@ -71,7 +71,7 @@
     "name": "Updated Admin",
     "email": "updatedadmin@email.com",
     "login": "updatedadmin",
-    "role": "OWNER",
+    "type": "OWNER",
     "address": {
       "description": "Updated Description",
       "number": "00",
@@ -86,7 +86,7 @@
     "name": "Updated Client",
     "email": "updatedclient@email.com",
     "login": "updatedclient",
-    "role": "CLIENT",
+    "type": "CLIENT",
     "address": {
       "description": "Updated Description",
       "number": "00",

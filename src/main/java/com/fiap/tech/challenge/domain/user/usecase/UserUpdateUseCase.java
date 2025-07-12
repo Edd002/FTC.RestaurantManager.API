@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.domain.user.enumerated.UserRoleEnum;
+import com.fiap.tech.challenge.domain.user.enumerated.UserTypeEnum;
 import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import lombok.NonNull;
 
@@ -13,7 +13,7 @@ public final class UserUpdateUseCase {
     private final User user;
 
     public UserUpdateUseCase(@NonNull User loggedUser, @NonNull City city, @NonNull UserPutRequestDTO userPutRequestDTO, @NonNull String passwordCryptoKey) {
-        if (!loggedUser.getRole().equals(UserRoleEnum.OWNER) && userPutRequestDTO.getRole().equals(UserRoleEnum.OWNER.name())) {
+        if (!loggedUser.getType().equals(UserTypeEnum.OWNER) && userPutRequestDTO.getType().equals(UserTypeEnum.OWNER.name())) {
             throw new AuthorizationException("O usuário não tem permissão para alterar o seu tipo para DONO (OWNER).");
         }
         this.user = buildUser(loggedUser, city, userPutRequestDTO, passwordCryptoKey);
@@ -27,7 +27,7 @@ public final class UserUpdateUseCase {
                 userPutRequestDTO.getLogin(),
                 passwordCryptoKey,
                 loggedUser.getPassword(),
-                userPutRequestDTO.getRole(),
+                userPutRequestDTO.getType(),
                 new Address(
                         loggedUser.getAddress().getId(),
                         userPutRequestDTO.getAddress().getDescription(),

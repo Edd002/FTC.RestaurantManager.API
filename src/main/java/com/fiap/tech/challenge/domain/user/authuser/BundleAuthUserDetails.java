@@ -21,7 +21,7 @@ public class BundleAuthUserDetails implements UserDetails {
 
     public BundleAuthUserDetails(User user) {
         this.user = user;
-        this.authorities = Collections.singletonList(user.getRole().getSimpleGrantedAuthority());
+        this.authorities = Collections.singletonList(user.getType().getSimpleGrantedAuthority());
     }
 
     @Override
