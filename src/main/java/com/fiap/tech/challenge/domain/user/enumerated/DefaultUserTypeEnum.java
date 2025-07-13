@@ -26,6 +26,10 @@ public enum DefaultUserTypeEnum {
         return ValidationUtil.isNotNull(type) && StringUtils.upperCase(type).equals(DefaultUserTypeEnum.OWNER.name());
     }
 
+    public static boolean isTypeAdminOrOwner(String type) {
+        return isTypeAdmin(type) || isTypeOwner(type);
+    }
+
     public static boolean isTypeClient(String type) {
         return ValidationUtil.isNotNull(type) && StringUtils.upperCase(type).equals(DefaultUserTypeEnum.CLIENT.name());
     }
@@ -36,6 +40,10 @@ public enum DefaultUserTypeEnum {
 
     public static boolean isUserOwner(User user) {
         return user.getType().getName().equals(DefaultUserTypeEnum.OWNER.name());
+    }
+
+    public static boolean isUserAdminOrOwner(User user) {
+        return isUserAdmin(user) || isUserOwner(user);
     }
 
     public static boolean isUserClient(User user) {

@@ -33,7 +33,7 @@ CREATE UNIQUE INDEX T_RESTAURANT_HASH_ID_UK ON public.t_restaurant (hash_id);
 CREATE UNIQUE INDEX T_RESTAURANT_FK_MENU_UK ON public.t_restaurant (FK_MENU_FIELD);
 CREATE UNIQUE INDEX T_RESTAURANT_FK_ADDRESS_UK ON public.t_restaurant (FK_ADDRESS_FIELD);
 
-ALTER TABLE public.t_restaurantADD CONSTRAINT T_RESTAURANT_TYPE_CHECK CHECK (type IN
+ALTER TABLE public.t_restaurant ADD CONSTRAINT T_RESTAURANT_TYPE_CHECK CHECK (type IN
                                                   ('QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD', 'FAST_CASUAL_CONCEPTS',
                                                    'CASUAL_DINING_RESTAURANTS', 'CONTEMPORARY_CASUAL', 'PREMIUM_CASUAL',
                                                    'FINE_DINING', 'FAMILY_STYLE_DINING',

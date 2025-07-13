@@ -49,6 +49,10 @@ public class HttpHeaderComponent {
         return headers;
     }
 
+    public HttpHeaders generateHeaderWithAdminBearerToken() {
+        return generateHeaderWithBearerToken(JsonUtil.objectFromJson("jwtGeneratePostRequestDTOAdmin", PATH_RESOURCE_JWT, JwtGeneratePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue()));
+    }
+
     public HttpHeaders generateHeaderWithOwnerBearerToken() {
         return generateHeaderWithBearerToken(JsonUtil.objectFromJson("jwtGeneratePostRequestDTOOwner", PATH_RESOURCE_JWT, JwtGeneratePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue()));
     }

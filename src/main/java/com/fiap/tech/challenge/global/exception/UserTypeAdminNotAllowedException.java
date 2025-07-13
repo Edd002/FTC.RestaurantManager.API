@@ -6,16 +6,16 @@ import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import java.io.Serial;
 import java.util.List;
 
-public class InvalidUserPasswordException extends ApiException {
+public class UserTypeAdminNotAllowedException extends ApiException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public InvalidUserPasswordException() {
+    public UserTypeAdminNotAllowedException() {
         super();
     }
 
-    public InvalidUserPasswordException(String message) {
+    public UserTypeAdminNotAllowedException(String message) {
         super(message);
     }
 

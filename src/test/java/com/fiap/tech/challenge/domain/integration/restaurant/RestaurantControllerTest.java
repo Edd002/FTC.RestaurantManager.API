@@ -49,6 +49,7 @@ class RestaurantControllerTest {
                         "persistence/city/before_test_city.sql",
                         "persistence/address/before_test_address.sql",
                         "persistence/loadtable/before_test_load_table.sql",
+                        "persistence/usertype/before_test_user_type.sql",
                         "persistence/user/before_test_user.sql",
                         "persistence/jwt/before_test_jwt.sql");
         databaseManagementComponent.populateDatabase(sqlFileScripts);

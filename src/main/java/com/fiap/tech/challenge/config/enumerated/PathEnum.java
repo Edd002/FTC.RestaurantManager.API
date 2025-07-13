@@ -38,10 +38,10 @@ public enum PathEnum {
     API_V1_USER_TYPES_FILTER_GET(HttpMethod.GET, "/api/v1/user-types/filter"),
     API_V1_USER_TYPES_POST(HttpMethod.POST, "/api/v1/user-types"),
     API_V1_USER_TYPES_PUT(HttpMethod.PUT, "/api/v1/user-types"),
-    API_V1_RESTAURANTS_USERS_DELETE(HttpMethod.DELETE, "/api/v1/restaurant-users"),
-    API_V1_RESTAURANTS_USERS_FILTER_GET(HttpMethod.GET, "/api/v1/restaurant-users/filter"),
-    API_V1_RESTAURANTS_USERS_GET(HttpMethod.GET, "/api/v1/restaurant-users"),
-    API_V1_RESTAURANTS_USERS_POST(HttpMethod.POST, "/api/v1/restaurant-users");
+    API_V1_RESTAURANT_USERS_DELETE(HttpMethod.DELETE, "/api/v1/restaurant-users"),
+    API_V1_RESTAURANT_USERS_FILTER_GET(HttpMethod.GET, "/api/v1/restaurant-users/filter"),
+    API_V1_RESTAURANT_USERS_GET(HttpMethod.GET, "/api/v1/restaurant-users"),
+    API_V1_RESTAURANT_USERS_POST(HttpMethod.POST, "/api/v1/restaurant-users");
 
     private final HttpMethod httpMethod;
     private final String path;
@@ -64,10 +64,10 @@ public enum PathEnum {
                 API_V1_RESTAURANTS_FILTER_GET,
                 API_V1_RESTAURANTS_GET,
                 API_V1_USERS_POST,
-                API_V1_RESTAURANTS_USERS_DELETE,
-                API_V1_RESTAURANTS_USERS_FILTER_GET,
-                API_V1_RESTAURANTS_USERS_GET,
-                API_V1_RESTAURANTS_USERS_POST
+                API_V1_RESTAURANT_USERS_DELETE,
+                API_V1_RESTAURANT_USERS_FILTER_GET,
+                API_V1_RESTAURANT_USERS_GET,
+                API_V1_RESTAURANT_USERS_POST
         );
     }
 

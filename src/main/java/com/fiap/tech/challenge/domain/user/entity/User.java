@@ -4,10 +4,12 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.UserEntityListener;
+import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.constraint.UserConstraint;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.exception.UserTypeAdminNotAllowedException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -100,5 +102,12 @@ public class User extends Audit implements Serializable {
 
     public void setEncryptedPassword(@NonNull String passwordCryptoKey, @NonNull String password) {
         this.password = CryptoUtil.newInstance(passwordCryptoKey).encode(password);
+    }
+
+    public void setType(UserType type) {
+        if (DefaultUserTypeEnum.isUserAdmin(this)) {
+            throw new UserTypeAdminNotAllowedException("Usuários administradores são pré cadastrados pelo sistema e não podem ser persistidos.");
+        }
+        this.type = type;
     }
 }

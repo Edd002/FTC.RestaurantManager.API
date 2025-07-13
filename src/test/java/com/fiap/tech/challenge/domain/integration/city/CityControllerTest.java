@@ -48,6 +48,7 @@ public class CityControllerTest {
                 "persistence/city/before_test_city.sql",
                 "persistence/address/before_test_address.sql",
                 "persistence/loadtable/before_test_load_table.sql",
+                "persistence/usertype/before_test_user_type.sql",
                 "persistence/user/before_test_user.sql",
                 "persistence/jwt/before_test_jwt.sql"
         );
@@ -81,7 +82,7 @@ public class CityControllerTest {
     @DisplayName(value = "Teste de sucesso - Cidade existe ao verificar por filtro de UF do estado")
     @Test
     public void findByFilterUfStateSuccess() {
-        final String UfState = "AC";
+        final String UfState = "RO";
         String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/cities/filter")
                 .queryParam("ufState", UfState)
                 .encode()
@@ -92,8 +93,8 @@ public class CityControllerTest {
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
-        Assertions.assertEquals(22, responseObject.getList().size());
-        Assertions.assertEquals(22, responseObject.getTotalElements());
+        Assertions.assertEquals(6, responseObject.getList().size());
+        Assertions.assertEquals(6, responseObject.getTotalElements());
         Assertions.assertEquals(UfState, responseObject.getList().stream().toList().get(NumberUtils.INTEGER_ZERO).getState().getUf());
     }
 

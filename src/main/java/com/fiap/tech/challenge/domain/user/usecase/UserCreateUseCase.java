@@ -22,7 +22,7 @@ public final class UserCreateUseCase {
 
     public UserCreateUseCase(@NonNull UserType userType, @NonNull City city, @NonNull UserPostRequestDTO userPostRequestDTO, @NonNull String passwordCryptoKey) {
         if (DefaultUserTypeEnum.isTypeOwner(userPostRequestDTO.getType())) {
-            throw new AuthorizationException("Para criar um usuário do como dono de restaurante é necessário estar autenticado com um usuário com esse mesmo tipo.");
+            throw new AuthorizationException("Para criar um usuário como dono de restaurante é necessário estar autenticado com um usuário com esse mesmo tipo.");
         }
         this.user = buildUser(userType, city, userPostRequestDTO, passwordCryptoKey);
     }
