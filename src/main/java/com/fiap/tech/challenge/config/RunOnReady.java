@@ -7,6 +7,8 @@ import com.fiap.tech.challenge.domain.state.StateService;
 import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.domain.user.UserService;
 import com.fiap.tech.challenge.domain.user.entity.User;
+import com.fiap.tech.challenge.domain.usertype.UserTypeService;
+import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.java.Log;
@@ -28,18 +30,21 @@ public class RunOnReady {
 
     private static final String PATH_RESOURCE_STATE = "/runready/state.json";
     private static final String PATH_RESOURCE_CITY = "/runready/city.json";
+    private static final String PATH_RESOURCE_USER_TYPE = "/runready/user_type.json";
     private static final String PATH_RESOURCE_USER = "/runready/user.json";
 
     private final LoadTableService loadTableService;
     private final StateService stateService;
     private final CityService cityService;
+    private final UserTypeService userTypeService;
     private final UserService userService;
 
     @Autowired
-    public RunOnReady(LoadTableService loadTableService, StateService stateService, CityService cityService, UserService userService) {
+    public RunOnReady(LoadTableService loadTableService, StateService stateService, CityService cityService, UserTypeService userTypeService, UserService userService) {
         this.loadTableService = loadTableService;
         this.stateService = stateService;
         this.cityService = cityService;
+        this.userTypeService = userTypeService;
         this.userService = userService;
     }
 
@@ -48,6 +53,8 @@ public class RunOnReady {
         List<State> stateList = JsonUtil.objectListFromJson("state", PATH_RESOURCE_STATE, new TypeToken<ArrayList<State>>() {
         }.getType());
         List<City> cityList = JsonUtil.objectListFromJson("city", PATH_RESOURCE_CITY, new TypeToken<ArrayList<City>>() {
+        }.getType());
+        List<UserType> userTypeList = JsonUtil.objectListFromJson("userType", PATH_RESOURCE_USER_TYPE, new TypeToken<ArrayList<UserType>>() {
         }.getType());
         List<User> userList = JsonUtil.objectListFromJson("user", PATH_RESOURCE_USER, new TypeToken<ArrayList<User>>() {
         }.getType());
@@ -58,6 +65,10 @@ public class RunOnReady {
         if ((loadTableService.isEntityLoadEnabled(City.class.getSimpleName()))) {
             cityList.forEach(this::createCity);
             loadTableService.create(City.class.getSimpleName());
+        }
+        if ((loadTableService.isEntityLoadEnabled(UserType.class.getSimpleName()))) {
+            userTypeList.forEach(this::createUserType);
+            loadTableService.create(UserType.class.getSimpleName());
         }
         if ((loadTableService.isEntityLoadEnabled(User.class.getSimpleName()))) {
             userList.forEach(this::createUser);
@@ -78,6 +89,14 @@ public class RunOnReady {
             cityService.save(city);
         } catch (Exception exception) {
             log.severe(String.format("A cidade de nome %s não pode ser cadastrada. Erro: %s", city.getName(), exception.getMessage()));
+        }
+    }
+
+    private void createUserType(UserType userType) {
+        try {
+            userTypeService.save(userType);
+        } catch (Exception exception) {
+            log.severe(String.format("O tipo de usuário de nome %s não pode ser cadastrado. Erro: %s", userType.getName(), exception.getMessage()));
         }
     }
 

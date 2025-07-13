@@ -4,7 +4,7 @@
     "email": "admin@email.com",
     "login": "admin",
     "password": "admin",
-    "type": "OWNER",
+    "type": "ADMIN",
     "address": {
       "description": "Description",
       "number": "00",

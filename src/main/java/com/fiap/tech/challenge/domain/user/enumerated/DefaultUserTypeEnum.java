@@ -3,7 +3,6 @@ package com.fiap.tech.challenge.domain.user.enumerated;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import lombok.Getter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Getter
 public enum DefaultUserTypeEnum {
@@ -16,10 +15,6 @@ public enum DefaultUserTypeEnum {
 
     DefaultUserTypeEnum(String description) {
         this.description = description;
-    }
-
-    public SimpleGrantedAuthority getSimpleGrantedAuthority() {
-        return new SimpleGrantedAuthority(this.name());
     }
 
     public static boolean isTypeAdmin(String type) {

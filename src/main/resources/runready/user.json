@@ -5,14 +5,50 @@
       "email": "admin@email.com",
       "login": "admin",
       "password": "admin",
-      "type": "OWNER",
+      "type": "ADMIN",
       "address": {
-        "description": "Description",
+        "description": "Description 00",
         "number": "00",
-        "complement": "Complement",
-        "neighborhood": "Neighborhood",
+        "complement": "Complement 00",
+        "neighborhood": "Neighborhood 00",
         "cep": "00000-000",
         "postalCode": "0000-0000",
+        "city": {
+          "id": 1
+        }
+      }
+    },
+    {
+      "name": "Owner",
+      "email": "owner@email.com",
+      "login": "owner",
+      "password": "owner",
+      "type": "OWNER",
+      "address": {
+        "description": "Description 01",
+        "number": "01",
+        "complement": "Complement 01",
+        "neighborhood": "Neighborhood 01",
+        "cep": "11111-111",
+        "postalCode": "1111-1111",
+        "city": {
+          "id": 1
+        }
+      }
+    },
+    {
+      "name": "Client",
+      "email": "client@email.com",
+      "login": "client",
+      "password": "client",
+      "type": "CLIENT",
+      "address": {
+        "description": "Description 02",
+        "number": "02",
+        "complement": "Complement 02",
+        "neighborhood": "Neighborhood 02",
+        "cep": "22222-222",
+        "postalCode": "2222-2222",
         "city": {
           "id": 1
         }
