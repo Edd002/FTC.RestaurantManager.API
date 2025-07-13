@@ -1,9 +1,7 @@
 package com.fiap.tech.challenge.global.util;
 
 import lombok.experimental.UtilityClass;
-import org.springframework.http.HttpStatus;
 
-import java.net.http.HttpResponse;
 import java.util.Collection;
 
 @UtilityClass
@@ -39,13 +37,5 @@ public class ValidationUtil {
 
     public static boolean isNotBlank(String value) {
         return !isBlank(value);
-    }
-
-    public static boolean isSuccess(HttpResponse<?> response) {
-        return response.statusCode() == HttpStatus.OK.value();
-    }
-
-    public static boolean noSuccess(HttpResponse<?> response) {
-        return response.statusCode() != HttpStatus.OK.value();
     }
 }

@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -62,5 +63,9 @@ public class UserType extends Audit implements Serializable {
 
     public void saveState(UserType userTypeSavedState) {
         this.userTypeSavedState = userTypeSavedState;
+    }
+
+    public void setName(String name) {
+        this.name = StringUtils.upperCase(name);
     }
 }

@@ -1,14 +1,16 @@
 package com.fiap.tech.challenge.domain.usertype;
 
-import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypeGetFilter;
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypePostRequestDTO;
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypePutRequestDTO;
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypeResponseDTO;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.domain.usertype.specification.UserTypeSpecificationBuilder;
-import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCheckForDeleteNoAssociateUserUseCase;
+import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCheckForDeleteUseCase;
+import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCreateUseCase;
+import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeUpdateUseCase;
 import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -25,26 +27,28 @@ import java.util.Optional;
 @Service
 public class UserTypeService extends BaseService<IUserTypeRepository, UserType> {
 
+    private final IUserTypeRepository userTypeRepository;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserTypeService(PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserTypeService(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+        this.userTypeRepository = userTypeRepository;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
     }
 
     @Transactional
     public UserTypeResponseDTO create(UserTypePostRequestDTO userTypePostRequestDTO) {
-        UserType newUserType = new UserType(userTypePostRequestDTO.getName());
+        UserType newUserType = new UserTypeCreateUseCase(userTypePostRequestDTO).getBuiltedUserType();
         return modelMapper.map(save(newUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
-    public UserResponseDTO update(String hashId, UserTypePutRequestDTO userTypePutRequestDTO) {
+    public UserTypeResponseDTO update(String hashId, UserTypePutRequestDTO userTypePutRequestDTO) {
         UserType existingUserType = findByHashId(hashId);
-        UserType updatedUserType = new UserType(existingUserType.getId(), userTypePutRequestDTO.getName());
-        return modelMapper.map(save(updatedUserType), UserResponseDTO.class);
+        UserType updatedUserType = new UserTypeUpdateUseCase(existingUserType, userTypePutRequestDTO).getBuiltedUserType();
+        return modelMapper.map(save(updatedUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
@@ -65,9 +69,14 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
     @Transactional
     public void delete(String hashId) {
         UserType existingUserType = findByHashId(hashId);
-        if (new UserTypeCheckForDeleteNoAssociateUserUseCase(existingUserType).hasNoUser()) {
+        if (new UserTypeCheckForDeleteUseCase(existingUserType).isAllowedToDelete()) {
             delete(existingUserType);
         }
+    }
+
+    @Transactional
+    public UserType findByName(String name) {
+        return userTypeRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(String.format("O tipo de usuário com o nome %s não foi encontrado.", name)));
     }
 
     @Override

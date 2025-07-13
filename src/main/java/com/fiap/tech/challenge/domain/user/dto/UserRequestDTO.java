@@ -2,11 +2,9 @@ package com.fiap.tech.challenge.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fiap.tech.challenge.domain.user.enumerated.UserTypeEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.EmailValidatorUtil;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringNormalizeSpaceDeserializer;
-import com.fiap.tech.challenge.global.util.enumerated.validation.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +38,6 @@ public abstract class UserRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Tipo de usuário.", example = "OWNER", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o tipo de usuário é 255 caracteres.")
-    @ValueOfEnum(enumClass = UserTypeEnum.class, message = "Tipo de usuário inválido.")
     @NotBlank(message = "O tipo de usuário não pode ser nulo ou em branco.")
     @JsonProperty("type")
     private String type;

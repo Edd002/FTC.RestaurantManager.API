@@ -1,17 +1,28 @@
 package com.fiap.tech.challenge.domain.usertype;
 
+import com.fiap.tech.challenge.domain.usertype.dto.UserTypeGetFilter;
+import com.fiap.tech.challenge.domain.usertype.dto.UserTypePostRequestDTO;
+import com.fiap.tech.challenge.domain.usertype.dto.UserTypePutRequestDTO;
+import com.fiap.tech.challenge.domain.usertype.dto.UserTypeResponseDTO;
 import com.fiap.tech.challenge.global.base.response.error.*;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
+import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.java.Log;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log
 @Validated
@@ -37,5 +48,46 @@ public class UserTypeController {
     @Autowired
     public UserTypeController(UserTypeService userTypeService) {
         this.userTypeService = userTypeService;
+    }
+
+    @Operation(method = "POST", summary = "Criar tipo de usuário", description = "Criar tipo de usuário.")
+    @ApiResponse(responseCode = "201", description = "Created")
+    @PostMapping
+    public ResponseEntity<BaseSuccessResponse201<UserTypeResponseDTO>> create(@RequestBody @Valid UserTypePostRequestDTO userTypePostRequestDTO) {
+        log.info("Criando tipo de usuário...");
+        return new BaseSuccessResponse201<>(userTypeService.create(userTypePostRequestDTO)).buildResponse();
+    }
+
+    @Operation(method = "PUT", summary = "Atualizar tipo do usuário", description = "Atualizar tipo do usuário.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PutMapping(value = "/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserTypePutRequestDTO userTypePutRequestDTO) {
+        log.info("Criando tipo de usuário...");
+        return new BaseSuccessResponse200<>(userTypeService.update(hashId, userTypePutRequestDTO)).buildResponse();
+    }
+
+    @Operation(method = "GET", summary = "Buscar tipo de usuário por filtro", description = "Buscar tipo de usuário por filtro.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @GetMapping(value = "/filter")
+    public ResponseEntity<BasePageableSuccessResponse200<UserTypeResponseDTO>> find(@ParameterObject @Valid UserTypeGetFilter filter) {
+        log.info("Buscando tipos de usuário por filtro...");
+        return new BasePageableSuccessResponse200<>(userTypeService.find(filter)).buildPageableResponse();
+    }
+
+    @Operation(method = "GET", summary = "Buscar tipo de usuário", description = "Buscar tipo de usuário.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @GetMapping(value = "/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> find(@PathVariable("hashId") String hashId) {
+        log.info("Buscando tipo de usuário...");
+        return new BaseSuccessResponse200<>(userTypeService.find(hashId)).buildResponse();
+    }
+
+    @Operation(method = "DELETE", summary = "Excluir tipo de usuário", description = "Excluir tipo de usuário.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @DeleteMapping(value = "/{hashId}")
+    public ResponseEntity<NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>> delete(@PathVariable("hashId") String hashId) {
+        log.info("Excluindo tipo de usuário...");
+        userTypeService.delete(hashId);
+        return new NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>().buildResponseWithoutPayload();
     }
 }
