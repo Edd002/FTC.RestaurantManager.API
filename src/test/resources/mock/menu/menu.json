@@ -1,0 +1,32 @@
+{
+  "menuBatchPutRequestDTO": {
+    "hashIdRestaurant": "${RESTAURANT_HASH_ID}",
+    "menuItems": [
+      {
+        "name": "Espaguete à Bolonhesa",
+        "description": "Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão",
+        "price": 19.99,
+        "availability": true,
+        "photoUrl": "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808"
+      },
+      {
+        "name": "Pizza Margherita",
+        "description": "Pizza tradicional com molho de tomate, mussarela de búfala e manjericão fresco",
+        "price": 29.99,
+        "availability": true,
+        "photoUrl": "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/pizza-margherita.jpg-20250614014808"
+      }
+    ]
+  },
+  "invalidMenuBatchPutRequestDTO": {
+    "hashIdRestaurant": "${RESTAURANT_HASH_ID}",
+    "menuItems": [
+      {
+        "name": "",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ligula id suscipit aliquam. Nulla facilisi. Vivamus congue eros sit amet ultricies pellentesque. Nulla ultrices sit amet nisl vitae ultricies. Etiam nec velit non eros elementum tempus et",
+        "price": -19.99,
+        "photoUrl": "url-invalida"
+      }
+    ]
+  }
+}
