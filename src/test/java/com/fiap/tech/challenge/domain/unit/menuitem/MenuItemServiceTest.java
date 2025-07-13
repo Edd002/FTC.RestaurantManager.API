@@ -1,7 +1,9 @@
-package com.fiap.tech.challenge.domain.menuitem;
+package com.fiap.tech.challenge.domain.unit.menuitem;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
+import com.fiap.tech.challenge.domain.menuitem.IMenuItemRepository;
+import com.fiap.tech.challenge.domain.menuitem.MenuItemService;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemPostRequestDTO;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemResponseDTO;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
@@ -31,6 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+// TODO Remover classe de teste a aplicar testes unitários com Mockito apenas nas classes isoladas de Framework (UseCase.java)
 
 @ExtendWith(MockitoExtension.class)
 class MenuItemServiceTest {

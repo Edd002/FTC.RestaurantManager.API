@@ -104,8 +104,8 @@ public class User extends Audit implements Serializable {
         this.password = CryptoUtil.newInstance(passwordCryptoKey).encode(password);
     }
 
-    public void setType(UserType type) {
-        if (DefaultUserTypeEnum.isUserAdmin(this)) {
+    public void setType(@NonNull UserType type) {
+        if (DefaultUserTypeEnum.isTypeAdmin(type.getName())) {
             throw new UserTypeAdminNotAllowedException("Usuários administradores são pré cadastrados pelo sistema e não podem ser persistidos.");
         }
         this.type = type;

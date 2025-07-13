@@ -98,8 +98,8 @@ public class SecurityConfig {
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(c -> c.configure(httpSecurity))
-                .with(new SecurityConfigurer(jwtBuilder, jwtService, bundleAuthUserDetailsService), sc -> sc.configure(httpSecurity))
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
+                .with(new SecurityConfigurer(jwtBuilder, jwtService, bundleAuthUserDetailsService), securityConfigurer -> {})
                 .exceptionHandling(eh -> eh.authenticationEntryPoint((request, response, e) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");
@@ -142,8 +142,7 @@ public class SecurityConfig {
         return web -> web.debug(true).ignoring().requestMatchers(IGNORE_SECURITY_CONFIG_PATHS);
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
         configuration.setAllowedOrigins(List.of(

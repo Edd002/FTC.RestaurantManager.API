@@ -80,7 +80,7 @@ public class BaseController {
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
         try {
             String constraintErrorMessage = entityManager.getMetamodel().getEntities().stream().
-                    filter(entityType -> Objects.requireNonNull(constraintViolationException.getConstraintName()).contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
+                    filter(entityType -> Objects.requireNonNull(constraintViolationException.getConstraintName()).toUpperCase().contains(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name().toUpperCase()))
                     .findFirst()
                     .map(entityType -> Objects.requireNonNull(entityType.getJavaType().getAnnotation(ConstraintMapper.class)).constraintClass())
                     .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
