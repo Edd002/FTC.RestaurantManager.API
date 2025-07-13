@@ -13,6 +13,7 @@ import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserService;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
@@ -48,8 +49,10 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
 
     @Transactional
     public MenuItemResponseDTO create(MenuItemPostRequestDTO menuItemPostRequestDTO) {
-        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(restaurantService.findByHashId(menuItemPostRequestDTO.getMenu().getHashIdRestaurant()), AuthUserContextHolder.getAuthUser()).getRestaurant();
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant existingRestaurant = restaurantUserService.findByHashIdAndUser(menuItemPostRequestDTO.getMenu().getHashIdRestaurant(), loggedUser).getRestaurant();
         MenuItem newMenuItem = new MenuItemCreateUseCase(existingRestaurant, menuItemPostRequestDTO).getBuiltedMenuItem();
+
         return modelMapper.map(save(newMenuItem), MenuItemResponseDTO.class);
     }
 
