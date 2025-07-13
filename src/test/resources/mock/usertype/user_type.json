@@ -1,0 +1,8 @@
+{
+  "userTypePostRequestDTOEmployee": {
+    "name": "EMPLOYEE"
+  },
+  "userTypePostRequestDTOOwner": {
+    "name": "OWNER"
+  }
+}

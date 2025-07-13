@@ -22,7 +22,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -42,11 +41,7 @@ public class MenuControllerTest {
     private final DatabaseManagementComponent databaseManagementComponent;
 
     @Autowired
-    public MenuControllerTest(
-            HttpHeaderComponent httpHeaderComponent,
-            HttpBodyComponent httpBodyComponent,
-            TestRestTemplate testRestTemplate,
-            DatabaseManagementComponent databaseManagementComponent) {
+    public MenuControllerTest(HttpHeaderComponent httpHeaderComponent, HttpBodyComponent httpBodyComponent, TestRestTemplate testRestTemplate, DatabaseManagementComponent databaseManagementComponent) {
         this.httpHeaderComponent = httpHeaderComponent;
         this.httpBodyComponent = httpBodyComponent;
         this.testRestTemplate = testRestTemplate;
@@ -55,14 +50,15 @@ public class MenuControllerTest {
 
     @BeforeEach
     public void populateDatabase() {
-        List<String> sqlFileScripts =
-                List.of(
-                        "persistence/state/before_test_state.sql",
-                        "persistence/city/before_test_city.sql",
-                        "persistence/address/before_test_address.sql",
-                        "persistence/loadtable/before_test_load_table.sql",
-                        "persistence/user/before_test_user.sql",
-                        "persistence/jwt/before_test_jwt.sql");
+        List<String> sqlFileScripts = List.of(
+                "persistence/state/before_test_state.sql",
+                "persistence/city/before_test_city.sql",
+                "persistence/address/before_test_address.sql",
+                "persistence/loadtable/before_test_load_table.sql",
+                "persistence/usertype/before_test_user_type.sql",
+                "persistence/user/before_test_user.sql",
+                "persistence/jwt/before_test_jwt.sql"
+        );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
 
@@ -71,72 +67,44 @@ public class MenuControllerTest {
         databaseManagementComponent.clearDatabase();
     }
 
-    @DisplayName("Teste de sucesso - Deve conseguir criar um Menu para um Restaurante")
+    @DisplayName("Teste de sucesso - Criar um menu para um restaurante")
     @Test
-    public void createMenuSuccess() throws IOException {
+    public void createMenuSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-
-        String restaurantHashId = this.createNewRestaurant();
-
-        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(
-                PATH_RESOURCE_MENU,
-                "${RESTAURANT_HASH_ID}",
-                restaurantHashId,
-                "menuBatchPutRequestDTO",
-                MenuBatchPutRequestDTO.class
-        );
-
-        ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus",
-                        HttpMethod.PUT,
-                        new HttpEntity<>(menuBatchPutRequestDTO, headers),
-                        new ParameterizedTypeReference<>() {}
-        );
+        String restaurantHashId = createNewRestaurant();
+        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
+        ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<MenuBatchResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
 
         Assertions.assertNotNull(responseObject);
         Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         assertThat(responseObject.getItem().getHashIdRestaurant()).isEqualTo(restaurantHashId);
-        assertThat(responseObject.getItem().getMenuItems())
-                .extracting("name", "description", "price", "availability", "photoUrl")
-                .containsExactlyInAnyOrder(
-                        tuple(
-                                "Espaguete à Bolonhesa",
-                                "Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão",
-                                new BigDecimal("19.99"),
-                                true,
-                                "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808"
-                        ),
-                        tuple(
-                                "Pizza Margherita",
-                                "Pizza tradicional com molho de tomate, mussarela de búfala e manjericão fresco",
-                                new BigDecimal("29.99"),
-                                true,
-                                "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/pizza-margherita.jpg-20250614014808"
-                        )
-                );
+        assertThat(responseObject.getItem().getMenuItems()).extracting("name", "description", "price", "availability", "photoUrl").containsExactlyInAnyOrder(
+                tuple(
+                        "Espaguete à Bolonhesa",
+                        "Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão",
+                        new BigDecimal("19.99"),
+                        true,
+                        "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808"
+                ),
+                tuple(
+                        "Pizza Margherita",
+                        "Pizza tradicional com molho de tomate, mussarela de búfala e manjericão fresco",
+                        new BigDecimal("29.99"),
+                        true,
+                        "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/pizza-margherita.jpg-20250614014808"
+                )
+        );
     }
 
-    @DisplayName("Teste de falha - Não deve conseguir criar um Menu para um Restaurante com dados inválidos")
+    @DisplayName("Teste de falha - Criar um menu para um restaurante com dados inválidos")
     @Test
-    public void createMenuInvalid() throws IOException {
+    public void createMenuWithInvalidDataFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-
-        String restaurantHashId = this.createNewRestaurant();
-
-        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(
-                "mock/menu/menu.json",
-                "${RESTAURANT_HASH_ID}",
-                restaurantHashId,
-                "invalidMenuBatchPutRequestDTO",
-                MenuBatchPutRequestDTO.class
-        );
-
-        ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus",
-                HttpMethod.PUT,
-                new HttpEntity<>(menuBatchPutRequestDTO, headers),
-                new ParameterizedTypeReference<>() {}
-        );
+        String restaurantHashId = createNewRestaurant();
+        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement("mock/menu/menu.json", "${RESTAURANT_HASH_ID}", restaurantHashId, "invalidMenuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
+        ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
 
         Assertions.assertNotNull(responseObject);
@@ -154,23 +122,9 @@ public class MenuControllerTest {
 
     private String createNewRestaurant() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-
-        RestaurantPostRequestDTO restaurantPostRequestDTO =
-                JsonUtil.objectFromJson(
-                        "restaurantPostRequestDTO",
-                        PATH_RESOURCE_RESTAURANT,
-                        RestaurantPostRequestDTO.class,
-                        DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
-
-        ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> restaurantResponseEntity =
-                testRestTemplate.exchange(
-                        "/api/v1/restaurants",
-                        HttpMethod.POST,
-                        new HttpEntity<>(restaurantPostRequestDTO, headers),
-                        new ParameterizedTypeReference<>() {});
-
+        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson("restaurantPostRequestDTO", PATH_RESOURCE_RESTAURANT, RestaurantPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
+        ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> restaurantResponseEntity = testRestTemplate.exchange("/api/v1/restaurants", HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         Assertions.assertNotNull(restaurantResponseEntity.getBody());
-
         return restaurantResponseEntity.getBody().getItem().getHashId();
     }
 }

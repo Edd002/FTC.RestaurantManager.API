@@ -3,7 +3,6 @@ package com.fiap.tech.challenge.global.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.tech.challenge.config.RunOnReady;
-import com.fiap.tech.challenge.domain.menu.dto.MenuBatchPutRequestDTO;
 import com.fiap.tech.challenge.global.adapter.OptionalTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +21,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Map;
 
 @UtilityClass
 public class JsonUtil {
@@ -102,17 +100,16 @@ public class JsonUtil {
         }
     }
 
-    public <T> T loadMockJsonWithReplacement(String pathResource, String replacement, String replacementNewValue, String dataGroup, Class<T> targetClass) throws IOException {
-        Resource resource = new ClassPathResource(pathResource);
-        String jsonContent = Files.readString(resource.getFile().toPath());
-        jsonContent = jsonContent.replace(replacement, replacementNewValue);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(jsonContent);
-
-        return objectMapper.convertValue(
-                rootNode.get(dataGroup),
-                targetClass
-        );
+    public <T> T loadMockJsonWithReplacement(String pathResource, String replacement, String replacementNewValue, String dataGroup, Class<T> targetClass) {
+        try {
+            Resource resource = new ClassPathResource(pathResource);
+            String jsonContent = Files.readString(resource.getFile().toPath());
+            jsonContent = jsonContent.replace(replacement, replacementNewValue);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonContent);
+            return objectMapper.convertValue(rootNode.get(dataGroup), targetClass);
+        } catch (IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

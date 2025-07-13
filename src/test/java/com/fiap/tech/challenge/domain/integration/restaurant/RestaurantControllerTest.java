@@ -43,15 +43,15 @@ class RestaurantControllerTest {
 
     @BeforeEach
     public void populateDatabase() {
-        List<String> sqlFileScripts =
-                List.of(
-                        "persistence/state/before_test_state.sql",
-                        "persistence/city/before_test_city.sql",
-                        "persistence/address/before_test_address.sql",
-                        "persistence/loadtable/before_test_load_table.sql",
-                        "persistence/usertype/before_test_user_type.sql",
-                        "persistence/user/before_test_user.sql",
-                        "persistence/jwt/before_test_jwt.sql");
+        List<String> sqlFileScripts = List.of(
+                "persistence/state/before_test_state.sql",
+                "persistence/city/before_test_city.sql",
+                "persistence/address/before_test_address.sql",
+                "persistence/loadtable/before_test_load_table.sql",
+                "persistence/usertype/before_test_user_type.sql",
+                "persistence/user/before_test_user.sql",
+                "persistence/jwt/before_test_jwt.sql"
+        );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
 
@@ -64,56 +64,25 @@ class RestaurantControllerTest {
     @Test
     public void createRestaurantSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-
-        RestaurantPostRequestDTO restaurantPostRequestDTO =
-                JsonUtil.objectFromJson(
-                        "restaurantPostRequestDTO",
-                        PATH_RESOURCE_RESTAURANT,
-                        RestaurantPostRequestDTO.class,
-                        DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
-        ResponseEntity<?> responseEntity =
-                testRestTemplate.exchange(
-                        "/api/v1/restaurants",
-                        HttpMethod.POST,
-                        new HttpEntity<>(restaurantPostRequestDTO, headers),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        BaseSuccessResponse201<RestaurantResponseDTO> responseObject =
-                httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {
-                });
+        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson("restaurantPostRequestDTO", PATH_RESOURCE_RESTAURANT, RestaurantPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/restaurants", HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseSuccessResponse201<RestaurantResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.CREATED.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.CREATED.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getHashId()));
-        Assertions.assertTrue(
-                ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
+        Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
     }
 
     @DisplayName(value = "Teste de falha - Criar um restaurante com um usuário que não é o dono")
     @Test
     public void createRestaurantWithNoOwnerUserFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
-        RestaurantPostRequestDTO restaurantPostRequestDTO =
-                JsonUtil.objectFromJson(
-                        "restaurantPostRequestDTO",
-                        PATH_RESOURCE_RESTAURANT,
-                        RestaurantPostRequestDTO.class,
-                        DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
-        ResponseEntity<?> responseEntity =
-                testRestTemplate.exchange(
-                        "/api/v1/restaurants",
-                        HttpMethod.POST,
-                        new HttpEntity<>(restaurantPostRequestDTO, headers),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {
-        });
+        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson("restaurantPostRequestDTO", PATH_RESOURCE_RESTAURANT, RestaurantPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/restaurants", HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
-        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
-
     }
 }

@@ -14,6 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserTypeResponseDTO extends BaseResponseDTO {
 
+    @Schema(description = "Hash id do tipo de usuário.", example = "c4as4fa748eas48f1f1h54as1a541fa4")
+    @JsonProperty("hashId")
+    private String hashId;
+
     @Schema(description = "Nome do tipo de usuário.", example = "EMPLOYEE")
     @JsonProperty("name")
     private String name;
