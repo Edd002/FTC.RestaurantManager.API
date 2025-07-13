@@ -53,7 +53,7 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
         City city = cityService.findByHashId(userPostRequestDTO.getAddress().getHashIdCity());
-        UserType userType = userTypeService.findByName(userPostRequestDTO.getType());
+        UserType userType = userTypeService.findByNameIgnoreCase(userPostRequestDTO.getType());
         User newUser = AuthUserContextHolder.getAuthUserIfExists()
                 .map(loggedUser -> new UserCreateUseCase(loggedUser, userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser())
                 .orElseGet(() -> new UserCreateUseCase(userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser());
@@ -63,7 +63,7 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
         City city = cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity());
-        UserType userType = userTypeService.findByName(userPutRequestDTO.getType());
+        UserType userType = userTypeService.findByNameIgnoreCase(userPutRequestDTO.getType());
         User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), userType, city, userPutRequestDTO, cryptoKey).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }

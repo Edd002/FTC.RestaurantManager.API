@@ -5,7 +5,9 @@
       "email": "admin@email.com",
       "login": "admin",
       "password": "admin",
-      "type": "ADMIN",
+      "type": {
+        "id": 1
+      },
       "address": {
         "description": "Description 00",
         "number": "00",
@@ -23,7 +25,9 @@
       "email": "owner@email.com",
       "login": "owner",
       "password": "owner",
-      "type": "OWNER",
+      "type": {
+        "id": 2
+      },
       "address": {
         "description": "Description 01",
         "number": "01",
@@ -41,7 +45,9 @@
       "email": "client@email.com",
       "login": "client",
       "password": "client",
-      "type": "CLIENT",
+      "type": {
+        "id": 3
+      },
       "address": {
         "description": "Description 02",
         "number": "02",

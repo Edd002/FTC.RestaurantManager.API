@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.user.enumerated;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 public enum DefaultUserTypeEnum {
@@ -18,15 +19,15 @@ public enum DefaultUserTypeEnum {
     }
 
     public static boolean isTypeAdmin(String type) {
-        return ValidationUtil.isNotNull(type) && type.equals(DefaultUserTypeEnum.ADMIN.name());
+        return ValidationUtil.isNotNull(type) && StringUtils.upperCase(type).equals(DefaultUserTypeEnum.ADMIN.name());
     }
 
     public static boolean isTypeOwner(String type) {
-        return ValidationUtil.isNotNull(type) && type.equals(DefaultUserTypeEnum.OWNER.name());
+        return ValidationUtil.isNotNull(type) && StringUtils.upperCase(type).equals(DefaultUserTypeEnum.OWNER.name());
     }
 
     public static boolean isTypeClient(String type) {
-        return ValidationUtil.isNotNull(type) && type.equals(DefaultUserTypeEnum.CLIENT.name());
+        return ValidationUtil.isNotNull(type) && StringUtils.upperCase(type).equals(DefaultUserTypeEnum.CLIENT.name());
     }
 
     public static boolean isUserAdmin(User user) {

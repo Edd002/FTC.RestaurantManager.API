@@ -75,8 +75,8 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
     }
 
     @Transactional
-    public UserType findByName(String name) {
-        return userTypeRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException(String.format("O tipo de usuário com o nome %s não foi encontrado.", name)));
+    public UserType findByNameIgnoreCase(String name) {
+        return userTypeRepository.findByNameIgnoreCase(name).orElseThrow(() -> new EntityNotFoundException(String.format("O tipo de usuário com o nome %s não foi encontrado.", name)));
     }
 
     @Override

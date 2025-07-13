@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface IUserTypeRepository extends IBaseRepository<UserType> {
 
-    Optional<UserType> findByName(String name);
+    Optional<UserType> findByNameIgnoreCase(String name);
 }

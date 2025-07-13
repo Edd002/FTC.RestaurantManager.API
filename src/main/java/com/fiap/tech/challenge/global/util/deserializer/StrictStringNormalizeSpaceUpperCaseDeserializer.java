@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
-public class StrictStringNormalizeSpaceDeserializer extends StrictStringDeserializer {
+public class StrictStringNormalizeSpaceUpperCaseDeserializer extends StrictStringNormalizeSpaceDeserializer {
 
     @Override
     public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        return StringUtils.normalizeSpace(super.deserialize(jsonParser, deserializationContext));
+        return StringUtils.upperCase(super.deserialize(jsonParser, deserializationContext));
     }
 }

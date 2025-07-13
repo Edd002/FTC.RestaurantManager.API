@@ -13,7 +13,7 @@ create table t_user
     login        varchar(255) not null,
     name         varchar(255) not null,
     password     varchar(255) not null,
-    fk_user_type varchar(255) not null,
+    fk_user_type int8         not null,
     fk_address   int8         not null,
     primary key (id)
 );
