@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class RestaurantUserRequestDTO extends BaseRequestDTO {
+public abstract class RestaurantUserRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Hash id do restaurante.", example = "c57469e0cf8245d0b9a9b3e39b303dc0")
     @Size(max = 255, message = "O número de caracteres máximo para o hash id do restaurante é 255 caracteres.")

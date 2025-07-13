@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.user.authuser;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
@@ -21,7 +22,7 @@ public class BundleAuthUserDetails implements UserDetails {
 
     public BundleAuthUserDetails(User user) {
         this.user = user;
-        this.authorities = Collections.singletonList(user.getRole().getSimpleGrantedAuthority());
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getType().getName()));
     }
 
     @Override

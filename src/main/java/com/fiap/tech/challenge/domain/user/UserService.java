@@ -2,7 +2,7 @@ package com.fiap.tech.challenge.domain.user;
 
 import com.fiap.tech.challenge.domain.city.CityService;
 import com.fiap.tech.challenge.domain.city.entity.City;
-import com.fiap.tech.challenge.domain.restaurantuser.usecase.CheckForDeleteRestaurantUserOnlyOwnerUseCase;
+import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCheckForDeleteUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.dto.*;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -10,6 +10,8 @@ import com.fiap.tech.challenge.domain.user.specification.UserSpecificationBuilde
 import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdatePasswordUseCase;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
+import com.fiap.tech.challenge.domain.usertype.UserTypeService;
+import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.base.BaseService;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
@@ -34,13 +36,15 @@ public class UserService extends BaseService<IUserRepository, User> {
     private String cryptoKey;
 
     private final IUserRepository userRepository;
+    private final UserTypeService userTypeService;
     private final CityService cityService;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserService(IUserRepository userRepository, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, UserTypeService userTypeService, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.userTypeService = userTypeService;
         this.cityService = cityService;
         this.pageableBuilder = pageableBuilder;
         this.modelMapper = modelMapper;
@@ -49,16 +53,18 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public UserResponseDTO create(UserPostRequestDTO userPostRequestDTO) {
         City city = cityService.findByHashId(userPostRequestDTO.getAddress().getHashIdCity());
+        UserType userType = userTypeService.findByNameIgnoreCase(userPostRequestDTO.getType());
         User newUser = AuthUserContextHolder.getAuthUserIfExists()
-                .map(loggedUser -> new UserCreateUseCase(loggedUser, city, userPostRequestDTO, cryptoKey).getBuiltedUser())
-                .orElseGet(() -> new UserCreateUseCase(city, userPostRequestDTO, cryptoKey).getBuiltedUser());
+                .map(loggedUser -> new UserCreateUseCase(loggedUser, userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser())
+                .orElseGet(() -> new UserCreateUseCase(userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser());
         return modelMapper.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
     public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
         City city = cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity());
-        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), city, userPutRequestDTO, cryptoKey).getBuiltedUser();
+        UserType userType = userTypeService.findByNameIgnoreCase(userPutRequestDTO.getType());
+        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), userType, city, userPutRequestDTO, cryptoKey).getBuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
@@ -85,7 +91,7 @@ public class UserService extends BaseService<IUserRepository, User> {
     @Transactional
     public void delete() {
         User loggedUser = AuthUserContextHolder.getAuthUser();
-        if (new CheckForDeleteRestaurantUserOnlyOwnerUseCase(loggedUser, loggedUser.getRestaurantUsers()).isAllowedToDelete()) {
+        if (new RestaurantUserCheckForDeleteUseCase(loggedUser, loggedUser.getRestaurantUsers()).isAllowedToDelete()) {
             delete(loggedUser);
             SecurityContextHolder.clearContext();
         }

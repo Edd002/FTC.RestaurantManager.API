@@ -1,0 +1,13 @@
+{
+  "userType": [
+    {
+      "name": "ADMIN"
+    },
+    {
+      "name": "OWNER"
+    },
+    {
+      "name": "CLIENT"
+    }
+  ]
+}

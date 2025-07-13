@@ -1,17 +1,39 @@
 {
-  "userOwner": {
+  "userAdmin": {
     "name": "Admin",
     "email": "admin@email.com",
     "login": "admin",
     "password": "admin",
-    "role": "OWNER",
+    "type": {
+      "id": 1
+    },
     "address": {
-      "description": "Description",
+      "description": "Description 00",
       "number": "00",
-      "complement": "Complement",
-      "neighborhood": "Neighborhood",
+      "complement": "Complement 00",
+      "neighborhood": "Neighborhood 00",
       "cep": "00000-000",
       "postalCode": "0000-0000",
+      "city": {
+        "id": 1
+      }
+    }
+  },
+  "userOwner": {
+    "name": "Owner",
+    "email": "owner@email.com",
+    "login": "owner",
+    "password": "owner",
+    "type": {
+      "id": 2
+    },
+    "address": {
+      "description": "Description 01",
+      "number": "01",
+      "complement": "Complement 01",
+      "neighborhood": "Neighborhood 01",
+      "cep": "11111-111",
+      "postalCode": "1111-1111",
       "city": {
         "id": 1
       }
@@ -22,30 +44,32 @@
     "email": "client@email.com",
     "login": "client",
     "password": "client",
-    "role": "CLIENT",
+    "type": {
+      "id": 3
+    },
     "address": {
-      "description": "Description",
-      "number": "00",
-      "complement": "Complement",
-      "neighborhood": "Neighborhood",
-      "cep": "00000-000",
-      "postalCode": "0000-0000",
+      "description": "Description 02",
+      "number": "02",
+      "complement": "Complement 02",
+      "neighborhood": "Neighborhood 02",
+      "cep": "22222-222",
+      "postalCode": "2222-2222",
       "city": {
         "id": 1
       }
     }
   },
   "userPostRequestDTOOwner": {
-    "name": "New Admin",
-    "email": "newadmin@email.com",
-    "login": "newadmin",
-    "password": "newadmin",
-    "role": "OWNER",
+    "name": "New Owner",
+    "email": "newowner@email.com",
+    "login": "newowner",
+    "password": "newowner",
+    "type": "OWNER",
     "address": {
-      "description": "New Description",
+      "description": "New Description 00",
       "number": "00",
-      "complement": "New Complement",
-      "neighborhood": "New Neighborhood",
+      "complement": "New Complement 00",
+      "neighborhood": "New Neighborhood 00",
       "cep": "00000-000",
       "postalCode": "0000-0000",
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
@@ -56,7 +80,7 @@
     "email": "newclient@email.com",
     "login": "newclient",
     "password": "newclient",
-    "role": "CLIENT",
+    "type": "CLIENT",
     "address": {
       "description": "New Description",
       "number": "00",
@@ -68,14 +92,14 @@
     }
   },
   "userPutRequestDTOOwner": {
-    "name": "Updated Admin",
-    "email": "updatedadmin@email.com",
-    "login": "updatedadmin",
-    "role": "OWNER",
+    "name": "Updated Owner",
+    "email": "updatedowner@email.com",
+    "login": "updatedowner",
+    "type": "OWNER",
     "address": {
-      "description": "Updated Description",
+      "description": "Updated Description 00",
       "number": "00",
-      "complement": "Updated Complement",
+      "complement": "Updated Complement 00",
       "neighborhood": "Updated Neighborhood",
       "cep": "00000-000",
       "postalCode": "0000-0000",
@@ -86,7 +110,7 @@
     "name": "Updated Client",
     "email": "updatedclient@email.com",
     "login": "updatedclient",
-    "role": "CLIENT",
+    "type": "CLIENT",
     "address": {
       "description": "Updated Description",
       "number": "00",
@@ -98,9 +122,9 @@
     }
   },
   "userUpdatePasswordPatchRequestDTOOwner": {
-    "actualPassword": "admin",
-    "newPassword": "newadmin",
-    "newPasswordConfirmation": "newadmin"
+    "actualPassword": "owner",
+    "newPassword": "newowner",
+    "newPasswordConfirmation": "newowner"
   },
   "userUpdatePasswordPatchRequestDTOClient": {
     "actualPassword": "client",
