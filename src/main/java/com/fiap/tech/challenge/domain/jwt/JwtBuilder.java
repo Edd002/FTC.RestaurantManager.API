@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -39,15 +40,15 @@ public class JwtBuilder {
         return new JwtClaims(bearerToken, jwtSecurityProperty.getBearerTokenSecretKey());
     }
 
-    private String getJwtFromHeader(HttpServletRequest request) {
+    private String getJwtFromHeader(HttpServletRequest httpServletRequest) {
         String bearer = "Bearer ";
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (ValidationUtil.isNull(bearerToken)) {
-            log.severe("Authorization Header ausente - Path da requisição: " + request.getServletPath());
+            log.severe("Authorization Header ausente - Path da requisição: " + httpServletRequest.getServletPath());
             throw new AuthenticationHttpException("O header de autorização deve estar presente.");
         }
         if (!bearerToken.startsWith(bearer)) {
-            log.severe("Header não iniciando com Bearer - Path da requisição: " + request.getServletPath());
+            log.severe("Header não iniciando com Bearer - Path da requisição: " + httpServletRequest.getServletPath());
             throw new AuthenticationHttpException("O header de autorização deve começar com Bearer.");
         }
         return bearerToken.substring(bearer.length());

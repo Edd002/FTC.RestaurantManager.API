@@ -54,7 +54,15 @@ public enum PathEnum {
         return this.getPath() + "/**";
     }
 
-    public static List<PathEnum> getIgnoreRequestFilterPaths() {
+    public static List<PathEnum> getIgnoreResponseFilterPaths() {
+        return Arrays.asList(
+                API_V1_JWTS_VALIDATE_GET,
+                API_V1_JWTS_GENERATE_POST,
+                API_V1_JWTS_INVALIDATE_POST
+        );
+    }
+
+    public static List<PathEnum> getAllowedPathsWithoutAuthotization() {
         return Arrays.asList(
                 API_V1_CITIES_FILTER_GET,
                 API_V1_CITIES_GET,
@@ -68,14 +76,6 @@ public enum PathEnum {
                 API_V1_RESTAURANT_USERS_FILTER_GET,
                 API_V1_RESTAURANT_USERS_GET,
                 API_V1_RESTAURANT_USERS_POST
-        );
-    }
-
-    public static List<PathEnum> getIgnoreResponseFilterPaths() {
-        return Arrays.asList(
-                API_V1_JWTS_VALIDATE_GET,
-                API_V1_JWTS_GENERATE_POST,
-                API_V1_JWTS_INVALIDATE_POST
         );
     }
 }
