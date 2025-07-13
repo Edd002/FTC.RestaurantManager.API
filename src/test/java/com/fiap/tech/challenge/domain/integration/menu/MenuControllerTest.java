@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.menu;
+package com.fiap.tech.challenge.domain.integration.menu;
 
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchPutRequestDTO;
 import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
