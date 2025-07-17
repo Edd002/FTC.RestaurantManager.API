@@ -17,7 +17,6 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	// 👇 Adiciona configuração para o agente
 	mockitoAgent
 }
 
@@ -61,13 +60,11 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-engine'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// 👇 Adiciona o Byte Buddy agent (usado pelo Mockito)
 	mockitoAgent 'net.bytebuddy:byte-buddy-agent:1.15.11'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 
-	// 👇 Anexa o agente durante execução dos testes
 	jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}"
 }
