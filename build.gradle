@@ -17,6 +17,8 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	// 👇 Adiciona configuração para o agente
+	mockitoAgent
 }
 
 repositories {
@@ -49,14 +51,23 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.flywaydb:flyway-database-postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'com.h2database:h2:2.2.220'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testImplementation 'org.mockito:mockito-core:5.11.0'
+	testImplementation 'org.mockito:mockito-inline:5.2.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-engine'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// 👇 Adiciona o Byte Buddy agent (usado pelo Mockito)
+	mockitoAgent 'net.bytebuddy:byte-buddy-agent:1.15.11'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+
+	// 👇 Anexa o agente durante execução dos testes
+	jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}"
 }
