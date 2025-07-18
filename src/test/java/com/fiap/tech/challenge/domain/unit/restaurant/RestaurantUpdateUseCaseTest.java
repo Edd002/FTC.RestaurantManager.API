@@ -5,7 +5,6 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
-import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
