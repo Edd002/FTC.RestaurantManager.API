@@ -17,7 +17,7 @@ public class RestaurantTestFactory {
         return new Address(1L);
     }
 
-    public static Restaurant createRestaurant() {
+    public static Restaurant loadEntityRestaurant() {
         return new Restaurant(
                 1L,
                 "Restaurante Teste",
