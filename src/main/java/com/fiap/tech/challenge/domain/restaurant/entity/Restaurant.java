@@ -7,7 +7,7 @@ import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.constraint.RestaurantConstraint;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

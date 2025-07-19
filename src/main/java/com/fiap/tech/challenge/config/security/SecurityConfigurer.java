@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.config.security;
 
+import com.fiap.tech.challenge.config.security.filter.JwtFilter;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;

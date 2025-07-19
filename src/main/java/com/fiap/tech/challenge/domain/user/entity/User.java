@@ -8,7 +8,7 @@ import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.constraint.UserConstraint;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.UserTypeAdminNotAllowedException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
 import jakarta.persistence.*;

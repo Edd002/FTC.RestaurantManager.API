@@ -1,4 +1,4 @@
-create table t_jwt
+create table public.t_jwt
 (
     id           int8         not null,
     created_in   timestamp(6) not null,
@@ -16,7 +16,7 @@ create table t_jwt
 
 create sequence public.sq_jwt start with 1 increment by 1;
 
-alter table if exists t_jwt add constraint t_jwt_fk_user foreign key (fk_user) references t_user;
+alter table if exists public.t_jwt add constraint t_jwt__fk_user foreign key (fk_user) references t_user;
 
-CREATE UNIQUE INDEX T_JWT_HASH_ID_UK ON public.t_jwt (hash_id);
-CREATE UNIQUE INDEX T_JWT_BEARER_TOKEN_UK ON public.t_jwt (bearer_token, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_JWT__HASH_ID_UK ON public.t_jwt (hash_id);
+CREATE UNIQUE INDEX T_JWT__BEARER_TOKEN_UK ON public.t_jwt (bearer_token, deleted) WHERE deleted IS NULL OR deleted = false;

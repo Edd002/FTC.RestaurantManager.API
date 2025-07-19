@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.config.enumerated;
+package com.fiap.tech.challenge.config.security.filter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public enum PathEnum {
+public enum PathFilterEnum {
 
     API_V1_CITIES_FILTER_GET(HttpMethod.GET, "/api/v1/cities/filter"),
     API_V1_CITIES_GET(HttpMethod.GET, "/api/v1/cities"),
@@ -50,11 +50,22 @@ public enum PathEnum {
         return "/restaurant-manager" + this.getPath();
     }
 
-    public String getPathMatchingAll() {
-        return this.getPath() + "/**";
+    public static List<String> getIgnoreFilterConfigPaths() {
+        return Arrays.asList(
+                "/restaurant-manager/swagger-ui/index.html",
+                "/restaurant-manager/swagger-ui/swagger-ui.css",
+                "/restaurant-manager/swagger-ui/swagger-ui-standalone-preset.js",
+                "/restaurant-manager/swagger-ui/swagger-ui-bundle.js",
+                "/restaurant-manager/v3/api-docs/swagger-config",
+                "/restaurant-manager/swagger-ui/favicon-32x32.png",
+                "/restaurant-manager/swagger-ui/favicon-16x16.png",
+                "/restaurant-manager/v3/api-docs",
+                "/restaurant-manager/h2-console",
+                "/actuator/health"
+        );
     }
 
-    public static List<PathEnum> getIgnoreResponseFilterPaths() {
+    public static List<PathFilterEnum> getIgnoreResponseFilterPaths() {
         return Arrays.asList(
                 API_V1_JWTS_VALIDATE_GET,
                 API_V1_JWTS_GENERATE_POST,
@@ -62,7 +73,7 @@ public enum PathEnum {
         );
     }
 
-    public static List<PathEnum> getAllowedPathsWithoutAuthotization() {
+    public static List<PathFilterEnum> getAllowedPathsWithoutAuthorization() {
         return Arrays.asList(
                 API_V1_CITIES_FILTER_GET,
                 API_V1_CITIES_GET,
