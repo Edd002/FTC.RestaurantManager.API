@@ -16,7 +16,7 @@ public class MenuItemCreateUseCaseTest {
     @DisplayName("Teste de sucesso - Deve conseguir criar um item no menu com sucesso")
     @Test
     void shouldCreateMenuItemSuccessfully() {
-        MenuItemPostRequestDTO menuItemPostRequestDTO = MenuItemTestFactory.loadValidMenuItemDTO();
+        MenuItemPostRequestDTO menuItemPostRequestDTO = MenuItemTestFactory.loadValidPostRequestDTO();
         MenuItemCreateUseCase useCase = new MenuItemCreateUseCase(RestaurantTestFactory.loadEntityRestaurant(), menuItemPostRequestDTO);
 
         MenuItem menuItem = useCase.getBuiltedMenuItem();
@@ -33,7 +33,7 @@ public class MenuItemCreateUseCaseTest {
     @DisplayName("Teste de falha - Não deve conseguir criar um item no menu")
     @Test
     void shouldThrowExceptionWhenRequiredFieldsAreNull() {
-        MenuItemPostRequestDTO menuItemPostRequestDTO = MenuItemTestFactory.loadInvalidMenuItemDTO();
+        MenuItemPostRequestDTO menuItemPostRequestDTO = MenuItemTestFactory.loadInvalidPostRequestDTO();
 
         assertThrows(NullPointerException.class, () -> {
             new MenuItemCreateUseCase(RestaurantTestFactory.loadEntityRestaurant(), menuItemPostRequestDTO);
@@ -43,7 +43,7 @@ public class MenuItemCreateUseCaseTest {
     @Test
     @DisplayName("Teste de falha - Deve lançar NullPointerException se Restaurante for nulo")
     void shouldThrowExceptionIfRestaurantIsNull() {
-        MenuItemPostRequestDTO dto = MenuItemTestFactory.loadValidMenuItemDTO();
+        MenuItemPostRequestDTO dto = MenuItemTestFactory.loadValidPostRequestDTO();
 
         assertThrows(NullPointerException.class, () -> new MenuItemCreateUseCase(null, dto));
     }

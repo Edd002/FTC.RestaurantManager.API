@@ -9,11 +9,11 @@ import java.util.Date;
 
 public class RestaurantTestFactory {
 
-    public static Menu createMenu() {
+    public static Menu loadEmptyMenu() {
         return new Menu();
     }
 
-    public static Address createAddress() {
+    public static Address loadDefaultAddress() {
         return new Address(1L);
     }
 
@@ -28,8 +28,8 @@ public class RestaurantTestFactory {
                 new Date(),
                 new Date(),
                 RestaurantTypeEnum.CAFETERIA,
-                createMenu(),
-                createAddress()
+                loadEmptyMenu(),
+                loadDefaultAddress()
         );
     }
 }

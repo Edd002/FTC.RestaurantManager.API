@@ -24,9 +24,9 @@ public class MenuItemUpdateUseCaseTest {
     @BeforeAll
     static void init() {
         restaurant = RestaurantTestFactory.loadEntityRestaurant();
-        menuItemPutRequestDTO = MenuItemTestFactory.loadValidMenuItemPutDTO();
+        menuItemPutRequestDTO = MenuItemTestFactory.loadValidPutRequestDTO();
         existingMenuItem = MenuItemTestFactory.loadEntityMenuItem();
-        invalidMenuItemPutRequestDTO = MenuItemTestFactory.loadInvalidMenuItemPutDTO();
+        invalidMenuItemPutRequestDTO = MenuItemTestFactory.loadInvalidPutRequestDTO();
     }
 
 

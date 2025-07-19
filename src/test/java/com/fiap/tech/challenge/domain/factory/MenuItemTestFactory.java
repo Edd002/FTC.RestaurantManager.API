@@ -12,7 +12,7 @@ public class MenuItemTestFactory {
 
     private static final String PATH_RESOURCE_MENU_ITEM = "/mock/menuitem/menuitem.json";
 
-    public static MenuItemPostRequestDTO loadValidMenuItemDTO() {
+    public static MenuItemPostRequestDTO loadValidPostRequestDTO() {
         return JsonUtil.objectFromJson(
                 "menuItemPostRequestDTO",
                 PATH_RESOURCE_MENU_ITEM,
@@ -20,7 +20,7 @@ public class MenuItemTestFactory {
         );
     }
 
-    public static MenuItemPutRequestDTO loadValidMenuItemPutDTO() {
+    public static MenuItemPutRequestDTO loadValidPutRequestDTO() {
         return JsonUtil.objectFromJson(
                 "menuItemPutRequestDTO",
                 PATH_RESOURCE_MENU_ITEM,
@@ -28,7 +28,7 @@ public class MenuItemTestFactory {
         );
     }
 
-    public static MenuItemPostRequestDTO loadInvalidMenuItemDTO() {
+    public static MenuItemPostRequestDTO loadInvalidPostRequestDTO() {
         return JsonUtil.objectFromJson(
                 "menuItemInvalidPostRequestDTO",
                 PATH_RESOURCE_MENU_ITEM,
@@ -36,7 +36,7 @@ public class MenuItemTestFactory {
         );
     }
 
-    public static MenuItemPutRequestDTO loadInvalidMenuItemPutDTO() {
+    public static MenuItemPutRequestDTO loadInvalidPutRequestDTO() {
         return JsonUtil.objectFromJson(
                 "menuItemInvalidPostRequestDTO",
                 PATH_RESOURCE_MENU_ITEM,
