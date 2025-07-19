@@ -2,11 +2,11 @@ package com.fiap.tech.challenge.global.base;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fiap.tech.challenge.global.constraint.ConstraintComponent;
-import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse422;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse500;
+import com.fiap.tech.challenge.global.constraint.ConstraintComponent;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ApiException;
 import com.fiap.tech.challenge.global.exception.ConstraintNotAssociatedWithEntityException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -81,17 +80,22 @@ public class BaseController {
 
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
-        try {
-            String constraintErrorMessage = entityManager.getMetamodel().getEntities().stream().
-                    filter(entityType -> constraintComponent.extractTableNameFromConstraintName(Objects.requireNonNull(constraintViolationException.getConstraintName())).equalsIgnoreCase(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
-                    .findFirst()
-                    .map(entityType -> Objects.requireNonNull(entityType.getJavaType().getAnnotation(ConstraintMapper.class)).constraintClass())
-                    .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
-                    .getDeclaredConstructor().newInstance().getErrorMessage(constraintViolationException.getConstraintName());
-            return new BaseErrorResponse422(List.of(constraintErrorMessage)).buildResponse();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ConstraintNotAssociatedWithEntityException ignored) {
+        if (ValidationUtil.isNotNull(constraintViolationException.getConstraintName())) {
+            final String cleanConstraintName = constraintComponent.extractCleanConstraintNameFromConstraintName(constraintViolationException.getConstraintName());
+            final String cleanTableName = constraintComponent.extractCleanTableNameFromConstraintName(constraintViolationException.getConstraintName());
+            try {
+                String constraintErrorMessage = entityManager.getMetamodel().getEntities().stream().
+                        filter(entityType -> cleanTableName.equalsIgnoreCase(Objects.requireNonNull(entityType.getJavaType().getAnnotation(Table.class)).name()))
+                        .findFirst()
+                        .map(entityType -> Objects.requireNonNull(entityType.getJavaType().getAnnotation(ConstraintMapper.class)).constraintClass())
+                        .orElseThrow(ConstraintNotAssociatedWithEntityException::new)
+                        .getDeclaredConstructor().newInstance().getErrorMessage(cleanConstraintName);
+                return new BaseErrorResponse422(List.of(constraintErrorMessage)).buildResponse();
+            } catch (Exception ignored) {
+            }
+            return new BaseErrorResponse422(List.of(String.format("Erro de violação do restritor %s do banco de dados.", cleanConstraintName))).buildResponse();
         }
-        return new BaseErrorResponse422(List.of(String.format("Violação do restritor %s do banco de dados.", constraintViolationException.getConstraintName()))).buildResponse();
+        return new BaseErrorResponse422(List.of("Erro de violação de um restritor no banco de dados.")).buildResponse();
     }
 
     @ExceptionHandler(value = {ApiException.class})

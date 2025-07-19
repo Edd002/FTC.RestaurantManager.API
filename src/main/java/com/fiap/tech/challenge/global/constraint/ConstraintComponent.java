@@ -6,8 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConstraintComponent {
 
-    public String extractTableNameFromConstraintName(String constraintName) {
+    public String extractCleanConstraintNameFromConstraintName(String constraintName) {
         String constraintNameUpperCase = constraintName.toUpperCase();
-        return StringUtils.substringBefore(constraintNameUpperCase.substring(constraintNameUpperCase.indexOf("T_")), "__");
+        return constraintNameUpperCase.substring(constraintNameUpperCase.indexOf("T_"));
+    }
+
+    public String extractCleanTableNameFromConstraintName(String constraintName) {
+        return StringUtils.substringBefore(extractCleanConstraintNameFromConstraintName(constraintName), "__");
     }
 }
