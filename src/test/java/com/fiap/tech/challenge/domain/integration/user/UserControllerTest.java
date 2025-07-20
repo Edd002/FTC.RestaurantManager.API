@@ -85,7 +85,7 @@ public class UserControllerTest {
     @DisplayName(value = "Teste de sucesso - Criar um usuário cliente")
     @Test
     public void createUserClientSuccess() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
         UserPostRequestDTO userPostRequestDTO = JsonUtil.objectFromJson("userPostRequestDTOClient", PATH_RESOURCE_USER, UserPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.POST, new HttpEntity<>(userPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});

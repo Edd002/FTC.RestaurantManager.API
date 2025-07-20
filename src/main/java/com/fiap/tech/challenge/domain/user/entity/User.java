@@ -22,7 +22,6 @@ import org.hibernate.annotations.SQLRestriction;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -37,11 +36,10 @@ public class User extends Audit implements Serializable {
     protected User() {}
 
     public User(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
-        this.setId(id);
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
-        this.setEncryptedPassword(passwordCryptoKey, CryptoUtil.newInstance(passwordCryptoKey).decrypt(password));
+        this.setEncryptedPassword(passwordCryptoKey, password);
         this.setType(type);
         this.setAddress(address);
     }
