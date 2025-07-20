@@ -58,8 +58,11 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
 
     @Transactional
     public MenuItemResponseDTO update(String hashId, MenuItemPutRequestDTO menuItemPutRequestDTO) {
-        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(restaurantService.findByHashId(menuItemPutRequestDTO.getMenu().getHashIdRestaurant()), AuthUserContextHolder.getAuthUser()).getRestaurant();
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant restaurant = restaurantService.findByHashId(menuItemPutRequestDTO.getMenu().getHashIdRestaurant());
+        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(restaurant, loggedUser).getRestaurant();
         MenuItem updatedMenuItem = new MenuItemUpdateUseCase(findByHashIdAndMenu(hashId, existingRestaurant.getMenu()), existingRestaurant, menuItemPutRequestDTO).getBuiltedMenuItem();
+
         return modelMapper.map(save(updatedMenuItem), MenuItemResponseDTO.class);
     }
 
