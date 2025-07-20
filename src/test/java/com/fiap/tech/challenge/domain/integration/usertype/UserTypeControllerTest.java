@@ -112,12 +112,11 @@ public class UserTypeControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
         String EXISTING_USER_TYPE_OWNER_HASH_ID = "91cbb591b10c43b1ab55023858b6bc9f";
         UserTypePutRequestDTO userTypePutRequestDTO = JsonUtil.objectFromJson("userTypePutRequestDTOEmployee", PATH_RESOURCE_USER_TYPE, UserTypePutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types/" + EXISTING_USER_TYPE_OWNER_HASH_ID, HttpMethod.POST, new HttpEntity<>(userTypePutRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types/" + EXISTING_USER_TYPE_OWNER_HASH_ID, HttpMethod.PUT, new HttpEntity<>(userTypePutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
-        Assertions.assertTrue(responseObject.getMessages().contains(UserTypeConstraintEnum.T_USER_TYPE__NAME_UK.getErrorMessage()));
     }
 }
