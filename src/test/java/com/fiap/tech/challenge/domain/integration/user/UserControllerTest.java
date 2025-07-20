@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
@@ -58,7 +59,11 @@ public class UserControllerTest {
                 "persistence/loadtable/before_test_load_table.sql",
                 "persistence/usertype/before_test_user_type.sql",
                 "persistence/user/before_test_user.sql",
-                "persistence/jwt/before_test_jwt.sql"
+                "persistence/jwt/before_test_jwt.sql",
+                "persistence/menu/before_test_menu.sql",
+                "persistence/restaurant/before_test_restaurant.sql",
+                "persistence/restaurantuser/before_test_restaurant_user.sql",
+                "persistence/menuitem/before_test_menuitem.sql"
         );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
@@ -295,6 +300,30 @@ public class UserControllerTest {
         NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertNull(responseObject);
+    }
+
+    @DisplayName(value = "Teste de falha - Deletar usuário administrador")
+    @Test
+    public void deleteUserAdministratorFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de falha - Deletar usuário dono de restaurante sendo o único dono")
+    @Test
+    public void deleteUserOwnerBeingTheOnlyOwnerFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
     }
 
     @DisplayName(value = "Teste de falha - Deletar usuário não estando autenticado")
