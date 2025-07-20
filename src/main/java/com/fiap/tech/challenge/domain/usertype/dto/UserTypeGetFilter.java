@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class UserTypeGetFilter extends BasePaginationFilter {
 
-    @Schema(description = "Nome do tipo de usuário.", example = "EMPLOYEE")
+    @Schema(description = "Nome do tipo de usuário.", example = "CLIENT")
     private String name;
 
     public UserTypeGetFilter(Integer pageNumber, Integer pageSize) {

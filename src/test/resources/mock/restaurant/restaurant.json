@@ -37,5 +37,24 @@
       "postalCode": "1234-4321",
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
     }
+  },
+  "restaurantPutRequestDTO": {
+    "name": "Churrascaria teste atualizada",
+    "breakfastOpeningHours": "07:00",
+    "breakfastClosingHours": "10:00",
+    "lunchOpeningHours": "14:30",
+    "lunchClosingHours": "19:00",
+    "dinnerOpeningHours": "19:00",
+    "dinnerClosingHours": "23:00",
+    "type": "STEAKHOUSE",
+    "address": {
+      "description": "Teste Descrição New",
+      "number": "100",
+      "complement": "Sala 03",
+      "neighborhood": "Bairro teste",
+      "cep": "12345-789",
+      "postalCode": "1234-4321",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
   }
 }

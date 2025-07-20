@@ -75,7 +75,6 @@ public class MenuControllerTest {
         MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
         ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<MenuBatchResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
-
         Assertions.assertNotNull(responseObject);
         Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -106,7 +105,6 @@ public class MenuControllerTest {
         MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement("mock/menu/menu.json", "${RESTAURANT_HASH_ID}", restaurantHashId, "invalidMenuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
         ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
-
         Assertions.assertNotNull(responseObject);
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), responseObject.getStatus());
