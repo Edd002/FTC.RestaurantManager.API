@@ -50,7 +50,7 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
     @Transactional
     public MenuItemResponseDTO create(MenuItemPostRequestDTO menuItemPostRequestDTO) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
-        Restaurant existingRestaurant = restaurantUserService.findByHashIdAndUser(menuItemPostRequestDTO.getMenu().getHashIdRestaurant(), loggedUser).getRestaurant();
+        Restaurant existingRestaurant = restaurantUserService.findByRestaurantHashIdAndUser(menuItemPostRequestDTO.getMenu().getHashIdRestaurant(), loggedUser).getRestaurant();
         MenuItem newMenuItem = new MenuItemCreateUseCase(existingRestaurant, menuItemPostRequestDTO).getBuiltedMenuItem();
 
         return modelMapper.map(save(newMenuItem), MenuItemResponseDTO.class);
