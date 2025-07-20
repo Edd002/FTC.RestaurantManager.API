@@ -78,7 +78,6 @@ public class UserTypeControllerTest {
     @DisplayName(value = "Teste de falha - Criar um tipo de usuário com nome já existente")
     @Test
     public void createUserTypeExistingNameFailure() {
-        // APONTAR ROLES NECESSÁRIAS NO SWAGGER PARA CADA ENDPOINT
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
         UserTypePostRequestDTO userTypePostRequestDTO = JsonUtil.objectFromJson("userTypePostRequestDTOOwner", PATH_RESOURCE_USER_TYPE, UserTypePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types", HttpMethod.POST, new HttpEntity<>(userTypePostRequestDTO, headers), new ParameterizedTypeReference<>() {});

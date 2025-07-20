@@ -47,7 +47,7 @@ public class MenuController {
         this.menuService = menuService;
     }
 
-    @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu", description = "Criar ou atualizar lista de itens do menu.")
+    @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu - Permissão necessária: [OWNER]", description = "Criar ou atualizar lista de itens do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> createOrUpdate(@RequestBody @Valid MenuBatchPutRequestDTO menuBatchPutRequestDTO) {

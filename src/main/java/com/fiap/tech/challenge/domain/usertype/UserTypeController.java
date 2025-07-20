@@ -50,7 +50,7 @@ public class UserTypeController {
         this.userTypeService = userTypeService;
     }
 
-    @Operation(method = "POST", summary = "Criar tipo de usuário", description = "Criar tipo de usuário.")
+    @Operation(method = "POST", summary = "Criar tipo de usuário - Permissão necessária: [ADMIN]", description = "Criar tipo de usuário.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserTypeResponseDTO>> create(@RequestBody @Valid UserTypePostRequestDTO userTypePostRequestDTO) {
@@ -58,7 +58,7 @@ public class UserTypeController {
         return new BaseSuccessResponse201<>(userTypeService.create(userTypePostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar tipo do usuário", description = "Atualizar tipo do usuário.")
+    @Operation(method = "PUT", summary = "Atualizar tipo do usuário - Permissão necessária: [ADMIN]", description = "Atualizar tipo do usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserTypePutRequestDTO userTypePutRequestDTO) {
@@ -82,7 +82,7 @@ public class UserTypeController {
         return new BaseSuccessResponse200<>(userTypeService.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir tipo de usuário", description = "Excluir tipo de usuário.")
+    @Operation(method = "DELETE", summary = "Excluir tipo de usuário - Permissão necessária: [ADMIN]", description = "Excluir tipo de usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>> delete(@PathVariable("hashId") String hashId) {
