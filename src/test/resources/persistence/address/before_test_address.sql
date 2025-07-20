@@ -7,3 +7,6 @@ VALUES(nextval('SQ_ADDRESS'), '2025-05-17 15:42:22.957', NULL, false, NULL, NULL
 INSERT INTO public.t_address
 (id, created_in, created_by, deleted, deleted_in, deleted_by, hash_id, updated_in, updated_by, cep, complement, description, neighborhood, number, postal_code, fk_city)
 VALUES(nextval('SQ_ADDRESS'), '2025-05-17 15:42:22.957', NULL, false, NULL, NULL, 'ds7as5a4s1fas1a1c84sa1s53a99qe74', '2025-05-17 15:42:22.957', NULL, '22222-222', 'Complement 02', 'Description 02', 'Neighborhood 02', '22', '2222-2222', 1);
+INSERT INTO public.t_address
+(id, created_in, created_by, deleted, deleted_in, deleted_by, hash_id, updated_in, updated_by, cep, complement, description, neighborhood, number, postal_code, fk_city)
+VALUES(nextval('SQ_ADDRESS'), '2025-05-17 15:42:22.957', NULL, false, NULL, NULL, 'as5c15as5aqf4s15a6das612eds451as', '2025-05-17 15:42:22.957', NULL, '33333-333', 'Complement 03', 'Description 03', 'Neighborhood 03', '33', '3333-3333', 1);

@@ -301,8 +301,8 @@ public class UserControllerTest {
     @Test
     public void deleteUserWithoutBeingAuthenticatedFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users/change-password", HttpMethod.PATCH, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse401 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
