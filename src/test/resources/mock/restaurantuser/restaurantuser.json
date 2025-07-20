@@ -1,0 +1,5 @@
+{
+  "restaurantUserRequestDTO": {
+    "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
+  }
+}

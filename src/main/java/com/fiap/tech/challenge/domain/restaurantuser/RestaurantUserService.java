@@ -79,6 +79,11 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
     }
 
     @Transactional
+    public RestaurantUser findByRestaurantHashIdAndUser(String hashId, User user) {
+        return restaurantUserRepository.findByRestaurantHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma associação para o usuário com o restaurante com hash id %s foi encontrada.", hashId)));
+    }
+
+    @Transactional
     public RestaurantUser findByRestaurantAndUser(Restaurant restaurant, User user) {
         return restaurantUserRepository.findByRestaurantAndUser(restaurant, user).orElseThrow(() -> new EntityNotFoundException("Nenhuma associação do usuário com o restaurante foi encontrada."));
     }

@@ -3,7 +3,7 @@
     "availability": true,
     "description": "Espaguete à bolonhesa.",
     "menu": {
-      "hashIdRestaurant": "c57469e0cf8245d0b9a9b3e39b303dc0"
+      "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
     },
     "name": "Espaguete",
     "photoUrl": "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808",
@@ -13,7 +13,7 @@
     "availability": true,
     "description": "UPDATED: Espaguete à bolonhesa.",
     "menu": {
-      "hashIdRestaurant": "c57469e0cf8245d0b9a9b3e39b303dc0"
+      "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
     },
     "name": "UPDATED: Espaguete",
     "photoUrl": "https://ftc-restaurant-manager-api.s3.amazonaws.com/1-admin/305-image_(9).png-20250614014808",
@@ -22,7 +22,7 @@
   "menuItemInvalidPostRequestDTO": {
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra ligula id suscipit aliquam. Nulla facilisi. Vivamus congue eros sit amet ultricies pellentesque. Nulla ultrices sit amet nisl vitae ultricies. Etiam nec velit non eros elementum tempus et",
     "menu": {
-      "hashIdRestaurant": "c57469e0cf8245d0b9a9b3e39b303dc0"
+      "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
     },
     "name": "",
     "photoUrl": "url-invalida",
