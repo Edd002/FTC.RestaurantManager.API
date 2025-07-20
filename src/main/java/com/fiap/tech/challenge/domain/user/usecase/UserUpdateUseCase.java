@@ -1,6 +1,5 @@
 package com.fiap.tech.challenge.domain.user.usecase;
 
-import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
@@ -17,20 +16,18 @@ public final class UserUpdateUseCase {
         if (!DefaultUserTypeEnum.isUserOwner(loggedUser) && DefaultUserTypeEnum.isTypeOwner(userPutRequestDTO.getType())) {
             throw new AuthorizationException("O usuário não tem permissão para alterar o seu tipo para dono de restaurante.");
         }
-        this.user = buildUser(loggedUser, userType, city, userPutRequestDTO, passwordCryptoKey);
+        this.user = rebuildUser(loggedUser, userType, city, userPutRequestDTO, passwordCryptoKey);
     }
 
-    private User buildUser(User loggedUser, UserType userType, City city, UserPutRequestDTO userPutRequestDTO, String passwordCryptoKey) {
-        return new User(
-                loggedUser.getId(),
+    private User rebuildUser(User loggedUser, UserType userType, City city, UserPutRequestDTO userPutRequestDTO, String passwordCryptoKey) {
+        return loggedUser.rebuild(
                 userPutRequestDTO.getName(),
                 userPutRequestDTO.getEmail(),
                 userPutRequestDTO.getLogin(),
                 passwordCryptoKey,
                 loggedUser.getPassword(),
                 userType,
-                new Address(
-                        loggedUser.getAddress().getId(),
+                loggedUser.getAddress().rebuild(
                         userPutRequestDTO.getAddress().getDescription(),
                         userPutRequestDTO.getAddress().getNumber(),
                         userPutRequestDTO.getAddress().getComplement(),
@@ -42,7 +39,7 @@ public final class UserUpdateUseCase {
         );
     }
 
-    public User getBuiltedUser() {
+    public User getRebuiltedUser() {
         return this.user;
     }
 }

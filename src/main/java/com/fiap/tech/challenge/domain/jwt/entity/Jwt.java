@@ -29,10 +29,6 @@ public class Jwt extends Audit implements Serializable {
 
     protected Jwt() {}
 
-    public Jwt(@NonNull Long id) {
-        this.setId(id);
-    }
-
     public Jwt(@NonNull String bearerToken, @NonNull User user) {
         this.setBearerToken(bearerToken);
         this.setUser(user);

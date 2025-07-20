@@ -2,7 +2,10 @@
   "userTypePostRequestDTOEmployee": {
     "name": "EMPLOYEE"
   },
-  "userTypePostRequestDTOOwner": {
-    "name": "OWNER"
+  "userTypePostRequestDTOChef": {
+    "name": "CHEF"
+  },
+  "userTypePutRequestDTOEmployee": {
+    "name": "EMPLOYEE"
   }
 }

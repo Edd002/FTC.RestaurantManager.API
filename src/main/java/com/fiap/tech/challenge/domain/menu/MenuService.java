@@ -45,7 +45,7 @@ public class MenuService extends BaseService<IMenuRepository, Menu> {
         List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
                 menuItemService.save(
                         Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())
-                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getBuiltedMenuItem())
+                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getRebuiltedMenuItem())
                                 .orElseGet(() -> new MenuItemCreateUseCase(restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
                 )).toList();
         return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapper.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());

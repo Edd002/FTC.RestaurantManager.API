@@ -1,8 +1,10 @@
 package com.fiap.tech.challenge.domain.integration.usertype;
 
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypePostRequestDTO;
+import com.fiap.tech.challenge.domain.usertype.dto.UserTypePutRequestDTO;
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypeResponseDTO;
 import com.fiap.tech.challenge.domain.usertype.enumerated.constraint.UserTypeConstraintEnum;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse422;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
@@ -79,11 +81,41 @@ public class UserTypeControllerTest {
     @Test
     public void createUserTypeExistingNameFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
-        UserTypePostRequestDTO userTypePostRequestDTO = JsonUtil.objectFromJson("userTypePostRequestDTOOwner", PATH_RESOURCE_USER_TYPE, UserTypePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        UserTypePostRequestDTO userTypePostRequestDTO = JsonUtil.objectFromJson("userTypePostRequestDTOChef", PATH_RESOURCE_USER_TYPE, UserTypePostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types", HttpMethod.POST, new HttpEntity<>(userTypePostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse422 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+        Assertions.assertTrue(responseObject.getMessages().contains(UserTypeConstraintEnum.T_USER_TYPE__NAME_UK.getErrorMessage()));
+    }
+
+    @DisplayName(value = "Teste de sucesso - Atualizar um tipo de usuário")
+    @Test
+    public void updateUserTypeSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
+        String EXISTING_USER_TYPE_CHEF_HASH_ID = "23as85as485va5ffh4c1z4s4aes6d88a";
+        UserTypePutRequestDTO userTypePutRequestDTO = JsonUtil.objectFromJson("userTypePutRequestDTOEmployee", PATH_RESOURCE_USER_TYPE, UserTypePutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types/" + EXISTING_USER_TYPE_CHEF_HASH_ID, HttpMethod.PUT, new HttpEntity<>(userTypePutRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseSuccessResponse201<UserTypeResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
+        Assertions.assertTrue(responseObject.isSuccess());
+        Assertions.assertEquals(EXISTING_USER_TYPE_CHEF_HASH_ID, responseObject.getItem().getHashId());
+        Assertions.assertEquals(userTypePutRequestDTO.getName(), responseObject.getItem().getName());
+    }
+
+    @DisplayName(value = "Teste de falha - Atualizar um tipo de usuário padrão")
+    @Test
+    public void updateDefaultUserTypeFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
+        String EXISTING_USER_TYPE_OWNER_HASH_ID = "91cbb591b10c43b1ab55023858b6bc9f";
+        UserTypePutRequestDTO userTypePutRequestDTO = JsonUtil.objectFromJson("userTypePutRequestDTOEmployee", PATH_RESOURCE_USER_TYPE, UserTypePutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types/" + EXISTING_USER_TYPE_OWNER_HASH_ID, HttpMethod.POST, new HttpEntity<>(userTypePutRequestDTO, headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
         Assertions.assertTrue(responseObject.getMessages().contains(UserTypeConstraintEnum.T_USER_TYPE__NAME_UK.getErrorMessage()));

@@ -30,9 +30,13 @@ public class Menu extends Audit implements Serializable {
 
     public Menu() {}
 
-    public Menu(@NonNull Long id, @NonNull List<MenuItem> menuItems) {
-        this.setId(id);
+    public Menu(@NonNull List<MenuItem> menuItems) {
         this.setMenuItems(menuItems);
+    }
+
+    public Menu rebuild(@NonNull List<MenuItem> menuItems) {
+        this.setMenuItems(menuItems);
+        return this;
     }
 
     @Serial

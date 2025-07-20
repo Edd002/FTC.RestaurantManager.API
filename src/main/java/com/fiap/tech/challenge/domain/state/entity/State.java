@@ -29,10 +29,6 @@ public class State extends Audit implements Serializable {
 
     protected State() {}
 
-    public State(@NonNull Long id) {
-        this.setId(id);
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 

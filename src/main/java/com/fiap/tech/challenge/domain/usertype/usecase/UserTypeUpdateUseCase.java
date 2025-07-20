@@ -11,18 +11,18 @@ public class UserTypeUpdateUseCase {
 
     private final UserType userType;
 
-    public UserTypeUpdateUseCase(UserType existingUserType, @NonNull UserTypePutRequestDTO userTypePutRequestDTO) {
+    public UserTypeUpdateUseCase(@NonNull UserType existingUserType, @NonNull UserTypePutRequestDTO userTypePutRequestDTO) {
         if (EnumUtils.isValidEnum(DefaultUserTypeEnum.class, existingUserType.getName())) {
             throw new EntityCannotBeDeletedException("Não foi possível realizar a atualização pois tipos de usuário padrão (administrador, dono de restaurante e cliente) não podem ser atualizados.");
         }
-        this.userType = buildUserType(existingUserType, userTypePutRequestDTO);
+        this.userType = rebuildUserType(existingUserType, userTypePutRequestDTO);
     }
 
-    private UserType buildUserType(UserType existingUserType, UserTypePutRequestDTO userTypePutRequestDTO) {
-        return new UserType(existingUserType.getId(), userTypePutRequestDTO.getName());
+    private UserType rebuildUserType(UserType existingUserType, UserTypePutRequestDTO userTypePutRequestDTO) {
+        return existingUserType.rebuild(userTypePutRequestDTO.getName());
     }
 
-    public UserType getBuiltedUserType() {
+    public UserType getRebuiltedUserType() {
         return this.userType;
     }
 }
