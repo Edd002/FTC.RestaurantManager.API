@@ -30,21 +30,6 @@ public class Address extends Audit implements Serializable {
 
     protected Address() {}
 
-    public Address(@NonNull Long id) {
-        this.setId(id);
-    }
-
-    public Address(@NonNull Long id, @NonNull String description, @NonNull String number, String complement, @NonNull String neighborhood, @NonNull String cep, @NonNull String postalCode, @NonNull City city) {
-        this.setId(id);
-        this.setDescription(description);
-        this.setNumber(number);
-        this.setComplement(complement);
-        this.setNeighborhood(neighborhood);
-        this.setCep(cep);
-        this.setPostalCode(postalCode);
-        this.setCity(city);
-    }
-
     public Address(@NonNull String description, @NonNull String number, String complement, @NonNull String neighborhood, @NonNull String cep, @NonNull String postalCode, @NonNull City city) {
         this.setDescription(description);
         this.setNumber(number);
@@ -53,6 +38,17 @@ public class Address extends Audit implements Serializable {
         this.setCep(cep);
         this.setPostalCode(postalCode);
         this.setCity(city);
+    }
+
+    public Address rebuild(@NonNull String description, @NonNull String number, String complement, @NonNull String neighborhood, @NonNull String cep, @NonNull String postalCode, @NonNull City city) {
+        this.setDescription(description);
+        this.setNumber(number);
+        this.setComplement(complement);
+        this.setNeighborhood(neighborhood);
+        this.setCep(cep);
+        this.setPostalCode(postalCode);
+        this.setCity(city);
+        return this;
     }
 
     @Serial

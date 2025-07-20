@@ -17,8 +17,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -76,7 +74,7 @@ public class RestaurantUpdateUseCaseTest {
 
         when(dtoRestaurant.getAddress()).thenReturn(dtoAddress);
 
-        Restaurant updated = new RestaurantUpdateUseCase(existingRestaurant, city, dtoRestaurant).getBuiltedRestaurant();
+        Restaurant updated = new RestaurantUpdateUseCase(existingRestaurant, city, dtoRestaurant).getRebuiltedRestaurant();
 
         assertEquals("New Restaurant", updated.getName());
         assertEquals(RestaurantTypeEnum.CAFETERIA, updated.getType());

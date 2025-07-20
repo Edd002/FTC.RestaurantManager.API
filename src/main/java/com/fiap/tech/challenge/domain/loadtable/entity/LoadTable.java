@@ -27,10 +27,6 @@ public class LoadTable extends Audit implements Serializable {
 
     protected LoadTable() {}
 
-    public LoadTable(@NonNull Long id) {
-        this.setId(id);
-    }
-
     public LoadTable(@NonNull String entityName) {
         this.setEntityName(entityName);
         this.setEntityLoadEnabled(false);

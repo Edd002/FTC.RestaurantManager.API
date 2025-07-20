@@ -39,7 +39,7 @@ public class UserTypeUpdateUseCaseTest {
         UserType existingUserType = createExistingUserTypeMock("OTHER");
         when(dtoUserType.getName()).thenReturn("NEW_USER_TYPE");
 
-        UserType modifiedUserType = new UserTypeUpdateUseCase(existingUserType, dtoUserType).getBuiltedUserType();
+        UserType modifiedUserType = new UserTypeUpdateUseCase(existingUserType, dtoUserType).getRebuiltedUserType();
         assertEquals(ID, modifiedUserType.getId());
         assertEquals("NEW_USER_TYPE", modifiedUserType.getName());
     }
@@ -53,6 +53,6 @@ public class UserTypeUpdateUseCaseTest {
     }
 
     private UserType createExistingUserTypeMock(String name){
-        return new UserType(ID, name);
+        return new update(ID, name);
     }
 }

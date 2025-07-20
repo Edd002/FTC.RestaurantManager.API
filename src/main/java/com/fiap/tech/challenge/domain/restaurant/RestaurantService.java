@@ -58,7 +58,7 @@ public class RestaurantService extends BaseService<IRestaurantRepository, Restau
     public RestaurantResponseDTO update(String hashId, RestaurantPutRequestDTO restaurantPutRequestDTO) {
         Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
         City city = cityService.findByHashId(restaurantPutRequestDTO.getAddress().getHashIdCity());
-        Restaurant updatedRestaurant = new RestaurantUpdateUseCase(existingRestaurant, city, restaurantPutRequestDTO).getBuiltedRestaurant();
+        Restaurant updatedRestaurant = new RestaurantUpdateUseCase(existingRestaurant, city, restaurantPutRequestDTO).getRebuiltedRestaurant();
         return modelMapper.map(save(updatedRestaurant), RestaurantResponseDTO.class);
     }
 

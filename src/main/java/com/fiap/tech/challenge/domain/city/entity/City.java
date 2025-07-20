@@ -30,10 +30,6 @@ public class City extends Audit implements Serializable {
 
     protected City() {}
 
-    public City(@NonNull Long id) {
-        this.setId(id);
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 

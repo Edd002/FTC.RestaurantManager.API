@@ -35,7 +35,7 @@ public class MenuItemUpdateUseCaseTest {
     void shouldBuildMenuItemWithUpdatedData() {
         MenuItemUpdateUseCase useCase = new MenuItemUpdateUseCase(existingMenuItem, restaurant, menuItemPutRequestDTO);
 
-        MenuItem updatedMenuItem = useCase.getBuiltedMenuItem();
+        MenuItem updatedMenuItem = useCase.getRebuiltedMenuItem();
 
         assertNotNull(updatedMenuItem);
         assertEquals(existingMenuItem.getId(), updatedMenuItem.getId());

@@ -30,17 +30,13 @@ public class UserType extends Audit implements Serializable {
 
     protected UserType() {}
 
-    public UserType(@NonNull Long id) {
-        this.setId(id);
-    }
-
-    public UserType(@NonNull Long id, @NonNull String name) {
-        this.setId(id);
-        this.setName(name);
-    }
-
     public UserType(@NonNull String name) {
         this.setName(name);
+    }
+
+    public UserType rebuild(@NonNull String name) {
+        this.setName(name);
+        return this;
     }
 
     @Serial
@@ -65,7 +61,7 @@ public class UserType extends Audit implements Serializable {
         this.userTypeSavedState = userTypeSavedState;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = StringUtils.upperCase(name);
     }
 }
