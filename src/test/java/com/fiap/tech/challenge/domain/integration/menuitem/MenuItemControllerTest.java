@@ -155,7 +155,6 @@ public class MenuItemControllerTest {
         MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
         filter.setHashIdRestaurant(hashIdRestaurantDb);
         filter.setName("Espa");
-
         String url = UriComponentsBuilder
                 .fromPath("/api/v1/menu-items/filter")
                 .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
@@ -165,19 +164,8 @@ public class MenuItemControllerTest {
                 .queryParam("pageNumber", filter.getPageNumber())
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
-
-        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                new ParameterizedTypeReference<>() {}
-        );
-
-        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(
-                menuItemResponseEntity,
-                new TypeToken<>() {}
-        );
-
+        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
@@ -196,20 +184,8 @@ public class MenuItemControllerTest {
     public void findMenuItemByHashIdWithSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdMenuItemDb = "d921fcd786aeffcaa60e35ccf9f01313";
-
-        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(
-                "/api/v1/menu-items/{hashId}",
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                new ParameterizedTypeReference<>() {},
-                hashIdMenuItemDb
-        );
-
-        BaseSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(
-                menuItemResponseEntity,
-                new TypeToken<>() {}
-        );
-
+        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange("/api/v1/menu-items/{hashId}", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdMenuItemDb);
+        BaseSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
@@ -225,15 +201,7 @@ public class MenuItemControllerTest {
     public void deleteMenuItemByHashIdWithSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdMenuItemDb = "d921fcd786aeffcaa60e35ccf9f01313";
-
-        ResponseEntity<NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>> menuItemResponseEntity = testRestTemplate.exchange(
-                "/api/v1/menu-items/{hashId}",
-                HttpMethod.DELETE,
-                new HttpEntity<>(headers),
-                new ParameterizedTypeReference<>() {},
-                hashIdMenuItemDb
-        );
-
+        ResponseEntity<NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>> menuItemResponseEntity = testRestTemplate.exchange("/api/v1/menu-items/{hashId}", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdMenuItemDb);
         assertThat(menuItemResponseEntity).isNotNull();
         assertThat(menuItemResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(menuItemResponseEntity.getBody()).isNull();
