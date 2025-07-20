@@ -8,7 +8,7 @@ import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
 import com.fiap.tech.challenge.domain.user.enumerated.constraint.UserConstraint;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.UserTypeAdminNotAllowedException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
 import jakarta.persistence.*;
@@ -36,11 +36,7 @@ public class User extends Audit implements Serializable {
 
     protected User() {}
 
-    public User(@NonNull Long id) {
-        this.setId(id);
-    }
-
-    public User(@NonNull Long id, @NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
+    public User(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
         this.setId(id);
         this.setName(name);
         this.setEmail(email);
@@ -50,13 +46,14 @@ public class User extends Audit implements Serializable {
         this.setAddress(address);
     }
 
-    public User(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
+    public User rebuild(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
         this.setEncryptedPassword(passwordCryptoKey, password);
         this.setType(type);
         this.setAddress(address);
+        return this;
     }
 
     @Serial

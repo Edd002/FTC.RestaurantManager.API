@@ -16,10 +16,10 @@ CREATE TABLE public.t_restaurant_user
 
 CREATE SEQUENCE public.sq_restaurant_user START WITH 1 INCREMENT BY 1;
 
-ALTER TABLE public.t_restaurant_user ADD CONSTRAINT t_restaurant_user_fk_restaurant FOREIGN KEY (fk_restaurant) REFERENCES public.t_restaurant (id);
-ALTER TABLE public.t_restaurant_user ADD CONSTRAINT t_restaurant_user_fk_user FOREIGN KEY (fk_user) REFERENCES public.t_user (id);
+ALTER TABLE public.t_restaurant_user ADD CONSTRAINT t_restaurant_user__fk_restaurant FOREIGN KEY (fk_restaurant) REFERENCES public.t_restaurant (id);
+ALTER TABLE public.t_restaurant_user ADD CONSTRAINT t_restaurant_user__fk_user FOREIGN KEY (fk_user) REFERENCES public.t_user (id);
 
 ALTER TABLE public.t_restaurant_user ADD FK_RESTAURANT_UK_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_restaurant END);
 ALTER TABLE public.t_restaurant_user ADD FK_USER_UK_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_user END);
-CREATE UNIQUE INDEX T_RESTAURANT_USER_HASH_ID_UK ON public.t_restaurant_user (hash_id);
-CREATE UNIQUE INDEX T_RESTAURANT_USER_FK_RESTAURANT_AND_FK_USER_UK ON public.t_restaurant_user (FK_RESTAURANT_UK_FIELD, FK_USER_UK_FIELD);
+CREATE UNIQUE INDEX T_RESTAURANT_USER__HASH_ID_UK ON public.t_restaurant_user (hash_id);
+CREATE UNIQUE INDEX T_RESTAURANT_USER__FK_RESTAURANT_AND_FK_USER_UK ON public.t_restaurant_user (FK_RESTAURANT_UK_FIELD, FK_USER_UK_FIELD);

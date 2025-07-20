@@ -10,12 +10,11 @@ public class MenuItemUpdateUseCase {
     private final MenuItem menuItem;
 
     public MenuItemUpdateUseCase(@NonNull MenuItem existingMenuItem, @NonNull Restaurant restaurant, @NonNull MenuItemPutRequestDTO menuItemPutRequestDTO) {
-        this.menuItem = buildMenuItem(existingMenuItem, restaurant, menuItemPutRequestDTO);
+        this.menuItem = rebuildMenuItem(existingMenuItem, restaurant, menuItemPutRequestDTO);
     }
 
-    private MenuItem buildMenuItem(MenuItem existingMenuItem, Restaurant restaurant, MenuItemPutRequestDTO menuItemPutRequestDTO) {
-        return new MenuItem(
-                existingMenuItem.getId(),
+    private MenuItem rebuildMenuItem(MenuItem existingMenuItem, Restaurant restaurant, MenuItemPutRequestDTO menuItemPutRequestDTO) {
+        return existingMenuItem.rebuild(
                 menuItemPutRequestDTO.getName(),
                 menuItemPutRequestDTO.getDescription(),
                 menuItemPutRequestDTO.getPrice(),
@@ -25,7 +24,7 @@ public class MenuItemUpdateUseCase {
         );
     }
 
-    public MenuItem getBuiltedMenuItem() {
+    public MenuItem getRebuiltedMenuItem() {
         return this.menuItem;
     }
 }

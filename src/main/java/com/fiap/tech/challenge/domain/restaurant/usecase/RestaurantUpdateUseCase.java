@@ -12,12 +12,11 @@ public class RestaurantUpdateUseCase {
     private final Restaurant restaurant;
 
     public RestaurantUpdateUseCase(@NonNull Restaurant existingRestaurant, @NonNull City city, @NonNull RestaurantPutRequestDTO restaurantPutRequestDTO) {
-        this.restaurant = buildRestaurant(existingRestaurant, city, restaurantPutRequestDTO);
+        this.restaurant = rebuildRestaurant(existingRestaurant, city, restaurantPutRequestDTO);
     }
 
-    private Restaurant buildRestaurant(Restaurant existingRestaurant, City city, RestaurantPutRequestDTO restaurantPutRequestDTO) {
-        return new Restaurant(
-                existingRestaurant.getId(),
+    private Restaurant rebuildRestaurant(Restaurant existingRestaurant, City city, RestaurantPutRequestDTO restaurantPutRequestDTO) {
+        return existingRestaurant.rebuild(
                 restaurantPutRequestDTO.getName(),
                 restaurantPutRequestDTO.getBreakfastOpeningHours(),
                 restaurantPutRequestDTO.getBreakfastClosingHours(),
@@ -39,7 +38,7 @@ public class RestaurantUpdateUseCase {
         );
     }
 
-    public Restaurant getBuiltedRestaurant() {
+    public Restaurant getRebuiltedRestaurant() {
         return this.restaurant;
     }
 }

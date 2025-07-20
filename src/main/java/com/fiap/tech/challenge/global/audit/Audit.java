@@ -22,8 +22,7 @@ import static com.fiap.tech.challenge.global.util.HashUtil.generateHash;
 @EntityListeners({ AuditingEntityListener.class, AuditEntityListener.class })
 public abstract class Audit implements Serializable {
 
-    protected Audit() {
-    }
+    protected Audit() {}
 
     @Serial
     private static final long serialVersionUID = 1L;

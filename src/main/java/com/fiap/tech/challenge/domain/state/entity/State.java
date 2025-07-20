@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.state.StateEntityListener;
 import com.fiap.tech.challenge.domain.state.enumerated.constraint.StateConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,10 +28,6 @@ import java.util.List;
 public class State extends Audit implements Serializable {
 
     protected State() {}
-
-    public State(@NonNull Long id) {
-        this.setId(id);
-    }
 
     @Serial
     private static final long serialVersionUID = 1L;

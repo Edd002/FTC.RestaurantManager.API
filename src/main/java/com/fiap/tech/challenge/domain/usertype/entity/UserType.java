@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.usertype.UserTypeEntityListener;
 import com.fiap.tech.challenge.domain.usertype.enumerated.constraint.UserTypeConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,17 +30,13 @@ public class UserType extends Audit implements Serializable {
 
     protected UserType() {}
 
-    public UserType(@NonNull Long id) {
-        this.setId(id);
-    }
-
-    public UserType(@NonNull Long id, @NonNull String name) {
-        this.setId(id);
-        this.setName(name);
-    }
-
     public UserType(@NonNull String name) {
         this.setName(name);
+    }
+
+    public UserType rebuild(@NonNull String name) {
+        this.setName(name);
+        return this;
     }
 
     @Serial
@@ -65,7 +61,7 @@ public class UserType extends Audit implements Serializable {
         this.userTypeSavedState = userTypeSavedState;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = StringUtils.upperCase(name);
     }
 }

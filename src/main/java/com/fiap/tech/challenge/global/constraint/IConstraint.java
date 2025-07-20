@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.audit.constraint;
+package com.fiap.tech.challenge.global.constraint;
 
 public interface IConstraint {
 

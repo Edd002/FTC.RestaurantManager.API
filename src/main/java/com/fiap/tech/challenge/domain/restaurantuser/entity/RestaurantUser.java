@@ -5,7 +5,7 @@ import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserEntityListene
 import com.fiap.tech.challenge.domain.restaurantuser.enumerated.constraint.RestaurantUserConstraint;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

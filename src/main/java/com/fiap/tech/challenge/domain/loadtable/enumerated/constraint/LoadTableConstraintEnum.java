@@ -9,8 +9,8 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 public enum LoadTableConstraintEnum {
 
-    @FieldNameConstants.Include T_LOAD_TABLE_HASH_ID_UK("O hash id informado para a carga de tabela já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_LOAD_TABLE_ENTITY_NAME_UK("A nome da entidade informado para a carga de tabela já encontra-se cadastrado.");
+    @FieldNameConstants.Include T_LOAD_TABLE__HASH_ID_UK("O hash id informado para a carga de tabela já encontra-se cadastrado."),
+    @FieldNameConstants.Include T_LOAD_TABLE__ENTITY_NAME_UK("A nome da entidade informado para a carga de tabela já encontra-se cadastrado.");
 
     private final String errorMessage;
 }

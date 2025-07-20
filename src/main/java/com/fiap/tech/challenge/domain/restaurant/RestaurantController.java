@@ -50,7 +50,7 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @Operation(method = "POST", summary = "Criar restaurante", description = "Criar restaurante.")
+    @Operation(method = "POST", summary = "Criar restaurante - Permissão necessária: [OWNER]", description = "Criar restaurante.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> create(@RequestBody @Valid RestaurantPostRequestDTO restaurantPostRequestDTO) {
@@ -58,7 +58,7 @@ public class RestaurantController {
         return new BaseSuccessResponse201<>(restaurantService.create(restaurantPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar restaurante", description = "Atualizar restaurante.")
+    @Operation(method = "PUT", summary = "Atualizar restaurante - Permissão necessária: [OWNER]", description = "Atualizar restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid RestaurantPutRequestDTO restaurantPutRequestDTO) {
@@ -82,7 +82,7 @@ public class RestaurantController {
         return new BaseSuccessResponse200<>(restaurantService.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir restaurante", description = "Excluir restaurante.")
+    @Operation(method = "DELETE", summary = "Excluir restaurante - Permissão necessária: [OWNER]", description = "Excluir restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantResponseDTO>> delete(@PathVariable("hashId") String hashId) {

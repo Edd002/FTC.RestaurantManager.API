@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.user.enumerated.constraint;
 
-import com.fiap.tech.challenge.global.audit.constraint.IConstraint;
+import com.fiap.tech.challenge.global.constraint.IConstraint;
 
 public class UserConstraint implements IConstraint {
 

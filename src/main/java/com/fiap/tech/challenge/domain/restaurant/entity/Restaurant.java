@@ -7,7 +7,7 @@ import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.constraint.RestaurantConstraint;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,8 +33,7 @@ public class Restaurant extends Audit implements Serializable {
 
     protected Restaurant() {}
 
-    public Restaurant(@NonNull Long id, @NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
-        this.setId(id);
+    public Restaurant(@NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
         this.setName(name);
         this.setBreakfastOpeningHours(breakfastOpeningHours);
         this.setBreakfastClosingHours(breakfastClosingHours);
@@ -47,7 +46,7 @@ public class Restaurant extends Audit implements Serializable {
         this.setAddress(address);
     }
 
-    public Restaurant(@NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
+    public Restaurant rebuild(@NonNull String name, @NonNull Date breakfastOpeningHours, @NonNull Date breakfastClosingHours, @NonNull Date lunchOpeningHours, @NonNull Date lunchClosingHours, @NonNull Date dinnerOpeningHours, @NonNull Date dinnerClosingHours, @NonNull RestaurantTypeEnum type, @NonNull Menu menu, @NonNull Address address) {
         this.setName(name);
         this.setBreakfastOpeningHours(breakfastOpeningHours);
         this.setBreakfastClosingHours(breakfastClosingHours);
@@ -58,6 +57,7 @@ public class Restaurant extends Audit implements Serializable {
         this.setType(type);
         this.setMenu(menu);
         this.setAddress(address);
+        return this;
     }
 
     @Serial

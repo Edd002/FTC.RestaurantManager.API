@@ -1,6 +1,5 @@
 package com.fiap.tech.challenge.config.security;
 
-import com.fiap.tech.challenge.config.enumerated.PathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -110,28 +110,27 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(IGNORE_SECURITY_CONFIG_PATHS).permitAll()
-                        .requestMatchers(PathEnum.API_V1_CITIES_GET.getHttpMethod(), PathEnum.API_V1_CITIES_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_DELETE.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_DELETE.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_GET.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_POST.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_POST.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_MENU_ITEMS_PUT.getHttpMethod(), PathEnum.API_V1_MENU_ITEMS_PUT.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod(), PathEnum.API_V1_JWTS_GENERATE_POST.getPath()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_MENUS_PUT.getHttpMethod(), PathEnum.API_V1_MENUS_PUT.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_DELETE.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_DELETE.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_GET.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_POST.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_POST.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_RESTAURANTS_PUT.getHttpMethod(), PathEnum.API_V1_RESTAURANTS_PUT.getPath()).hasAuthority(DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_USERS_FILTER_GET.getHttpMethod(), PathEnum.API_V1_USERS_FILTER_GET.getPath()).hasAnyAuthority(DefaultUserTypeEnum.ADMIN.name(), DefaultUserTypeEnum.OWNER.name())
-                        .requestMatchers(PathEnum.API_V1_USERS_POST.getHttpMethod(), PathEnum.API_V1_USERS_POST.getPath()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_USER_TYPES_DELETE.getHttpMethod(), PathEnum.API_V1_USER_TYPES_DELETE.getPath()).hasAuthority(DefaultUserTypeEnum.ADMIN.name())
-                        .requestMatchers(PathEnum.API_V1_USER_TYPES_GET.getHttpMethod(), PathEnum.API_V1_USER_TYPES_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_USER_TYPES_POST.getHttpMethod(), PathEnum.API_V1_USER_TYPES_POST.getPath()).hasAuthority(DefaultUserTypeEnum.ADMIN.name())
-                        .requestMatchers(PathEnum.API_V1_USER_TYPES_PUT.getHttpMethod(), PathEnum.API_V1_USER_TYPES_PUT.getPath()).hasAuthority(DefaultUserTypeEnum.ADMIN.name())
-                        .requestMatchers(PathEnum.API_V1_RESTAURANT_USERS_DELETE.getHttpMethod(), PathEnum.API_V1_RESTAURANT_USERS_DELETE.getPath()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_RESTAURANT_USERS_GET.getHttpMethod(), PathEnum.API_V1_RESTAURANT_USERS_GET.getPathMatchingAll()).permitAll()
-                        .requestMatchers(PathEnum.API_V1_RESTAURANT_USERS_POST.getHttpMethod(), PathEnum.API_V1_RESTAURANT_USERS_POST.getPath()).permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/cities/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/menu-items").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/menu-items/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/menu-items").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/menu-items").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/jwts/generate").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/menus").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurants").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/restaurants").hasAuthority(DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/filter").hasAnyAuthority(DefaultUserTypeEnum.ADMIN.name(), DefaultUserTypeEnum.OWNER.name())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user-types").hasAuthority(DefaultUserTypeEnum.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/user-types/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user-types").hasAuthority(DefaultUserTypeEnum.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/user-types").hasAuthority(DefaultUserTypeEnum.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurant-users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurant-users/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/restaurant-users").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults());
         return httpSecurity.build();

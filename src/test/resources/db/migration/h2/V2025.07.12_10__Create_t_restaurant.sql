@@ -24,16 +24,16 @@ CREATE TABLE public.t_restaurant
 
 CREATE SEQUENCE public.sq_restaurant START WITH 1 INCREMENT BY 1;
 
-ALTER TABLE public.t_restaurant ADD CONSTRAINT t_restaurant_fk_menu FOREIGN KEY (fk_menu) REFERENCES public.t_menu (id);
-ALTER TABLE public.t_restaurant ADD CONSTRAINT t_restaurant_fk_address FOREIGN KEY (fk_address) REFERENCES public.t_address (id);
+ALTER TABLE public.t_restaurant ADD CONSTRAINT t_restaurant__fk_menu FOREIGN KEY (fk_menu) REFERENCES public.t_menu (id);
+ALTER TABLE public.t_restaurant ADD CONSTRAINT t_restaurant__fk_address FOREIGN KEY (fk_address) REFERENCES public.t_address (id);
 
 ALTER TABLE public.t_restaurant ADD FK_MENU_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_menu END);
 ALTER TABLE public.t_restaurant ADD FK_ADDRESS_FIELD INT8 AS (CASE deleted WHEN TRUE THEN NULL ELSE fk_address END);
-CREATE UNIQUE INDEX T_RESTAURANT_HASH_ID_UK ON public.t_restaurant (hash_id);
-CREATE UNIQUE INDEX T_RESTAURANT_FK_MENU_UK ON public.t_restaurant (FK_MENU_FIELD);
-CREATE UNIQUE INDEX T_RESTAURANT_FK_ADDRESS_UK ON public.t_restaurant (FK_ADDRESS_FIELD);
+CREATE UNIQUE INDEX T_RESTAURANT__HASH_ID_UK ON public.t_restaurant (hash_id);
+CREATE UNIQUE INDEX T_RESTAURANT__FK_MENU_UK ON public.t_restaurant (FK_MENU_FIELD);
+CREATE UNIQUE INDEX T_RESTAURANT__FK_ADDRESS_UK ON public.t_restaurant (FK_ADDRESS_FIELD);
 
-ALTER TABLE public.t_restaurant ADD CONSTRAINT T_RESTAURANT_TYPE_CHECK CHECK (type IN
+ALTER TABLE public.t_restaurant ADD CONSTRAINT T_RESTAURANT__TYPE_CHECK CHECK (type IN
                                                   ('QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD', 'FAST_CASUAL_CONCEPTS',
                                                    'CASUAL_DINING_RESTAURANTS', 'CONTEMPORARY_CASUAL', 'PREMIUM_CASUAL',
                                                    'FINE_DINING', 'FAMILY_STYLE_DINING',

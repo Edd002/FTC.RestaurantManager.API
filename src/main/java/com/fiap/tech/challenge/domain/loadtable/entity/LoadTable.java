@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.loadtable.entity;
 import com.fiap.tech.challenge.domain.loadtable.LoadTableEntityListener;
 import com.fiap.tech.challenge.domain.loadtable.enumerated.constraint.LoadTableConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,10 +26,6 @@ import java.io.Serializable;
 public class LoadTable extends Audit implements Serializable {
 
     protected LoadTable() {}
-
-    public LoadTable(@NonNull Long id) {
-        this.setId(id);
-    }
 
     public LoadTable(@NonNull String entityName) {
         this.setEntityName(entityName);

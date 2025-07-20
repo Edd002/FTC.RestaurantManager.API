@@ -47,7 +47,7 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
     @Transactional
     public UserTypeResponseDTO update(String hashId, UserTypePutRequestDTO userTypePutRequestDTO) {
         UserType existingUserType = findByHashId(hashId);
-        UserType updatedUserType = new UserTypeUpdateUseCase(existingUserType, userTypePutRequestDTO).getBuiltedUserType();
+        UserType updatedUserType = new UserTypeUpdateUseCase(existingUserType, userTypePutRequestDTO).getRebuiltedUserType();
         return modelMapper.map(save(updatedUserType), UserTypeResponseDTO.class);
     }
 

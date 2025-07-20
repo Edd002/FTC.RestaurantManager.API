@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.global.audit.constraint;
+package com.fiap.tech.challenge.global.constraint;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

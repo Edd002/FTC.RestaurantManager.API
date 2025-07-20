@@ -1,4 +1,4 @@
-create table t_state
+create table public.t_state
 (
     id         int8         not null,
     created_in timestamp(6) not null,
@@ -18,6 +18,6 @@ create sequence public.sq_state start with 1 increment by 1;
 
 ALTER TABLE public.t_state ADD NAME_UK_FIELD VARCHAR(255) AS (CASE deleted WHEN TRUE THEN NULL ELSE name END);
 ALTER TABLE public.t_state ADD UF_UK_FIELD VARCHAR(2) AS (CASE deleted WHEN TRUE THEN NULL ELSE uf END);
-CREATE UNIQUE INDEX T_STATE_HASH_ID_UK ON public.t_state(hash_id);
-CREATE UNIQUE INDEX T_STATE_NAME_UK ON public.t_state(NAME_UK_FIELD);
-CREATE UNIQUE INDEX T_STATE_UF_UK ON public.t_state(UF_UK_FIELD);
+CREATE UNIQUE INDEX T_STATE__HASH_ID_UK ON public.t_state(hash_id);
+CREATE UNIQUE INDEX T_STATE__NAME_UK ON public.t_state(NAME_UK_FIELD);
+CREATE UNIQUE INDEX T_STATE__UF_UK ON public.t_state(UF_UK_FIELD);

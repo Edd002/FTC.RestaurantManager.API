@@ -1,4 +1,4 @@
-create table t_address
+create table public.t_address
 (
     id           int8         not null,
     created_in   timestamp(6) not null,
@@ -21,6 +21,6 @@ create table t_address
 
 create sequence public.sq_address start with 1 increment by 1;
 
-alter table if exists t_address add constraint t_address_fk_city foreign key (fk_city) references t_city;
+alter table if exists public.t_address add constraint t_address__fk_city foreign key (fk_city) references t_city;
 
-CREATE UNIQUE INDEX T_ADDRESS_HASH_ID_UK ON public.t_address (hash_id);
+CREATE UNIQUE INDEX T_ADDRESS__HASH_ID_UK ON public.t_address (hash_id);
