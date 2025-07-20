@@ -50,7 +50,7 @@ public class MenuItemController {
         this.menuItemService = menuItemService;
     }
 
-    @Operation(method = "POST", summary = "Criar item do menu", description = "Criar item do menu.")
+    @Operation(method = "POST", summary = "Criar item do menu - Permissão necessária: [OWNER]", description = "Criar item do menu.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<MenuItemResponseDTO>> create(@RequestBody @Valid MenuItemPostRequestDTO menuItemPostRequestDTO) {
@@ -58,7 +58,7 @@ public class MenuItemController {
         return new BaseSuccessResponse201<>(menuItemService.create(menuItemPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar item do menu", description = "Atualizar item do menu.")
+    @Operation(method = "PUT", summary = "Atualizar item do menu - Permissão necessária: [OWNER]", description = "Atualizar item do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<MenuItemResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid MenuItemPutRequestDTO menuItemPutRequestDTO) {
@@ -82,7 +82,7 @@ public class MenuItemController {
         return new BaseSuccessResponse200<>(menuItemService.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir item do menu", description = "Excluir item do menu.")
+    @Operation(method = "DELETE", summary = "Excluir item do menu - Permissão necessária: [OWNER]", description = "Excluir item do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>> delete(@PathVariable("hashId") String hashId) {

@@ -86,6 +86,6 @@ public class UserTypeControllerTest {
         Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
-        Assertions.assertTrue(responseObject.getMessages().contains(UserTypeConstraintEnum.T_USER_TYPE_NAME_UK.name()));
+        Assertions.assertTrue(responseObject.getMessages().contains(UserTypeConstraintEnum.T_USER_TYPE__NAME_UK.getErrorMessage()));
     }
 }

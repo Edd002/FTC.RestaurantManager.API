@@ -9,7 +9,7 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 public enum AddressConstraintEnum {
 
-    @FieldNameConstants.Include T_ADDRESS_HASH_ID_UK("O hash id informado para o endereço já encontra-se cadastrado.");
+    @FieldNameConstants.Include T_ADDRESS__HASH_ID_UK("O hash id informado para o endereço já encontra-se cadastrado.");
 
     private final String errorMessage;
 }

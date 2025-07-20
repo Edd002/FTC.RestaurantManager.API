@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.menu.enumerated.constraint;
 
-import com.fiap.tech.challenge.global.audit.constraint.IConstraint;
+import com.fiap.tech.challenge.global.constraint.IConstraint;
 
 public class MenuConstraint implements IConstraint {
 

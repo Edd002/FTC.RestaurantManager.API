@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.loadtable.enumerated.constraint;
 
-import com.fiap.tech.challenge.global.audit.constraint.IConstraint;
+import com.fiap.tech.challenge.global.constraint.IConstraint;
 
 public final class LoadTableConstraint implements IConstraint {
 

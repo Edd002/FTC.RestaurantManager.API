@@ -1,4 +1,4 @@
-create table t_load_table
+create table public.t_load_table
 (
     id                  int8         not null,
     created_in          timestamp(6) not null,
@@ -16,5 +16,5 @@ create table t_load_table
 
 create sequence public.sq_load_table start with 1 increment by 1;
 
-CREATE UNIQUE INDEX T_LOAD_TABLE_HASH_ID_UK ON public.t_load_table (hash_id);
-CREATE UNIQUE INDEX T_LOAD_TABLE_ENTITY_NAME_UK ON public.t_load_table (entity_name, deleted) WHERE deleted IS NULL OR deleted = false;
+CREATE UNIQUE INDEX T_LOAD_TABLE__HASH_ID_UK ON public.t_load_table (hash_id);
+CREATE UNIQUE INDEX T_LOAD_TABLE__ENTITY_NAME_UK ON public.t_load_table (entity_name, deleted) WHERE deleted IS NULL OR deleted = false;

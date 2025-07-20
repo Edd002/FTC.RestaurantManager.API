@@ -72,7 +72,7 @@ public class UserController {
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 
-    @Operation(method = "GET", summary = "Buscar usuário por filtro", description = "Buscar usuário por filtro.")
+    @Operation(method = "GET", summary = "Buscar usuário por filtro - Permissão necessária: [ADMIN, OWNER]", description = "Buscar usuário por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {

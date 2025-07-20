@@ -9,9 +9,9 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants(onlyExplicitlyIncluded = true)
 public enum StateConstraintEnum {
 
-    @FieldNameConstants.Include T_STATE_HASH_ID_UK("O hash id informado para o estado já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_STATE_NAME_UK("O nome informado para o estado já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_STATE_UF_UK("A UF informada para o estado já encontra-se cadastrada.");
+    @FieldNameConstants.Include T_STATE__HASH_ID_UK("O hash id informado para o estado já encontra-se cadastrado."),
+    @FieldNameConstants.Include T_STATE__NAME_UK("O nome informado para o estado já encontra-se cadastrado."),
+    @FieldNameConstants.Include T_STATE__UF_UK("A UF informada para o estado já encontra-se cadastrada.");
 
     private final String errorMessage;
 }

@@ -1,6 +1,5 @@
-package com.fiap.tech.challenge.config.security;
+package com.fiap.tech.challenge.config.security.filter;
 
-import com.fiap.tech.challenge.config.enumerated.PathEnum;
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtClaims;
 import com.fiap.tech.challenge.domain.jwt.JwtService;
@@ -22,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Log
 public class JwtFilter extends OncePerRequestFilter {
@@ -30,19 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtBuilder jwtBuilder;
     private final JwtService jwtService;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
-
-    private static final String[] IGNORE_FILTER_CONFIG_PATHS = {
-            "/restaurant-manager/swagger-ui/index.html",
-            "/restaurant-manager/swagger-ui/swagger-ui.css",
-            "/restaurant-manager/swagger-ui/swagger-ui-standalone-preset.js",
-            "/restaurant-manager/swagger-ui/swagger-ui-bundle.js",
-            "/restaurant-manager/v3/api-docs/swagger-config",
-            "/restaurant-manager/swagger-ui/favicon-32x32.png",
-            "/restaurant-manager/swagger-ui/favicon-16x16.png",
-            "/restaurant-manager/v3/api-docs",
-            "/restaurant-manager/h2-console",
-            "/actuator/health"
-    };
 
     public JwtFilter(JwtBuilder jwtBuilder, JwtService jwtService, BundleAuthUserDetailsService bundleAuthUserDetailsService) {
         this.jwtBuilder = jwtBuilder;
@@ -52,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest httpServletRequest) {
-        return Arrays.stream(IGNORE_FILTER_CONFIG_PATHS).anyMatch(path -> httpServletRequest.getRequestURI().contains(path)) || authorizationHeaderIsMissingAndPathIsAllowed(httpServletRequest) || isGeneratingJwt(httpServletRequest);
+        return PathFilterEnum.getIgnoreFilterConfigPaths().stream().anyMatch(path -> httpServletRequest.getRequestURI().contains(path)) || authorizationHeaderIsMissingAndPathIsAllowed(httpServletRequest) || isGeneratingJwt(httpServletRequest);
     }
 
     @Override
@@ -66,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(PathEnum.getIgnoreResponseFilterPaths().stream().map(PathEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
+            if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(PathFilterEnum.getIgnoreResponseFilterPaths().stream().map(PathFilterEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
                 jwtService.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
@@ -82,14 +67,14 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean authorizationHeaderIsMissingAndPathIsAllowed(HttpServletRequest httpServletRequest) {
-        return ValidationUtil.isNull(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)) && PathEnum.getAllowedPathsWithoutAuthotization().stream().anyMatch(securityPathEnum -> httpServletRequest.getRequestURI().contains(securityPathEnum.getCompletePath()) && httpServletRequest.getMethod().equals(securityPathEnum.getHttpMethod().name()));
+        return ValidationUtil.isNull(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)) && PathFilterEnum.getAllowedPathsWithoutAuthorization().stream().anyMatch(securityPathEnum -> httpServletRequest.getRequestURI().contains(securityPathEnum.getCompletePath()) && httpServletRequest.getMethod().equals(securityPathEnum.getHttpMethod().name()));
     }
 
     private boolean isGeneratingJwt(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getServletPath().equals(PathEnum.API_V1_JWTS_GENERATE_POST.getPath()) && httpServletRequest.getMethod().equals(PathEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod().name());
+        return httpServletRequest.getServletPath().equals(PathFilterEnum.API_V1_JWTS_GENERATE_POST.getPath()) && httpServletRequest.getMethod().equals(PathFilterEnum.API_V1_JWTS_GENERATE_POST.getHttpMethod().name());
     }
 
     private boolean isDeletingUser(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getServletPath().equals(PathEnum.API_V1_USERS_DELETE.getPath()) && httpServletRequest.getMethod().equals(PathEnum.API_V1_USERS_DELETE.getHttpMethod().name());
+        return httpServletRequest.getServletPath().equals(PathFilterEnum.API_V1_USERS_DELETE.getPath()) && httpServletRequest.getMethod().equals(PathFilterEnum.API_V1_USERS_DELETE.getHttpMethod().name());
     }
 }

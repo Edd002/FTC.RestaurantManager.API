@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.usertype.UserTypeEntityListener;
 import com.fiap.tech.challenge.domain.usertype.enumerated.constraint.UserTypeConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
-import com.fiap.tech.challenge.global.audit.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

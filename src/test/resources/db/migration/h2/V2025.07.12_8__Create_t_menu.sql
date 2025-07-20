@@ -14,4 +14,4 @@ CREATE TABLE public.t_menu
 
 CREATE SEQUENCE public.sq_menu START WITH 1 INCREMENT BY 1;
 
-CREATE UNIQUE INDEX T_MENU_HASH_ID_UK ON public.t_menu (hash_id);
+CREATE UNIQUE INDEX T_MENU__HASH_ID_UK ON public.t_menu (hash_id);
