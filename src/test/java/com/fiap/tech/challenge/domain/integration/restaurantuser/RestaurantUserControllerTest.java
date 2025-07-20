@@ -66,30 +66,12 @@ public class RestaurantUserControllerTest {
 
     @DisplayName("Teste de sucesso - Cria uma associação entre Restaurante e Usuário")
     @Test
-    public void createMenuItemSuccess() {
+    public void createRestaurantUserSuccess() {
         HttpHeaders clientHeaders = httpHeaderComponent.generateHeaderWithClientBearerToken();
         RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
-
-        RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(
-                PATH_RESOURCE_RESTAURANT_USER,
-                "${RESTAURANT_HASH_ID}",
-                restaurantResponseDTO.getHashId(),
-                "restaurantUserRequestDTO",
-                RestaurantUserPostRequestDTO.class
-        );
-
-        ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange(
-                "/api/v1/restaurant-users",
-                HttpMethod.POST,
-                new HttpEntity<>(restaurantUserPostRequestDTO, clientHeaders),
-                new ParameterizedTypeReference<>() {}
-        );
-
-        BaseSuccessResponse201<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(
-                restaurantUserResponseEntity,
-                new TypeToken<>() {}
-        );
-
+        RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_RESTAURANT_USER, "${RESTAURANT_HASH_ID}", restaurantResponseDTO.getHashId(), "restaurantUserRequestDTO", RestaurantUserPostRequestDTO.class);
+        ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users", HttpMethod.POST, new HttpEntity<>(restaurantUserPostRequestDTO, clientHeaders), new ParameterizedTypeReference<>() {});
+        BaseSuccessResponse201<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
         assertNotNull(responseObject);
         assertTrue(responseObject.isSuccess());
         assertEquals(HttpStatus.CREATED.value(), responseObject.getStatus());
@@ -101,20 +83,8 @@ public class RestaurantUserControllerTest {
 
     private RestaurantResponseDTO createNewRestaurant() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-
-        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson(
-                "restaurantPostRequestDTO",
-                PATH_RESOURCE_RESTAURANT,
-                RestaurantPostRequestDTO.class,
-                DatePatternEnum.DATE_FORMAT_HH_mm.getValue()
-        );
-
-        ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> restaurantResponseEntity = testRestTemplate.exchange(
-                "/api/v1/restaurants",
-                HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers),
-                new ParameterizedTypeReference<>() {}
-        );
-
+        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson("restaurantPostRequestDTO", PATH_RESOURCE_RESTAURANT, RestaurantPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
+        ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> restaurantResponseEntity = testRestTemplate.exchange("/api/v1/restaurants", HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         assertNotNull(restaurantResponseEntity.getBody());
         return restaurantResponseEntity.getBody().getItem();
     }

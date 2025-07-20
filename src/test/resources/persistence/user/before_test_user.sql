@@ -10,3 +10,6 @@ VALUES(nextval('SQ_USER'), '2025-05-17 15:42:22.945', NULL, false, NULL, NULL, '
 INSERT INTO public.t_user
 (id, created_in, created_by, deleted, deleted_in, deleted_by, hash_id, updated_in, updated_by, email, login, name, password, fk_user_type, fk_address)
 VALUES(nextval('SQ_USER'), '2025-05-17 15:42:22.945', NULL, false, NULL, NULL, 'as15c5a145asd4756ccv154a7qee8946', '2025-05-17 15:42:22.945', NULL, 'chef@email.com', 'chef', 'Chef', 'HoIrRum0acc=', 4, 4);
+INSERT INTO public.t_user
+(id, created_in, created_by, deleted, deleted_in, deleted_by, hash_id, updated_in, updated_by, email, login, name, password, fk_user_type, fk_address)
+VALUES(nextval('SQ_USER'), '2025-05-17 15:42:22.945', NULL, false, NULL, NULL, 'f33ff5265fe549088bbd13afe2e22b65', '2025-05-17 15:42:22.945', NULL, 'owner2@email.com', 'owner2', 'Owner2', 'DSMRUcoeO30=', 2, 5);

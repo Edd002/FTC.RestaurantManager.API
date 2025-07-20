@@ -28,6 +28,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.URI;
 import java.util.List;
 
 @ExtendWith(value = {SpringExtension.class})
@@ -116,7 +117,7 @@ public class UserTypeControllerTest {
         final String EXISTING_USER_TYPE_CHEF_HASH_ID = "23as85as485va5ffh4c1z4s4aes6d88a";
         UserTypePutRequestDTO userTypePutRequestDTO = JsonUtil.objectFromJson("userTypePutRequestDTOEmployee", PATH_RESOURCE_USER_TYPE, UserTypePutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/user-types/" + EXISTING_USER_TYPE_CHEF_HASH_ID, HttpMethod.PUT, new HttpEntity<>(userTypePutRequestDTO, headers), new ParameterizedTypeReference<>() {});
-        BaseSuccessResponse201<UserTypeResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        BaseSuccessResponse200<UserTypeResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
@@ -156,12 +157,12 @@ public class UserTypeControllerTest {
     @Test
     public void findByFilterNameSuccess() {
         final String name = "CLIENT";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/user-types/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/user-types/filter")
                 .queryParam("name", name)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<UserTypeResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());

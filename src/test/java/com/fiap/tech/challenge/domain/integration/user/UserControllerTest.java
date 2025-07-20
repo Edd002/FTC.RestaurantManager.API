@@ -29,6 +29,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.URI;
 import java.util.List;
 
 @ExtendWith(value = {SpringExtension.class})
@@ -233,12 +234,12 @@ public class UserControllerTest {
     @Test
     public void findByFilterNameSuccess() {
         final String name = "Admin";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
                 .queryParam("name", name)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -252,12 +253,12 @@ public class UserControllerTest {
     @Test
     public void findByFilterEmailSuccess() {
         final String email = "admin@email.com";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
                 .queryParam("email", email)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
