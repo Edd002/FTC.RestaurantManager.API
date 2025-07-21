@@ -53,6 +53,6 @@ public class UserTypeUpdateUseCaseTest {
     }
 
     private UserType createExistingUserTypeMock(String name){
-        return new update(ID, name);
+        return new UserType(name);
     }
 }
