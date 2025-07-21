@@ -18,8 +18,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @ExtendWith(value = {SpringExtension.class})
@@ -64,12 +64,12 @@ public class CityControllerTest {
     @Test
     public void findByFilterNameSuccess() {
         final String name = "Ariquemes";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/cities/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/cities/filter")
                 .queryParam("name", name)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -83,12 +83,12 @@ public class CityControllerTest {
     @Test
     public void findByFilterUfStateSuccess() {
         final String UfState = "RO";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/cities/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/cities/filter")
                 .queryParam("ufState", UfState)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -101,30 +101,22 @@ public class CityControllerTest {
     @DisplayName(value = "Teste de sucesso - Cidade existe ao verificar por hash id")
     @Test
     public void findByHashIdSuccess() {
-        final String hashId = "d6a42563ee504e11858dfc73579171fd";
-        String urlTemplate = UriComponentsBuilder.fromUriString("/api/v1/cities/{hashId}")
-                .encode()
-                .build(hashId)
-                .toString();
+        final String EXISTING_CITY_HASH_ID = "d6a42563ee504e11858dfc73579171fd";
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/cities/" + EXISTING_CITY_HASH_ID, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<CityResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
-        Assertions.assertEquals(hashId, responseObject.getItem().getHashId());
+        Assertions.assertEquals(EXISTING_CITY_HASH_ID, responseObject.getItem().getHashId());
     }
 
     @DisplayName(value = "Teste de falha - Cidade não existe ao verificar por hash id")
     @Test
     public void findByHashIdFailure() {
-        final String hashId = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a";
-        String urlTemplate = UriComponentsBuilder.fromUriString("/api/v1/cities/{hashId}")
-                .encode()
-                .build(hashId)
-                .toString();
+        final String NOT_EXISTING_CITY_HASH_ID = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a";
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/cities/" + NOT_EXISTING_CITY_HASH_ID, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse404 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), responseObject.getStatus());

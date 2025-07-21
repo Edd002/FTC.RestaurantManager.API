@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse401;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
@@ -28,6 +29,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.URI;
 import java.util.List;
 
 @ExtendWith(value = {SpringExtension.class})
@@ -58,7 +60,11 @@ public class UserControllerTest {
                 "persistence/loadtable/before_test_load_table.sql",
                 "persistence/usertype/before_test_user_type.sql",
                 "persistence/user/before_test_user.sql",
-                "persistence/jwt/before_test_jwt.sql"
+                "persistence/jwt/before_test_jwt.sql",
+                "persistence/menu/before_test_menu.sql",
+                "persistence/restaurant/before_test_restaurant.sql",
+                "persistence/restaurantuser/before_test_restaurant_user.sql",
+                "persistence/menuitem/before_test_menuitem.sql"
         );
         databaseManagementComponent.populateDatabase(sqlFileScripts);
     }
@@ -85,7 +91,7 @@ public class UserControllerTest {
     @DisplayName(value = "Teste de sucesso - Criar um usuário cliente")
     @Test
     public void createUserClientSuccess() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
         UserPostRequestDTO userPostRequestDTO = JsonUtil.objectFromJson("userPostRequestDTOClient", PATH_RESOURCE_USER, UserPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.POST, new HttpEntity<>(userPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
@@ -228,12 +234,12 @@ public class UserControllerTest {
     @Test
     public void findByFilterNameSuccess() {
         final String name = "Admin";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
                 .queryParam("name", name)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -247,12 +253,12 @@ public class UserControllerTest {
     @Test
     public void findByFilterEmailSuccess() {
         final String email = "admin@email.com";
-        String urlTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
+        URI uriTemplate = httpHeaderComponent.buildUriWithDefaultQueryParamsGetFilter("/api/v1/users/filter")
                 .queryParam("email", email)
-                .encode()
-                .toUriString();
+                .build().encode()
+                .toUri();
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange(uriTemplate, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BasePageableSuccessResponse200<UserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
@@ -297,12 +303,36 @@ public class UserControllerTest {
         Assertions.assertNull(responseObject);
     }
 
+    @DisplayName(value = "Teste de falha - Deletar usuário administrador")
+    @Test
+    public void deleteUserAdministratorFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
+    @DisplayName(value = "Teste de falha - Deletar usuário dono de restaurante sendo o único dono")
+    @Test
+    public void deleteUserOwnerBeingTheOnlyOwnerFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
+        Assertions.assertFalse(responseObject.isSuccess());
+        Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
+    }
+
     @DisplayName(value = "Teste de falha - Deletar usuário não estando autenticado")
     @Test
     public void deleteUserWithoutBeingAuthenticatedFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
-        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users/change-password", HttpMethod.PATCH, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BaseErrorResponse401 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
