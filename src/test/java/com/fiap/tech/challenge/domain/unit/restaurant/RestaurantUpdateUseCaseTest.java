@@ -1,5 +1,18 @@
 package com.fiap.tech.challenge.domain.unit.restaurant;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import com.fiap.tech.challenge.domain.address.dto.AddressPutRequestDTO;
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
@@ -8,18 +21,6 @@ import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Calendar;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class RestaurantUpdateUseCaseTest {
 
@@ -46,7 +47,7 @@ public class RestaurantUpdateUseCaseTest {
     @DisplayName("Teste de sucesso - Deve atualizar o restaurante com dados válidos.")
     void shouldUpdateRestaurantWithValidData() {
         Restaurant existingRestaurant = anExistingRestaurant();
-        City city = new City(id);
+        City city = new City("São Paulo");
 
         when(dtoRestaurant.getName()).thenReturn("New Restaurant");
         when(dtoRestaurant.getType()).thenReturn(RestaurantTypeEnum.CAFETERIA.name());
@@ -95,7 +96,7 @@ public class RestaurantUpdateUseCaseTest {
         Date dinnerOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
         Date dinnerClose = getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
 
-        City city = new City(id);
+        City city = new City("São Paulo");
         Address address = new Address(
                 "Av. Exemplo",
                 "123",
@@ -105,7 +106,7 @@ public class RestaurantUpdateUseCaseTest {
                 "01000000",
                 city
         );
-        Restaurant restaurant = new Restaurant(id, name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, menu, address);
+        Restaurant restaurant = new Restaurant(name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, menu, address);
 
         return restaurant;
     }

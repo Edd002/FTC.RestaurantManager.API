@@ -45,7 +45,7 @@ public class MenuItemTestFactory {
     }
 
     public static MenuItem loadEntityMenuItem() {
-        return new MenuItem(1L,
+        return new MenuItem(
                 "Espaguete",
                 "Espaguete à bolonhesa.",
                 BigDecimal.valueOf(19.99),

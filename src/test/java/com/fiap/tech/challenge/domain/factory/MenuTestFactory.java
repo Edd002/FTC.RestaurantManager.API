@@ -7,6 +7,6 @@ import java.util.List;
 public class MenuTestFactory {
 
     public static Menu loadEntityMenu() {
-        return new Menu(1L, List.of());
+        return new Menu(List.of());
     }
 }

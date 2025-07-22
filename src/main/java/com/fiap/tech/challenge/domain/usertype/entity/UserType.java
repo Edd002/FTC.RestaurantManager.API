@@ -1,22 +1,34 @@
 package com.fiap.tech.challenge.domain.usertype.entity;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.usertype.UserTypeEntityListener;
 import com.fiap.tech.challenge.domain.usertype.enumerated.constraint.UserTypeConstraint;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.List;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -52,7 +64,7 @@ public class UserType extends Audit implements Serializable {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "type")
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     @Transient
     private transient UserType userTypeSavedState;
