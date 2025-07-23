@@ -7,6 +7,7 @@ import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostReque
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
 import com.fiap.tech.challenge.global.component.HttpBodyComponent;
@@ -95,7 +96,7 @@ public class RestaurantUserControllerTest {
 
     @DisplayName("Teste de sucesso - Encontrar uma associação entre restaurante e usuário dado um filtro por nome do usuário")
     @Test
-    public void findRestaurantUserByUserName() {
+    public void findRestaurantUserByUserNameSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         RestaurantUserGetFilter filter = new RestaurantUserGetFilter(1, 10);
         filter.setUserName("Owner");
@@ -112,19 +113,21 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(1);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
         assertThat(responseObject.getList())
-                .extracting(RestaurantUserResponseDTO::getHashId, dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
+                .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
-                .containsExactlyInAnyOrder(
-                        tuple("8d6ab84ca2af9fccd4e4048694176ebf", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER")
+                .containsExactly(
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                                "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER"),
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT")
                 );
     }
 
     @DisplayName("Teste de sucesso - Encontrar uma associação entre restaurante e usuário dado um filtro por nome do restaurante")
     @Test
-    public void findRestaurantUserByRestaurantName() {
+    public void findRestaurantUserByRestaurantNameSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         RestaurantUserGetFilter filter = new RestaurantUserGetFilter(1, 10);
         filter.setRestaurantName("Restaurante do João");
@@ -141,19 +144,21 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(1);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
         assertThat(responseObject.getList())
                 .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
                 .containsExactlyInAnyOrder(
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER")
+                                "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER"),
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT")
                 );
     }
 
     @DisplayName("Teste de sucesso - Encontrar uma associação entre restaurante e usuário dado seu hash id")
     @Test
-    public void findRestaurantUserByHashId() {
+    public void findRestaurantUserByHashIdSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdRestaurantUserDb = "8d6ab84ca2af9fccd4e4048694176ebf";
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
@@ -168,6 +173,17 @@ public class RestaurantUserControllerTest {
         assertThat(responseObject.getItem().getUser().getHashId()).isEqualTo("ab15a4s1a5qa7af15a41s8a4sa15d1fa");
         assertThat(responseObject.getItem().getUser().getName()).isEqualTo("Owner");
         assertThat(responseObject.getItem().getUser().getType()).isEqualTo("OWNER");
+    }
+
+    @DisplayName("Teste de sucesso - Deve deletar uma associação entre restaurante e usuário dado seu hash id")
+    @Test
+    public void deleteRestaurantUserByHashIdSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
+        String hashIdRestaurantUserDb = "bd7e15fcd3f1083ccd3e6e447e4d956e";
+        ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantUserResponseDTO>> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
+        assertThat(restaurantUserResponseEntity).isNotNull();
+        assertThat(restaurantUserResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(restaurantUserResponseEntity.getBody()).isNull();
     }
 
     private RestaurantResponseDTO createNewRestaurant() {
