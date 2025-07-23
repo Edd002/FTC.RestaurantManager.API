@@ -5,6 +5,7 @@ import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserGetFilter;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostRequestDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
+import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
@@ -142,12 +143,31 @@ public class RestaurantUserControllerTest {
         assertThat(responseObject.getPageSize()).isEqualTo(10);
         assertThat(responseObject.getTotalElements()).isEqualTo(1);
         assertThat(responseObject.getList())
-                .extracting(RestaurantUserResponseDTO::getHashId, dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
+                .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
                 .containsExactlyInAnyOrder(
-                        tuple("8d6ab84ca2af9fccd4e4048694176ebf", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
                                 "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER")
                 );
+    }
+
+    @DisplayName("Teste de sucesso - Encontrar uma associação entre restaurante e usuário dado seu hash id")
+    @Test
+    public void findRestaurantUserByHashId() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantUserDb = "8d6ab84ca2af9fccd4e4048694176ebf";
+        ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
+        BaseSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        assertThat(responseObject).isNotNull();
+        assertThat(responseObject.isSuccess()).isTrue();
+        assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
+        assertThat(responseObject.getItem().getHashId()).isNotNull();
+        assertThat(responseObject.getItem().getRestaurant().getHashId()).isEqualTo("6d4b62960a6aa2b1fff43a9c1d95f7b2");
+        assertThat(responseObject.getItem().getRestaurant().getName()).isEqualTo("Restaurante do João");
+        assertThat(responseObject.getItem().getRestaurant().getType()).isEqualTo(FAST_CASUAL_CONCEPTS);
+        assertThat(responseObject.getItem().getUser().getHashId()).isEqualTo("ab15a4s1a5qa7af15a41s8a4sa15d1fa");
+        assertThat(responseObject.getItem().getUser().getName()).isEqualTo("Owner");
+        assertThat(responseObject.getItem().getUser().getType()).isEqualTo("OWNER");
     }
 
     private RestaurantResponseDTO createNewRestaurant() {
