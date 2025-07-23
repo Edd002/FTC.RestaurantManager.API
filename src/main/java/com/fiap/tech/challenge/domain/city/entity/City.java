@@ -1,19 +1,11 @@
 package com.fiap.tech.challenge.domain.city.entity;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.List;
-
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.CityEntityListener;
 import com.fiap.tech.challenge.domain.city.enumerated.constraint.CityConstraint;
 import com.fiap.tech.challenge.domain.state.entity.State;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,10 +19,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -43,10 +39,6 @@ import lombok.Setter;
 public class City extends Audit implements Serializable {
 
     protected City() {}
-
-    public City(@NonNull String name){
-        this.setName(name);
-    }
 
     @Serial
     private static final long serialVersionUID = 1L;
