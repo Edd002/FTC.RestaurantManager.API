@@ -3,13 +3,14 @@ package com.fiap.tech.challenge.domain.unit.user;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.fiap.tech.challenge.domain.city.entity.City;
-import com.fiap.tech.challenge.domain.factory.CityFactory;
 import com.fiap.tech.challenge.domain.factory.UserFactory;
 import com.fiap.tech.challenge.domain.factory.UserTypeFactory;
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
@@ -18,25 +19,37 @@ import com.fiap.tech.challenge.domain.user.usecase.UserCreateUseCase;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.exception.AuthorizationException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class UserCreateUseCaseTest {
 
     private static final String cryptoKey = "5E50F405ACE6CBDF17379F4B9F2B0C9F4144C5E380EA0B9298CB02EBD8FFE511";
 
-    private User loggedUser;
-    private UserType userType;
-    private City city;
-    private UserPostRequestDTO userPostRequestDTO;
+    AutoCloseable openMocks;
 
     @BeforeEach
-    void setUp() {
-        city = CityFactory.loadEntityCity();
+    void setup(){
+        openMocks = MockitoAnnotations.openMocks(this);
     }
+
+    @AfterEach
+    void teardown() throws Exception{
+        openMocks.close();
+    }
+
+    @Mock
+    private User loggedUser;
+    @Mock
+    private City city;
+
+    private UserType userType;
+    private UserPostRequestDTO userPostRequestDTO;
 
     @Test
     @DisplayName("Teste de sucesso - Deve criar o usuário dono à partir de um dono já autenticado")
     void shouldCreateOwnerUserWithAuthOwnerUser(){
-        loggedUser = UserFactory.loadEntityOwnerUser();
+        when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeOwner());
         userType = UserTypeFactory.loadEntityUserTypeOwner();
         userPostRequestDTO = UserFactory.loadValidOwnerPostRequestDTO();
         User user = new UserCreateUseCase(loggedUser, userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser();
@@ -82,7 +95,7 @@ public class UserCreateUseCaseTest {
     @Test
     @DisplayName("Teste de falha - Deve lançar exceção ao tentar criar um usuário do tipo dono com um usuário cliente autenticado")
     void shouldNotCreateOwnerUserWithAuthClientUser(){
-        loggedUser = UserFactory.loadEntityClientUser();
+        when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeClient());
         userType = UserTypeFactory.loadEntityUserTypeClient();
         userPostRequestDTO = UserFactory.loadValidOwnerPostRequestDTO();
 
