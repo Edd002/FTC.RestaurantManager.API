@@ -5,6 +5,7 @@ import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserGetFilter;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostRequestDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
@@ -113,7 +114,7 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(2);
+        assertThat(responseObject.getTotalElements()).isEqualTo(3);
         assertThat(responseObject.getList())
                 .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
@@ -121,7 +122,9 @@ public class RestaurantUserControllerTest {
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
                                 "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER"),
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT")
+                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT"),
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN")
                 );
     }
 
@@ -144,7 +147,7 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(2);
+        assertThat(responseObject.getTotalElements()).isEqualTo(3);
         assertThat(responseObject.getList())
                 .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
@@ -152,7 +155,9 @@ public class RestaurantUserControllerTest {
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
                                 "ab15a4s1a5qa7af15a41s8a4sa15d1fa", "Owner", "OWNER"),
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT")
+                                "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT"),
+                        tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
+                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN")
                 );
     }
 
@@ -184,6 +189,40 @@ public class RestaurantUserControllerTest {
         assertThat(restaurantUserResponseEntity).isNotNull();
         assertThat(restaurantUserResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(restaurantUserResponseEntity.getBody()).isNull();
+    }
+
+    @DisplayName("Teste de falha - Deve dar erro ao deletar uma associação entre restaurante e dono de restaurante se existir somente uma associação")
+    @Test
+    public void deleteRestaurantUserAsOwnerByHashIdFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantUserDb = "8d6ab84ca2af9fccd4e4048694176ebf";
+        ResponseEntity<?> restaurantUserResponseEntity = restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        assertThat(responseObject).isNotNull();
+        assertThat(responseObject.isSuccess()).isFalse();
+        assertThat(HttpStatus.CONFLICT.value()).isEqualTo(responseObject.getStatus());
+        List<String> errorMessages = responseObject.getMessages();
+        assertThat(errorMessages).isNotNull().isNotEmpty().hasSize(1);
+        assertThat(errorMessages).containsExactlyInAnyOrder(
+                "Não foi possível realizar a exclusão pois deve existir pelo menos uma associação de usuário dono de restaurante com o restaurante."
+        );
+    }
+
+    @DisplayName("Teste de falha - Deve dar erro ao deletar uma associação entre restaurante e admin")
+    @Test
+    public void deleteRestaurantUserAsAdminByHashIdFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithAdminBearerToken();
+        String hashIdRestaurantUserDb = "202d227187ff7a6d2b2e3371a81fa633";
+        ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        assertThat(responseObject).isNotNull();
+        assertThat(responseObject.isSuccess()).isFalse();
+        assertThat(HttpStatus.CONFLICT.value()).isEqualTo(responseObject.getStatus());
+        List<String> errorMessages = responseObject.getMessages();
+        assertThat(errorMessages).isNotNull().isNotEmpty().hasSize(1);
+        assertThat(errorMessages).containsExactlyInAnyOrder(
+                "Usuários administradores não podem ser excluídos."
+        );
     }
 
     private RestaurantResponseDTO createNewRestaurant() {
