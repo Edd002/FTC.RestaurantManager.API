@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.unit.restaurant;
 import com.fiap.tech.challenge.domain.address.dto.AddressPutRequestDTO;
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.factory.RestaurantTestFactory;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
@@ -28,6 +29,9 @@ public class RestaurantUpdateUseCaseTest {
     @Mock
     private AddressPutRequestDTO dtoAddress;
 
+    @Mock
+    private City city;
+
     private final Long id = 1L;
 
     AutoCloseable openMocks;
@@ -45,18 +49,17 @@ public class RestaurantUpdateUseCaseTest {
     @Test
     @DisplayName("Teste de sucesso - Deve atualizar o restaurante com dados válidos.")
     void shouldUpdateRestaurantWithValidData() {
-        Restaurant existingRestaurant = anExistingRestaurant();
-        City city = new City(id);
+        Restaurant existingRestaurant = RestaurantTestFactory.loadEntityRestaurant();
 
         when(dtoRestaurant.getName()).thenReturn("New Restaurant");
         when(dtoRestaurant.getType()).thenReturn(RestaurantTypeEnum.CAFETERIA.name());
 
-        Date breakfastOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 6, 0);
-        Date breakfastClose = getDateWithTime(2025, Calendar.AUGUST, 14, 10, 0);
-        Date lunchOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 12, 0);
-        Date lunchClose = getDateWithTime(2025, Calendar.AUGUST, 14, 15, 0);
-        Date dinnerOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
-        Date dinnerClose = getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
+        Date breakfastOpen = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 6, 0);
+        Date breakfastClose = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 10, 0);
+        Date lunchOpen = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 12, 0);
+        Date lunchClose = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 15, 0);
+        Date dinnerOpen = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
+        Date dinnerClose = RestaurantTestFactory.getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
 
         when(dtoRestaurant.getBreakfastOpeningHours()).thenReturn(breakfastOpen);
         when(dtoRestaurant.getBreakfastClosingHours()).thenReturn(breakfastClose);
@@ -80,46 +83,6 @@ public class RestaurantUpdateUseCaseTest {
         assertEquals(RestaurantTypeEnum.CAFETERIA, updated.getType());
         assertEquals(breakfastOpen, updated.getBreakfastOpeningHours());
         assertEquals(dtoAddress.getCep(), updated.getAddress().getCep());
-    }
-
-
-    private Restaurant anExistingRestaurant() {
-        var menu = new Menu();
-        var name = "Old Restaurant";
-        var type = RestaurantTypeEnum.QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD;
-
-        Date breakfastOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 7, 0);
-        Date breakfastClose = getDateWithTime(2025, Calendar.AUGUST, 14, 10, 0);
-        Date lunchOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 12, 0);
-        Date lunchClose = getDateWithTime(2025, Calendar.AUGUST, 14, 15, 0);
-        Date dinnerOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
-        Date dinnerClose = getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
-
-        City city = new City(id);
-        Address address = new Address(
-                "Av. Exemplo",
-                "123",
-                "",
-                "Centro",
-                "01000-000",
-                "01000000",
-                city
-        );
-        Restaurant restaurant = new Restaurant(id, name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, menu, address);
-
-        return restaurant;
-    }
-
-    private Date getDateWithTime(int year, int month, int day, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
     }
 
 }
