@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.factory;
 
 
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
+import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 
 public class UserFactory {
@@ -20,6 +21,38 @@ public class UserFactory {
                 "userPostRequestDTOClient",
                 PATH_RESOURCE_USER,
                 UserPostRequestDTO.class
+        );
+    }
+
+    public static UserUpdatePasswordPatchRequestDTO loadValidPatchRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userUpdatePasswordPatchRequestDTOClient",
+                PATH_RESOURCE_USER,
+                UserUpdatePasswordPatchRequestDTO.class
+        );
+    }
+
+    public static UserUpdatePasswordPatchRequestDTO loadInvalidWrongPasswordPatchRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userUpdatePasswordPatchRequestDTOClientWrongActualPassword",
+                PATH_RESOURCE_USER,
+                UserUpdatePasswordPatchRequestDTO.class
+        );
+    }
+
+    public static UserUpdatePasswordPatchRequestDTO loadInvalidSamePasswordPatchRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userUpdatePasswordPatchRequestDTOClientSamePassword",
+                PATH_RESOURCE_USER,
+                UserUpdatePasswordPatchRequestDTO.class
+        );
+    }
+
+    public static UserUpdatePasswordPatchRequestDTO loadInvalidWrongPasswordConfirmationPatchRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userUpdatePasswordPatchRequestDTOClientWrongPasswordConfirmation",
+                PATH_RESOURCE_USER,
+                UserUpdatePasswordPatchRequestDTO.class
         );
     }
 }
