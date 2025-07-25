@@ -30,21 +30,6 @@ public class RestaurantTestFactory {
         );
     }
 
-//    public static Restaurant loadEntityRestaurant() {
-//        return new Restaurant(
-//                "Restaurante Teste",
-//                new Date(),
-//                new Date(),
-//                new Date(),
-//                new Date(),
-//                new Date(),
-//                new Date(),
-//                RestaurantTypeEnum.CAFETERIA,
-//                loadEmptyMenu(),
-//                loadDefaultAddress()
-//        );
-//    }
-
     public static Restaurant loadEntityRestaurant() {
         var name = "Old Restaurant";
         var type = RestaurantTypeEnum.QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD;
