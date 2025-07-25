@@ -1,15 +1,16 @@
 package com.fiap.tech.challenge.domain.unit.usertype;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
+import com.fiap.tech.challenge.domain.factory.UserTypeFactory;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCheckForDeleteUseCase;
 import com.fiap.tech.challenge.global.exception.EntityCannotBeDeletedException;
-import java.util.ArrayList;
 import java.util.Collections;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 public class UserTypeCheckForDeleteUseCaseTest {
 
     AutoCloseable openMocks;
+
     @Mock
     private UserType userType;
     @Mock
@@ -41,8 +43,8 @@ public class UserTypeCheckForDeleteUseCaseTest {
     @Test
     @DisplayName("Teste de sucesso - Usuário fornecido deve estar disponível para exclusão")
     void shouldUserTypeBeAllowedToDelete() {
-        when(userType.getName()).thenReturn("OTHER");
-        when(userType.getUsers()).thenReturn(new ArrayList<>());
+        userType = spy(UserTypeFactory.loadEntityUserTypeOther());
+        doReturn(Collections.emptyList()).when(userType).getUsers();
 
         assertTrue(new UserTypeCheckForDeleteUseCase(userType).isAllowedToDelete());
     }
@@ -50,7 +52,7 @@ public class UserTypeCheckForDeleteUseCaseTest {
     @Test
     @DisplayName("Teste de falha - Deve lançar exceção ao verificar a exclusão do tipo de usuário padrão(administrador, dono de restaurante e cliente)")
     void shouldUserTypeBeNotAllowedToDeleteDueToDefaultUserType() {
-        when(userType.getName()).thenReturn("OWNER");
+        userType = UserTypeFactory.loadEntityUserTypeOwner();
 
         EntityCannotBeDeletedException exception = assertThrows(EntityCannotBeDeletedException.class, () -> new UserTypeCheckForDeleteUseCase(userType));
         assertEquals(DEFAULT_USER_TYPE_EXCEPTION_MESSAGE, exception.getMessage());
@@ -59,8 +61,9 @@ public class UserTypeCheckForDeleteUseCaseTest {
     @Test
     @DisplayName("Teste de falha - Deve lançar exceção ao verificar a exclusão do tipo de usuário com usuários associados")
     void shouldUserTypeBeNotAllowedToDeleteDueToUsersAssociated() {
-        when(userType.getName()).thenReturn("OTHER");
-        when(userType.getUsers()).thenReturn(Collections.singletonList(user));
+        userType = spy(UserTypeFactory.loadEntityUserTypeOther());
+
+        doReturn(Collections.singletonList(user)).when(userType).getUsers();
 
         EntityCannotBeDeletedException exception = assertThrows(EntityCannotBeDeletedException.class, () -> new UserTypeCheckForDeleteUseCase(userType));
         assertEquals(USER_TYPE_WITH_USERS_EXCEPTION_MESSAGE, exception.getMessage());
