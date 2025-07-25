@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.factory;
 
 
 import com.fiap.tech.challenge.domain.user.dto.UserPostRequestDTO;
+import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserUpdatePasswordPatchRequestDTO;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 
@@ -53,6 +54,22 @@ public class UserFactory {
                 "userUpdatePasswordPatchRequestDTOClientWrongPasswordConfirmation",
                 PATH_RESOURCE_USER,
                 UserUpdatePasswordPatchRequestDTO.class
+        );
+    }
+
+    public static UserPutRequestDTO loadValidClientUserPutRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userPutRequestDTOClient",
+                PATH_RESOURCE_USER,
+                UserPutRequestDTO.class
+        );
+    }
+
+    public static UserPutRequestDTO loadValidOwnerUserPutRequestDTO(){
+        return JsonUtil.objectFromJson(
+                "userPutRequestDTOOwner",
+                PATH_RESOURCE_USER,
+                UserPutRequestDTO.class
         );
     }
 }
