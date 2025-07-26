@@ -114,7 +114,7 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(3);
+        assertThat(responseObject.getTotalElements()).isEqualTo(4);
         assertThat(responseObject.getList())
                 .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
@@ -124,7 +124,9 @@ public class RestaurantUserControllerTest {
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
                                 "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT"),
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN")
+                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN"),
+                        tuple("65cd4as415f15d4fas5155ds54sa65f4", "Restaurante da Maria", FAST_CASUAL_CONCEPTS,
+                                "eff4as15as6ae4as1s4d7df1a5s54fea", "Owner3", "OWNER")
                 );
     }
 
@@ -147,7 +149,7 @@ public class RestaurantUserControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(3);
+        assertThat(responseObject.getTotalElements()).isEqualTo(4);
         assertThat(responseObject.getList())
                 .extracting(dto -> dto.getRestaurant().getHashId(), dto -> dto.getRestaurant().getName(), dto -> dto.getRestaurant().getType(),
                         dto -> dto.getUser().getHashId(),dto -> dto.getUser().getName(),dto -> dto.getUser().getType())
@@ -157,7 +159,9 @@ public class RestaurantUserControllerTest {
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
                                 "d49690a919944be58fbe55b4f729bc3e", "Client", "CLIENT"),
                         tuple("6d4b62960a6aa2b1fff43a9c1d95f7b2", "Restaurante do João", FAST_CASUAL_CONCEPTS,
-                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN")
+                                "ed3a9d7639d84a20a57ecf20d27176da", "Admin", "ADMIN"),
+                        tuple("65cd4as415f15d4fas5155ds54sa65f4", "Restaurante da Maria", FAST_CASUAL_CONCEPTS,
+                                "eff4as15as6ae4as1s4d7df1a5s54fea", "Owner3", "OWNER")
                 );
     }
 
