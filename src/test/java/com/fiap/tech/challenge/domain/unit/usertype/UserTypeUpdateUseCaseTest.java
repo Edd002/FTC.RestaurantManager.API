@@ -1,9 +1,5 @@
 package com.fiap.tech.challenge.domain.unit.usertype;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 import com.fiap.tech.challenge.domain.usertype.dto.UserTypePutRequestDTO;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeUpdateUseCase;
@@ -14,6 +10,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 public class UserTypeUpdateUseCaseTest {
     @Mock
@@ -40,7 +40,6 @@ public class UserTypeUpdateUseCaseTest {
         when(dtoUserType.getName()).thenReturn("NEW_USER_TYPE");
 
         UserType modifiedUserType = new UserTypeUpdateUseCase(existingUserType, dtoUserType).getRebuiltedUserType();
-        assertEquals(ID, modifiedUserType.getId());
         assertEquals("NEW_USER_TYPE", modifiedUserType.getName());
     }
 

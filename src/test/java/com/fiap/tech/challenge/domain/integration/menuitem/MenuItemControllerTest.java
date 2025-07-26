@@ -149,7 +149,7 @@ public class MenuItemControllerTest {
 
     @DisplayName("Teste de sucesso - Encontrar um item de menu dado um filtro")
     @Test
-    public void findMenuItemByName() {
+    public void findMenuItemByNameSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
         MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
