@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class RestaurantUserCheckForDeleteUseCaseTest {
 
     @Test
+    @DisplayName("Teste de falha - Deve lançar EntityCannotBeDeletedException se o dono de restaurante só tiver uma associação com o restaurante")
     void shouldThrowEntityCannotBeDeletedExceptionIfUserIsOwner() {
         EntityCannotBeDeletedException exception =  assertThrows(EntityCannotBeDeletedException.class, () -> new RestaurantUserCheckForDeleteUseCase(UserTestFactory.loadEntityOwner(), List.of(RestaurantUserTestFactory.loadEntityRestaurantUser())));
 
