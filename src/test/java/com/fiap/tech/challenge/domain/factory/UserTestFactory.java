@@ -17,14 +17,14 @@ public class UserTestFactory {
         );
     }
 
-    public static User loadEntityAdmin() {
+    public static User loadEntityClient() {
         return new User(
                 "Manu",
                 "manu@email.com",
                 "manu",
                 "123456789012345678901234",
                 "123456",
-                new UserType("Admin"),
+                new UserType("Client"),
                 RestaurantTestFactory.loadDefaultAddress()
         );
     }
