@@ -6,6 +6,8 @@ import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemResponseDTO;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
+import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,7 @@ public class MapperConfig {
         configModelMapper(modelMapper);
         configMenuToMenuBatchResponseDTOMapper(modelMapper);
         configMenuItemToMenuItemResponseDTOMapper(modelMapper);
+        configUserToUserResponseDTO(modelMapper);
         return modelMapper;
     }
 
@@ -47,5 +50,11 @@ public class MapperConfig {
     private void configMenuItemToMenuItemResponseDTOMapper(ModelMapper modelMapper) {
         modelMapper.typeMap(MenuItem.class, MenuItemResponseDTO.class)
                 .addMappings(mapper -> mapper.map(menuItem -> menuItem.getMenu().getRestaurant().getHashId(), (menuItemResponseDTO, hashIdRestaurant) -> menuItemResponseDTO.getMenu().setHashIdRestaurant((String) hashIdRestaurant)));
+    }
+
+    private void configUserToUserResponseDTO(ModelMapper modelMapper) {
+        modelMapper.typeMap(User.class, UserResponseDTO.class).addMappings(mapper -> {
+            mapper.map(src -> src.getType().getName(), UserResponseDTO::setType);
+        });
     }
 }

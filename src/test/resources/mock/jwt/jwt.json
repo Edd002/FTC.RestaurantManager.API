@@ -12,6 +12,10 @@
     "login": "owner2",
     "password": "owner2"
   },
+  "jwtGeneratePostRequestDTOOwnerWithOneRestaurant": {
+    "login": "owner3",
+    "password": "owner3"
+  },
   "jwtGeneratePostRequestDTOClient": {
     "login": "client",
     "password": "client"
