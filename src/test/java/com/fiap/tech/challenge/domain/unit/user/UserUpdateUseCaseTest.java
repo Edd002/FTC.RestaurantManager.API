@@ -57,7 +57,7 @@ public class UserUpdateUseCaseTest {
         when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeOwner());
         when(loggedUser.getAddress()).thenReturn(address);
 
-        new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO, cryptoKey);
+        new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO);
 
         verify(loggedUser).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
     }
@@ -69,7 +69,7 @@ public class UserUpdateUseCaseTest {
         userPutRequestDTO = UserFactory.loadValidOwnerUserPutRequestDTO();
         when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeClient());
 
-        assertThrows(AuthorizationException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO, cryptoKey));
+        assertThrows(AuthorizationException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO));
 
         verify(loggedUser, times(0)).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
     }
