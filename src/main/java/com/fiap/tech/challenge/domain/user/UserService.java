@@ -64,7 +64,7 @@ public class UserService extends BaseService<IUserRepository, User> {
     public UserResponseDTO update(UserPutRequestDTO userPutRequestDTO) {
         City city = cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity());
         UserType userType = userTypeService.findByNameIgnoreCase(userPutRequestDTO.getType());
-        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), userType, city, userPutRequestDTO, cryptoKey).getRebuiltedUser();
+        User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), userType, city, userPutRequestDTO).getRebuiltedUser();
         return modelMapper.map(save(updatedUser), UserResponseDTO.class);
     }
 
