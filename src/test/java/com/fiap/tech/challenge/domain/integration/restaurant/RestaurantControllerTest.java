@@ -9,6 +9,7 @@ import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse404;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
+import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
 import com.fiap.tech.challenge.global.component.HttpBodyComponent;
@@ -174,8 +175,8 @@ class RestaurantControllerTest {
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
-        Assertions.assertEquals(1, responseObject.getList().size());
-        Assertions.assertEquals(1, responseObject.getTotalElements());
+        Assertions.assertEquals(3, responseObject.getList().size());
+        Assertions.assertEquals(3, responseObject.getTotalElements());
         Assertions.assertEquals(restaurantType, responseObject.getList().stream().toList().get(NumberUtils.INTEGER_ZERO).getType());
     }
 
@@ -190,6 +191,17 @@ class RestaurantControllerTest {
         Assertions.assertEquals(HttpStatus.OK.value(), responseObject.getStatus());
         Assertions.assertTrue(responseObject.isSuccess());
         Assertions.assertEquals(EXISTING_RESTAURANT_HASH_ID, responseObject.getItem().getHashId());
+    }
+
+    @DisplayName(value = "Teste de sucesso - Deletar restaurante")
+    @Test
+    public void deleteUserSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerWithOneRestaurantBearerToken();
+        final String EXISTING_RESTAURANT_HASH_ID = "65cd4as415f15d4fas5155ds54sa65f4";
+        ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/restaurants/" + EXISTING_RESTAURANT_HASH_ID, HttpMethod.DELETE, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        NoPayloadBaseSuccessResponse200<?> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertNull(responseObject);
     }
 
     @DisplayName(value = "Teste de falha - Deletar um restaurante com um usuário não autenticado")
