@@ -156,15 +156,15 @@ public class UserControllerTest {
         Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
     }
 
-    @DisplayName(value = "Teste de falha - Atualizar tipo para dono estando autenticado como cliente")
+    @DisplayName(value = "Teste de falha - Atualizar tipo de usuário dono para outro tipo possuindo restaurantes associados")
     @Test
-    public void updateUserOwnerWithoutBeingAuthenticatedFailure() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
-        UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOOwner", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
+    public void updateUserOwnerToOtherTypeWithRestaurantAssociatedFailure() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        UserPutRequestDTO userPutRequestDTO = JsonUtil.objectFromJson("userPutRequestDTOClient", PATH_RESOURCE_USER, UserPutRequestDTO.class, DatePatternEnum.DATE_FORMAT_mm_dd_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/users", HttpMethod.PUT, new HttpEntity<>(userPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
-        BaseErrorResponse403 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
-        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseEntity.getStatusCode().value());
-        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseObject.getStatus());
+        BaseErrorResponse409 responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {});
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.CONFLICT.value(), responseObject.getStatus());
         Assertions.assertFalse(responseObject.isSuccess());
         Assertions.assertTrue(ValidationUtil.isNotEmpty(responseObject.getMessages()));
     }
