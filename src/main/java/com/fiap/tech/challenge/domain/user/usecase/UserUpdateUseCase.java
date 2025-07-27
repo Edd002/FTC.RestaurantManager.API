@@ -13,7 +13,10 @@ public final class UserUpdateUseCase {
     private final User user;
 
     public UserUpdateUseCase(@NonNull User loggedUser, @NonNull UserType userType, @NonNull City city, @NonNull UserPutRequestDTO userPutRequestDTO) {
-        if (!loggedUser.getRestaurantUsers().isEmpty() && (DefaultUserTypeEnum.isTypeOwner(loggedUser.getType().getName()) && !DefaultUserTypeEnum.isTypeOwner(userPutRequestDTO.getType()))) {
+        boolean hasRestaurantUserAssociation = !loggedUser.getRestaurantUsers().isEmpty();
+        boolean isOwner = DefaultUserTypeEnum.isTypeOwner(loggedUser.getType().getName());
+        boolean hasNewUserTypeForOwner = !DefaultUserTypeEnum.isTypeOwner(userPutRequestDTO.getType());
+        if (hasRestaurantUserAssociation && (isOwner && hasNewUserTypeForOwner)) {
             throw new EntityCannotBeUpdatedException("O usuário é um dono de restaurante com restaurantes associados e por isso não pode ter seu tipo alterado.");
         }
         this.user = rebuildUser(loggedUser, userType, city, userPutRequestDTO);
