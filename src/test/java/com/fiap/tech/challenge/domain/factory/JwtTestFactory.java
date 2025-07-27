@@ -1,12 +1,10 @@
 package com.fiap.tech.challenge.domain.factory;
 
+import static org.mockito.Mockito.mock;
+
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
 import com.fiap.tech.challenge.domain.user.entity.User;
-import org.mockito.Mockito;
-
 import java.util.Date;
-
-import static org.mockito.Mockito.mock;
 
 public class JwtTestFactory {
 

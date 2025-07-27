@@ -1,26 +1,23 @@
 package com.fiap.tech.challenge.domain.unit.restaurant;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.fiap.tech.challenge.domain.address.dto.AddressPutRequestDTO;
-import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.factory.RestaurantTestFactory;
-import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPutRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
+import java.util.Calendar;
+import java.util.Date;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.Calendar;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class RestaurantUpdateUseCaseTest {
 
@@ -31,8 +28,6 @@ public class RestaurantUpdateUseCaseTest {
 
     @Mock
     private City city;
-
-    private final Long id = 1L;
 
     AutoCloseable openMocks;
 

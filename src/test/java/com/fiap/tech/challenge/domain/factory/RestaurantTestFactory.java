@@ -1,17 +1,22 @@
 package com.fiap.tech.challenge.domain.factory;
 
+import static org.mockito.Mockito.mock;
+
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
+import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPostRequestDTO;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
+import com.fiap.tech.challenge.global.util.JsonUtil;
+import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.mockito.Mockito.mock;
-
 public class RestaurantTestFactory {
+
+    private static final String PATH_RESOURCE_USER = "/mock/restaurant/restaurant.json";
 
     public static Menu loadEmptyMenu() {
         return new Menu();
@@ -30,6 +35,15 @@ public class RestaurantTestFactory {
         );
     }
 
+    public static RestaurantPostRequestDTO loadValidPostRequestDTO() {
+        return JsonUtil.objectFromJson(
+                "restaurantPostRequestDTO",
+                PATH_RESOURCE_USER,
+                RestaurantPostRequestDTO.class,
+                DatePatternEnum.DATE_FORMAT_HH_mm.getValue()
+        );
+    }
+
     public static Restaurant loadEntityRestaurant() {
         var name = "Old Restaurant";
         var type = RestaurantTypeEnum.QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD;
@@ -41,9 +55,7 @@ public class RestaurantTestFactory {
         Date dinnerOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
         Date dinnerClose = getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
 
-        Restaurant restaurant = new Restaurant(name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, loadEmptyMenu(), loadDefaultAddress());
-
-        return restaurant;
+        return new Restaurant(name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, loadEmptyMenu(), loadDefaultAddress());
     }
 
     public static Date getDateWithTime(int year, int month, int day, int hour, int minute) {

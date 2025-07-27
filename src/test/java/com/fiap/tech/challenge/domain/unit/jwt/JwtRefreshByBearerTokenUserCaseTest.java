@@ -1,20 +1,14 @@
 package com.fiap.tech.challenge.domain.unit.jwt;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fiap.tech.challenge.domain.factory.JwtTestFactory;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
 import com.fiap.tech.challenge.domain.jwt.usecase.JwtRefreshByBearerTokenUserCase;
 import com.fiap.tech.challenge.global.exception.InvalidBearerTokenHttpException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JwtRefreshByBearerTokenUserCaseTest {
 
