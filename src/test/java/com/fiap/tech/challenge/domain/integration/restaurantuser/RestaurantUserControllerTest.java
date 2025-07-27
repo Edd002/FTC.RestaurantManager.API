@@ -5,6 +5,7 @@ import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserGetFilter;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostRequestDTO;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
+import com.fiap.tech.challenge.global.adapter.TimeDeserializerTypeAdapter;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -85,7 +86,7 @@ public class RestaurantUserControllerTest {
         RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
         RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_RESTAURANT_USER, "${RESTAURANT_HASH_ID}", restaurantResponseDTO.getHashId(), "restaurantUserRequestDTO", RestaurantUserPostRequestDTO.class);
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users", HttpMethod.POST, new HttpEntity<>(restaurantUserPostRequestDTO, clientHeaders), new ParameterizedTypeReference<>() {});
-        BaseSuccessResponse201<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        BaseSuccessResponse201<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
         assertNotNull(responseObject);
         assertTrue(responseObject.isSuccess());
         assertEquals(HttpStatus.CREATED.value(), responseObject.getStatus());
@@ -108,7 +109,7 @@ public class RestaurantUserControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BasePageableSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        BasePageableSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
@@ -143,7 +144,7 @@ public class RestaurantUserControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BasePageableSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        BasePageableSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
@@ -171,7 +172,7 @@ public class RestaurantUserControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdRestaurantUserDb = "8d6ab84ca2af9fccd4e4048694176ebf";
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users/{hashId}", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {}, hashIdRestaurantUserDb);
-        BaseSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {});
+        BaseSuccessResponse200<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
