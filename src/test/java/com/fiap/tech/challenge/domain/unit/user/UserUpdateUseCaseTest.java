@@ -71,13 +71,13 @@ public class UserUpdateUseCaseTest {
 
     @Test
     @DisplayName("Teste de falha - Deve lançar exceção ao tentar atualizar um usuário dono de restaurante para outro tipo quando ele tem restaurantes associados")
-    void shouldNotUpdateClientUserToOwner(){
+    void shouldNotUpdateOwnerUserToClient(){
         userType = UserTypeFactory.loadEntityUserTypeOwner();
         userPutRequestDTO = UserFactory.loadInvalidOwnerToClientUserPutRequestDTO();
         when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeOwner());
         when(loggedUser.getRestaurantUsers()).thenReturn(List.of(mock(RestaurantUser.class)));
 
-        var exceptionMessage = assertThrows(EntityCannotBeUpdatedException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO));
+        EntityCannotBeUpdatedException exceptionMessage = assertThrows(EntityCannotBeUpdatedException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO));
 
         verify(loggedUser, times(0)).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
         assertEquals("O usuário é um dono de restaurante com restaurantes associados e por isso não pode ter seu tipo alterado.", exceptionMessage.getMessage());
