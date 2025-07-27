@@ -24,8 +24,6 @@ public final class UserUpdateUseCase {
                 userPutRequestDTO.getName(),
                 userPutRequestDTO.getEmail(),
                 userPutRequestDTO.getLogin(),
-                passwordCryptoKey,
-                loggedUser.getPassword(),
                 userType,
                 loggedUser.getAddress().rebuild(
                         userPutRequestDTO.getAddress().getDescription(),

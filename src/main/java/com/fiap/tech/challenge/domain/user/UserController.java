@@ -55,7 +55,7 @@ public class UserController {
         return new BaseSuccessResponse201<>(userService.create(userPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar usuário", description = "Atualizar usuário.")
+    @Operation(method = "PUT", summary = "Atualizar usuário logado", description = "Atualizar usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
@@ -63,7 +63,7 @@ public class UserController {
         return new BaseSuccessResponse200<>(userService.update(userPutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar senha do usuário", description = "Atualizar senha do usuário.")
+    @Operation(method = "PATCH", summary = "Atualizar senha do usuário logado", description = "Atualizar senha do usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PatchMapping(value = "/change-password")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
@@ -80,7 +80,7 @@ public class UserController {
         return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar usuário", description = "Buscar usuário.")
+    @Operation(method = "GET", summary = "Buscar usuário logado", description = "Buscar usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find() {
@@ -88,7 +88,7 @@ public class UserController {
         return new BaseSuccessResponse200<>(userService.find()).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir usuário", description = "Excluir usuário.")
+    @Operation(method = "DELETE", summary = "Excluir usuário logado", description = "Excluir usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete() {
