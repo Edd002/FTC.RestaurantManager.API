@@ -72,4 +72,12 @@ public class UserFactory {
                 UserPutRequestDTO.class
         );
     }
+
+    public static UserPutRequestDTO loadInvalidOwnerToClientUserPutRequestDTO() {
+        return JsonUtil.objectFromJson(
+                "userPutRequestDTOOwnerToOtherType",
+                PATH_RESOURCE_USER,
+                UserPutRequestDTO.class
+        );
+    }
 }

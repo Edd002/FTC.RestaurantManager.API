@@ -4,11 +4,12 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.factory.UserFactory;
 import com.fiap.tech.challenge.domain.factory.UserTypeFactory;
+import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.usecase.UserUpdateUseCase;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
-import com.fiap.tech.challenge.global.exception.AuthorizationException;
+import com.fiap.tech.challenge.global.exception.EntityCannotBeUpdatedException;
 import com.fiap.tech.challenge.global.util.CryptoUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -27,15 +31,18 @@ public class UserUpdateUseCaseTest {
 
     @Mock
     private User loggedUser;
+
     @Mock
+
     private City city;
+
     @Mock
     private Address address;
 
     private UserType userType;
     private UserPutRequestDTO userPutRequestDTO;
 
-    AutoCloseable openMocks;
+    private AutoCloseable openMocks;
 
     @BeforeEach
     void setup(){
@@ -63,14 +70,16 @@ public class UserUpdateUseCaseTest {
     }
 
     @Test
-    @DisplayName("Teste de falha - Deve lançar exceção ao tentar atualizar um usuário do tipo cliente para dono")
+    @DisplayName("Teste de falha - Deve lançar exceção ao tentar atualizar um usuário dono de restaurante para outro tipo quando ele tem restaurantes associados")
     void shouldNotUpdateClientUserToOwner(){
-        userType = UserTypeFactory.loadEntityUserTypeClient();
-        userPutRequestDTO = UserFactory.loadValidOwnerUserPutRequestDTO();
-        when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeClient());
+        userType = UserTypeFactory.loadEntityUserTypeOwner();
+        userPutRequestDTO = UserFactory.loadInvalidOwnerToClientUserPutRequestDTO();
+        when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeOwner());
+        when(loggedUser.getRestaurantUsers()).thenReturn(List.of(mock(RestaurantUser.class)));
 
-        assertThrows(AuthorizationException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO));
+        var exceptionMessage = assertThrows(EntityCannotBeUpdatedException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO));
 
         verify(loggedUser, times(0)).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
+        assertEquals("O usuário é um dono de restaurante com restaurantes associados e por isso não pode ter seu tipo alterado.", exceptionMessage.getMessage());
     }
 }
