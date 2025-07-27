@@ -1,9 +1,5 @@
 package com.fiap.tech.challenge.domain.unit.user;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.factory.UserFactory;
@@ -20,6 +16,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class UserUpdateUseCaseTest {
 
@@ -59,7 +59,7 @@ public class UserUpdateUseCaseTest {
 
         new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO, cryptoKey);
 
-        verify(loggedUser).rebuild(anyString(), anyString(), anyString(), anyString(), anyString(), any(UserType.class), any());
+        verify(loggedUser).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
     }
 
     @Test
@@ -71,8 +71,6 @@ public class UserUpdateUseCaseTest {
 
         assertThrows(AuthorizationException.class, () -> new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO, cryptoKey));
 
-        verify(loggedUser, times(0)).rebuild(anyString(), anyString(), anyString(), anyString(), anyString(), any(UserType.class), any());
+        verify(loggedUser, times(0)).rebuild(anyString(), anyString(), anyString(), any(UserType.class), any());
     }
-
-
 }
