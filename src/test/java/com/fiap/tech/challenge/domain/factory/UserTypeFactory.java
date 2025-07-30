@@ -35,4 +35,8 @@ public class UserTypeFactory {
     public static UserType loadEntityUserTypeOther(){
         return new UserType("OTHER");
     }
+
+    public static UserType loadEntityUserTypeAdmin(){
+        return new UserType("ADMIN");
+    }
 }
