@@ -16,4 +16,4 @@ CREATE TABLE public.t_user_type
 CREATE SEQUENCE public.sq_user_type START WITH 1 INCREMENT BY 1;
 
 CREATE UNIQUE INDEX T_USER_TYPE__HASH_ID_UK ON public.t_user_type (hash_id);
-CREATE UNIQUE INDEX T_USER_TYPE__NAME_UK ON public.t_user_type (name);
+CREATE UNIQUE INDEX T_USER_TYPE__NAME_UK ON public.t_user_type (name, deleted) WHERE deleted IS NULL OR deleted = false;

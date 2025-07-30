@@ -6,12 +6,12 @@ import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse409;
 import java.io.Serial;
 import java.util.List;
 
-public class EntityCannotBeDeletedException extends ApiException {
+public class EntityCannotBeUpdatedException extends ApiException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public EntityCannotBeDeletedException(String message) {
+    public EntityCannotBeUpdatedException(String message) {
         super(message);
     }
 

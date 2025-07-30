@@ -1,41 +1,42 @@
 package com.fiap.tech.challenge.domain.unit.restaurantuser;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
+import com.fiap.tech.challenge.domain.factory.RestaurantTestFactory;
+import com.fiap.tech.challenge.domain.factory.UserTestFactory;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCreateUseCase;
-import com.fiap.tech.challenge.domain.user.entity.User;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
+import static com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum.QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RestaurantUserCreateUseCaseTest {
-    @Mock
-    private Restaurant restaurant;
-    @Mock
-    private User loggedUser;
 
-    AutoCloseable openMocks;
+    @DisplayName("Teste de sucesso - Deve conseguir criar uma associação entre usuário e restaurante com sucesso")
+    @Test
+    void shouldCreateRestaurantUserUseCaseSuccess() {
+        RestaurantUserCreateUseCase restaurantUserCreateUseCase = new RestaurantUserCreateUseCase(UserTestFactory.loadEntityOwner(), RestaurantTestFactory.loadEntityRestaurant());
 
-    @BeforeEach
-    void setup(){
-        openMocks = MockitoAnnotations.openMocks(this);
-    }
+        RestaurantUser restaurantUser = restaurantUserCreateUseCase.getBuiltedURestaurantUser();
 
-    @AfterEach
-    void teardown() throws Exception{
-        openMocks.close();
+        assertThat(restaurantUser).isNotNull();
+        assertThat(restaurantUser.getId()).isNull();
+        assertThat(restaurantUser.getUser().getName()).isEqualTo("Manu");
+        assertThat(restaurantUser.getUser().getEmail()).isEqualTo("manu@email.com");
+        assertThat(restaurantUser.getRestaurant().getName()).isEqualTo("Old Restaurant");
+        assertThat(restaurantUser.getRestaurant().getType()).isEqualTo(QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD);
     }
 
     @Test
-    @DisplayName("Teste de sucesso - Deve criar o usuário do restaurante")
-    void shouldCreateRestaurantUser(){
-        RestaurantUser restaurantUser = new RestaurantUserCreateUseCase(loggedUser, restaurant).getBuiltedURestaurantUser();
+    @DisplayName("Teste de falha - Deve lançar NullPointerException se Usuário for nulo")
+    void shouldThrowExceptionIfUserIsNull() {
+        assertThrows(NullPointerException.class, () -> new RestaurantUserCreateUseCase(null, RestaurantTestFactory.loadEntityRestaurant()));
+    }
 
-        assertNotNull(restaurantUser);
+    @Test
+    @DisplayName("Teste de falha - Deve lançar NullPointerException se Restaurante for nulo")
+    void shouldThrowExceptionIfRestaurantIsNull() {
+        assertThrows(NullPointerException.class, () -> new RestaurantUserCreateUseCase(UserTestFactory.loadEntityOwner(), null));
     }
 }

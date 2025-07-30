@@ -5,27 +5,28 @@ import com.fiap.tech.challenge.domain.user.dto.UserPutRequestDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
-import com.fiap.tech.challenge.global.exception.AuthorizationException;
+import com.fiap.tech.challenge.global.exception.EntityCannotBeUpdatedException;
 import lombok.NonNull;
 
 public final class UserUpdateUseCase {
 
     private final User user;
 
-    public UserUpdateUseCase(@NonNull User loggedUser, @NonNull UserType userType, @NonNull City city, @NonNull UserPutRequestDTO userPutRequestDTO, @NonNull String passwordCryptoKey) {
-        if (!DefaultUserTypeEnum.isUserOwner(loggedUser) && DefaultUserTypeEnum.isTypeOwner(userPutRequestDTO.getType())) {
-            throw new AuthorizationException("O usuário não tem permissão para alterar o seu tipo para dono de restaurante.");
+    public UserUpdateUseCase(@NonNull User loggedUser, @NonNull UserType userType, @NonNull City city, @NonNull UserPutRequestDTO userPutRequestDTO) {
+        boolean hasRestaurantUserAssociation = !loggedUser.getRestaurantUsers().isEmpty();
+        boolean isOwner = DefaultUserTypeEnum.isTypeOwner(loggedUser.getType().getName());
+        boolean hasNewUserTypeForOwner = !DefaultUserTypeEnum.isTypeOwner(userPutRequestDTO.getType());
+        if (hasRestaurantUserAssociation && (isOwner && hasNewUserTypeForOwner)) {
+            throw new EntityCannotBeUpdatedException("O usuário é um dono de restaurante com restaurantes associados e por isso não pode ter seu tipo alterado.");
         }
-        this.user = rebuildUser(loggedUser, userType, city, userPutRequestDTO, passwordCryptoKey);
+        this.user = rebuildUser(loggedUser, userType, city, userPutRequestDTO);
     }
 
-    private User rebuildUser(User loggedUser, UserType userType, City city, UserPutRequestDTO userPutRequestDTO, String passwordCryptoKey) {
+    private User rebuildUser(User loggedUser, UserType userType, City city, UserPutRequestDTO userPutRequestDTO) {
         return loggedUser.rebuild(
                 userPutRequestDTO.getName(),
                 userPutRequestDTO.getEmail(),
                 userPutRequestDTO.getLogin(),
-                passwordCryptoKey,
-                loggedUser.getPassword(),
                 userType,
                 loggedUser.getAddress().rebuild(
                         userPutRequestDTO.getAddress().getDescription(),

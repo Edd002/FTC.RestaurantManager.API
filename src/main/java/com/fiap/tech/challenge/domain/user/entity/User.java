@@ -44,11 +44,10 @@ public class User extends Audit implements Serializable {
         this.setAddress(address);
     }
 
-    public User rebuild(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull String passwordCryptoKey, @NonNull String password, @NonNull UserType type, @NonNull Address address) {
+    public User rebuild(@NonNull String name, @NonNull String email, @NonNull String login, @NonNull UserType type, @NonNull Address address) {
         this.setName(name);
         this.setEmail(email);
         this.setLogin(login);
-        this.setEncryptedPassword(passwordCryptoKey, password);
         this.setType(type);
         this.setAddress(address);
         return this;

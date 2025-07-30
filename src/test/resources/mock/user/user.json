@@ -106,6 +106,21 @@
       "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
     }
   },
+  "userPutRequestDTOOwnerToOtherType": {
+    "name": "Updated Owner to Client",
+    "email": "updatedownertype@email.com",
+    "login": "updatedowner",
+    "type": "CLIENT",
+    "address": {
+      "description": "Updated Description 00",
+      "number": "00",
+      "complement": "Updated Complement 00",
+      "neighborhood": "Updated Neighborhood",
+      "cep": "00000-000",
+      "postalCode": "0000-0000",
+      "hashIdCity": "2d366493bd7e491da4e1ec9032ee4bc8"
+    }
+  },
   "userPutRequestDTOClient": {
     "name": "Updated Client",
     "email": "updatedclient@email.com",
