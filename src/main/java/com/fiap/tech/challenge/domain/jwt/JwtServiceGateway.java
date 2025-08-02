@@ -8,7 +8,7 @@ import com.fiap.tech.challenge.domain.jwt.usecase.JwtRefreshByBearerTokenUserCas
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetails;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
 import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.JwtNotFoundHttpException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class JwtService extends BaseService<IJwtRepository, Jwt> {
+public class JwtServiceGateway extends BaseServiceGateway<IJwtRepository, Jwt> {
 
     @Value("${security.jwt.expiration-in-milliseconds}")
     private int millisecondsToExpireJwt;
@@ -38,7 +38,7 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public JwtService(IJwtRepository jwtRepository, JwtBuilder jwtBuilder, BundleAuthUserDetailsService bundleAuthUserDetailsService, AuthenticationManager authenticationManager, ModelMapper modelMapperPresenter) {
+    public JwtServiceGateway(IJwtRepository jwtRepository, JwtBuilder jwtBuilder, BundleAuthUserDetailsService bundleAuthUserDetailsService, AuthenticationManager authenticationManager, ModelMapper modelMapperPresenter) {
         this.jwtRepository = jwtRepository;
         this.jwtBuilder = jwtBuilder;
         this.bundleAuthUserDetailsService = bundleAuthUserDetailsService;

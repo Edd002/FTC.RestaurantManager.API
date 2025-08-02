@@ -1,11 +1,11 @@
 package com.fiap.tech.challenge.domain.state;
 
 import com.fiap.tech.challenge.domain.state.entity.State;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StateService extends BaseService<IStateRepository, State> {
+public class StateServiceGateway extends BaseServiceGateway<IStateRepository, State> {
 
     @Override
     public State findByHashId(String hashId) {

@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.restaurant;
 
-import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.city.CityServiceGateway;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantGetFilter;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPostRequestDTO;
@@ -10,10 +10,10 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurant.specification.RestaurantSpecificationBuilder;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantCreateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.usecase.RestaurantUpdateUseCase;
-import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserService;
+import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -29,33 +29,33 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class RestaurantService extends BaseService<IRestaurantRepository, Restaurant> {
+public class RestaurantServiceGateway extends BaseServiceGateway<IRestaurantRepository, Restaurant> {
 
-    private final CityService cityService;
-    private final RestaurantUserService restaurantUserService;
+    private final CityServiceGateway cityServiceGateway;
+    private final RestaurantUserServiceGateway restaurantUserServiceGateway;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public RestaurantService(CityService cityService, @Lazy RestaurantUserService restaurantUserService, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
-        this.cityService = cityService;
-        this.restaurantUserService = restaurantUserService;
+    public RestaurantServiceGateway(CityServiceGateway cityServiceGateway, @Lazy RestaurantUserServiceGateway restaurantUserServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+        this.cityServiceGateway = cityServiceGateway;
+        this.restaurantUserServiceGateway = restaurantUserServiceGateway;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
     public RestaurantResponseDTO create(RestaurantPostRequestDTO restaurantPostRequestDTO) {
-        City city = cityService.findByHashId(restaurantPostRequestDTO.getAddress().getHashIdCity());
+        City city = cityServiceGateway.findByHashId(restaurantPostRequestDTO.getAddress().getHashIdCity());
         Restaurant newSavedRestaurant = save(new RestaurantCreateUseCase(city, restaurantPostRequestDTO).getBuiltedRestaurant());
-        restaurantUserService.save(new RestaurantUser(newSavedRestaurant, AuthUserContextHolder.getAuthUser()));
+        restaurantUserServiceGateway.save(new RestaurantUser(newSavedRestaurant, AuthUserContextHolder.getAuthUser()));
         return modelMapperPresenter.map(newSavedRestaurant, RestaurantResponseDTO.class);
     }
 
     @Transactional
     public RestaurantResponseDTO update(String hashId, RestaurantPutRequestDTO restaurantPutRequestDTO) {
-        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
-        City city = cityService.findByHashId(restaurantPutRequestDTO.getAddress().getHashIdCity());
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
+        City city = cityServiceGateway.findByHashId(restaurantPutRequestDTO.getAddress().getHashIdCity());
         Restaurant updatedRestaurant = new RestaurantUpdateUseCase(existingRestaurant, city, restaurantPutRequestDTO).getRebuiltedRestaurant();
         return modelMapperPresenter.map(save(updatedRestaurant), RestaurantResponseDTO.class);
     }
@@ -77,7 +77,7 @@ public class RestaurantService extends BaseService<IRestaurantRepository, Restau
 
     @Transactional
     public void delete(String hashId) {
-        Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantAndUser(findByHashId(hashId), AuthUserContextHolder.getAuthUser()).getRestaurant();
         delete(existingRestaurant);
     }
 

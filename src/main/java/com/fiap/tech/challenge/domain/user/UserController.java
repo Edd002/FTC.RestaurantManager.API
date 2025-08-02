@@ -40,11 +40,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Usuários - Endpoints de Usuários")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceGateway userServiceGateway;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceGateway userServiceGateway) {
+        this.userServiceGateway = userServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Criar usuário", description = "Criar usuário.")
@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserResponseDTO>> create(@RequestBody @Valid UserPostRequestDTO userPostRequestDTO) {
         log.info("Criando usuário...");
-        return new BaseSuccessResponse201<>(userService.create(userPostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(userServiceGateway.create(userPostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar usuário logado", description = "Atualizar usuário logado.")
@@ -60,7 +60,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando usuário...");
-        return new BaseSuccessResponse200<>(userService.update(userPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(userServiceGateway.update(userPutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PATCH", summary = "Atualizar senha do usuário logado", description = "Atualizar senha do usuário logado.")
@@ -68,7 +68,7 @@ public class UserController {
     @PatchMapping(value = "/change-password")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
         log.info("Atualizando senha do usuário...");
-        userService.updatePassword(userUpdatePasswordPatchRequestDTO);
+        userServiceGateway.updatePassword(userUpdatePasswordPatchRequestDTO);
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 
@@ -77,7 +77,7 @@ public class UserController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando usuários por filtro...");
-        return new BasePageableSuccessResponse200<>(userService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(userServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar usuário logado", description = "Buscar usuário logado.")
@@ -85,7 +85,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find() {
         log.info("Buscando usuário...");
-        return new BaseSuccessResponse200<>(userService.find()).buildResponse();
+        return new BaseSuccessResponse200<>(userServiceGateway.find()).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir usuário logado", description = "Excluir usuário logado.")
@@ -93,7 +93,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete() {
         log.info("Excluindo usuário...");
-        userService.delete();
+        userServiceGateway.delete();
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 }

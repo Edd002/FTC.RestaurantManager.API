@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseService<R extends IBaseRepository<E>, E> {
+public abstract class BaseServiceGateway<R extends IBaseRepository<E>, E> {
 
     @Autowired
     private R repository;

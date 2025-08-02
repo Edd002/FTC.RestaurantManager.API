@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.user.authuser;
 
-import com.fiap.tech.challenge.domain.user.UserService;
+import com.fiap.tech.challenge.domain.user.UserServiceGateway;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.exception.JwtNotFoundHttpException;
 import org.apache.logging.log4j.util.Strings;
@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class BundleAuthUserDetailsService implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserServiceGateway userServiceGateway;
 
     @Autowired
-    public BundleAuthUserDetailsService(@Lazy UserService userService) {
-        this.userService = userService;
+    public BundleAuthUserDetailsService(@Lazy UserServiceGateway userServiceGateway) {
+        this.userServiceGateway = userServiceGateway;
     }
 
     @Override
     public UserDetails loadUserByUsername(String login) {
         try {
-            return new BundleAuthUserDetails(userService.findByLogin(login));
+            return new BundleAuthUserDetails(userServiceGateway.findByLogin(login));
         } catch (JwtNotFoundHttpException | EntityNotFoundException exception) {
             throw new UsernameNotFoundException(String.format("O usuário com login %s não foi encontrado.", login));
         }

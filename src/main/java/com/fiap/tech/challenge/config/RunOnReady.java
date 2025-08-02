@@ -1,13 +1,13 @@
 package com.fiap.tech.challenge.config;
 
-import com.fiap.tech.challenge.domain.city.CityService;
+import com.fiap.tech.challenge.domain.city.CityServiceGateway;
 import com.fiap.tech.challenge.domain.city.entity.City;
-import com.fiap.tech.challenge.domain.loadtable.LoadTableService;
-import com.fiap.tech.challenge.domain.state.StateService;
+import com.fiap.tech.challenge.domain.loadtable.LoadTableServiceGateway;
+import com.fiap.tech.challenge.domain.state.StateServiceGateway;
 import com.fiap.tech.challenge.domain.state.entity.State;
-import com.fiap.tech.challenge.domain.user.UserService;
+import com.fiap.tech.challenge.domain.user.UserServiceGateway;
 import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.domain.usertype.UserTypeService;
+import com.fiap.tech.challenge.domain.usertype.UserTypeServiceGateway;
 import com.fiap.tech.challenge.domain.usertype.entity.UserType;
 import com.fiap.tech.challenge.global.util.JsonUtil;
 import com.google.gson.reflect.TypeToken;
@@ -33,19 +33,19 @@ public class RunOnReady {
     private static final String PATH_RESOURCE_USER_TYPE = "/runready/user_type.json";
     private static final String PATH_RESOURCE_USER = "/runready/user.json";
 
-    private final LoadTableService loadTableService;
-    private final StateService stateService;
-    private final CityService cityService;
-    private final UserTypeService userTypeService;
-    private final UserService userService;
+    private final LoadTableServiceGateway loadTableServiceGateway;
+    private final StateServiceGateway stateServiceGateway;
+    private final CityServiceGateway cityServiceGateway;
+    private final UserTypeServiceGateway userTypeServiceGateway;
+    private final UserServiceGateway userServiceGateway;
 
     @Autowired
-    public RunOnReady(LoadTableService loadTableService, StateService stateService, CityService cityService, UserTypeService userTypeService, UserService userService) {
-        this.loadTableService = loadTableService;
-        this.stateService = stateService;
-        this.cityService = cityService;
-        this.userTypeService = userTypeService;
-        this.userService = userService;
+    public RunOnReady(LoadTableServiceGateway loadTableServiceGateway, StateServiceGateway stateServiceGateway, CityServiceGateway cityServiceGateway, UserTypeServiceGateway userTypeServiceGateway, UserServiceGateway userServiceGateway) {
+        this.loadTableServiceGateway = loadTableServiceGateway;
+        this.stateServiceGateway = stateServiceGateway;
+        this.cityServiceGateway = cityServiceGateway;
+        this.userTypeServiceGateway = userTypeServiceGateway;
+        this.userServiceGateway = userServiceGateway;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -58,27 +58,27 @@ public class RunOnReady {
         }.getType());
         List<User> userList = JsonUtil.objectListFromJson("user", PATH_RESOURCE_USER, new TypeToken<ArrayList<User>>() {
         }.getType());
-        if ((loadTableService.isEntityLoadEnabled(State.class.getSimpleName()))) {
+        if ((loadTableServiceGateway.isEntityLoadEnabled(State.class.getSimpleName()))) {
             stateList.forEach(this::createState);
-            loadTableService.create(State.class.getSimpleName());
+            loadTableServiceGateway.create(State.class.getSimpleName());
         }
-        if ((loadTableService.isEntityLoadEnabled(City.class.getSimpleName()))) {
+        if ((loadTableServiceGateway.isEntityLoadEnabled(City.class.getSimpleName()))) {
             cityList.forEach(this::createCity);
-            loadTableService.create(City.class.getSimpleName());
+            loadTableServiceGateway.create(City.class.getSimpleName());
         }
-        if ((loadTableService.isEntityLoadEnabled(UserType.class.getSimpleName()))) {
+        if ((loadTableServiceGateway.isEntityLoadEnabled(UserType.class.getSimpleName()))) {
             userTypeList.forEach(this::createUserType);
-            loadTableService.create(UserType.class.getSimpleName());
+            loadTableServiceGateway.create(UserType.class.getSimpleName());
         }
-        if ((loadTableService.isEntityLoadEnabled(User.class.getSimpleName()))) {
+        if ((loadTableServiceGateway.isEntityLoadEnabled(User.class.getSimpleName()))) {
             userList.forEach(this::createUser);
-            loadTableService.create(User.class.getSimpleName());
+            loadTableServiceGateway.create(User.class.getSimpleName());
         }
     }
 
     private void createState(State state) {
         try {
-            stateService.save(state);
+            stateServiceGateway.save(state);
         } catch (Exception exception) {
             log.severe(String.format("O estado de nome %s não pode ser cadastrado. Erro: %s", state.getName(), exception.getMessage()));
         }
@@ -86,7 +86,7 @@ public class RunOnReady {
 
     private void createCity(City city) {
         try {
-            cityService.save(city);
+            cityServiceGateway.save(city);
         } catch (Exception exception) {
             log.severe(String.format("A cidade de nome %s não pode ser cadastrada. Erro: %s", city.getName(), exception.getMessage()));
         }
@@ -94,7 +94,7 @@ public class RunOnReady {
 
     private void createUserType(UserType userType) {
         try {
-            userTypeService.save(userType);
+            userTypeServiceGateway.save(userType);
         } catch (Exception exception) {
             log.severe(String.format("O tipo de usuário de nome %s não pode ser cadastrado. Erro: %s", userType.getName(), exception.getMessage()));
         }
@@ -103,7 +103,7 @@ public class RunOnReady {
     private void createUser(User user) {
         try {
             user.setEncryptedPassword(cryptoKey, user.getPassword());
-            userService.save(user);
+            userServiceGateway.save(user);
         } catch (Exception exception) {
             log.severe(String.format("O usuário de nome %s não pode ser cadastrado. Erro: %s", user.getName(), exception.getMessage()));
         }

@@ -42,11 +42,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Usuários de Restaurante - Endpoints de Associação de Usuários com Restaurante")
 public class RestaurantUserController {
 
-    private final RestaurantUserService restaurantUserService;
+    private final RestaurantUserServiceGateway restaurantUserServiceGateway;
 
     @Autowired
-    public RestaurantUserController(RestaurantUserService restaurantUserService) {
-        this.restaurantUserService = restaurantUserService;
+    public RestaurantUserController(RestaurantUserServiceGateway restaurantUserServiceGateway) {
+        this.restaurantUserServiceGateway = restaurantUserServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Criar associação de usuário com restaurante", description = "Criar associação de usuário com restaurante.")
@@ -54,7 +54,7 @@ public class RestaurantUserController {
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantUserResponseDTO>> create(@RequestBody @Valid RestaurantUserPostRequestDTO restaurantUserPostRequestDTO) {
         log.info("Criando associação de usuário com restaurante...");
-        return new BaseSuccessResponse201<>(restaurantUserService.create(restaurantUserPostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(restaurantUserServiceGateway.create(restaurantUserPostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar associações de usuários com restaurantes por filtro", description = "Buscar associações de usuários com restaurantes por filtro.")
@@ -62,7 +62,7 @@ public class RestaurantUserController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<RestaurantUserResponseDTO>> find(@ParameterObject @Valid RestaurantUserGetFilter filter) {
         log.info("Buscando associações de usuários com restaurantes por filtro...");
-        return new BasePageableSuccessResponse200<>(restaurantUserService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(restaurantUserServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar associação de usuário com restaurante", description = "Buscar associação de usuário com restaurante.")
@@ -70,7 +70,7 @@ public class RestaurantUserController {
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantUserResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando associações de usuário com restaurante...");
-        return new BaseSuccessResponse200<>(restaurantUserService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(restaurantUserServiceGateway.find(hashId)).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir associação de usuário com restaurante", description = "Excluir associação de usuário com restaurante.")
@@ -78,7 +78,7 @@ public class RestaurantUserController {
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantUserResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo associação de usuário com restaurante...");
-        restaurantUserService.delete(hashId);
+        restaurantUserServiceGateway.delete(hashId);
         return new NoPayloadBaseSuccessResponse200<RestaurantUserResponseDTO>().buildResponseWithoutPayload();
     }
 }

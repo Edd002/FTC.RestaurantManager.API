@@ -9,7 +9,7 @@ import com.fiap.tech.challenge.domain.usertype.specification.UserTypeSpecificati
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCheckForDeleteUseCase;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCreateUseCase;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeUpdateUseCase;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -25,14 +25,14 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class UserTypeService extends BaseService<IUserTypeRepository, UserType> {
+public class UserTypeServiceGateway extends BaseServiceGateway<IUserTypeRepository, UserType> {
 
     private final IUserTypeRepository userTypeRepository;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public UserTypeService(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public UserTypeServiceGateway(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.userTypeRepository = userTypeRepository;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;

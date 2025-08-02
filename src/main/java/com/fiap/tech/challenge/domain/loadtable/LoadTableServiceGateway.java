@@ -3,19 +3,19 @@ package com.fiap.tech.challenge.domain.loadtable;
 import com.fiap.tech.challenge.domain.loadtable.entity.LoadTable;
 import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableCreateUseCase;
 import com.fiap.tech.challenge.domain.loadtable.usecase.LoadTableEntityLoadEnabledCase;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.exception.EntityNullException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoadTableService extends BaseService<ILoadTableRepository, LoadTable> {
+public class LoadTableServiceGateway extends BaseServiceGateway<ILoadTableRepository, LoadTable> {
 
     private final ILoadTableRepository loadTableRepository;
 
     @Autowired
-    public LoadTableService(ILoadTableRepository loadTableRepository) {
+    public LoadTableServiceGateway(ILoadTableRepository loadTableRepository) {
         this.loadTableRepository = loadTableRepository;
     }
 

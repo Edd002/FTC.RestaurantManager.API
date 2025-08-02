@@ -39,11 +39,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "JWT - Endpoints de JSON Web Token (JWT)")
 public class JwtController {
 
-    private final JwtService jwtService;
+    private final JwtServiceGateway jwtServiceGateway;
 
     @Autowired
-    public JwtController(JwtService jwtService) {
-        this.jwtService = jwtService;
+    public JwtController(JwtServiceGateway jwtServiceGateway) {
+        this.jwtServiceGateway = jwtServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Gerar um novo JWT", description = "Gerar um novo JWT.")
@@ -51,7 +51,7 @@ public class JwtController {
     @PostMapping("/generate")
     public ResponseEntity<BaseSuccessResponse201<JwtResponseDTO>> generate(@RequestBody @Valid JwtGeneratePostRequestDTO jwtGeneratePostRequestDTO) {
         log.info("Gerando JWT...");
-        return new BaseSuccessResponse201<>(jwtService.generate(jwtGeneratePostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(jwtServiceGateway.generate(jwtGeneratePostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Verificar se o JWT está válido", description = "Verificar se o JWT está válido.")
@@ -59,7 +59,7 @@ public class JwtController {
     @GetMapping("/validate")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<JwtResponseDTO>> validate(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
         log.info("Validando JWT...");
-        jwtService.validate(bearerToken);
+        jwtServiceGateway.validate(bearerToken);
         return new NoPayloadBaseSuccessResponse200<JwtResponseDTO>().buildResponseWithoutPayload();
     }
 
@@ -68,7 +68,7 @@ public class JwtController {
     @PostMapping("/invalidate")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<JwtResponseDTO>> invalidate(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
         log.info("Invalidando JWT...");
-        jwtService.invalidate(bearerToken);
+        jwtServiceGateway.invalidate(bearerToken);
         return new NoPayloadBaseSuccessResponse200<JwtResponseDTO>().buildResponseWithoutPayload();
     }
 }

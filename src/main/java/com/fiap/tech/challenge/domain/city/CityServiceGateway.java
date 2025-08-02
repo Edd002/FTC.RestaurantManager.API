@@ -4,7 +4,7 @@ import com.fiap.tech.challenge.domain.city.dto.CityGetFilter;
 import com.fiap.tech.challenge.domain.city.dto.CityResponseDTO;
 import com.fiap.tech.challenge.domain.city.entity.City;
 import com.fiap.tech.challenge.domain.city.specification.CitySpecificationBuilder;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class CityService extends BaseService<ICityRepository, City> {
+public class CityServiceGateway extends BaseServiceGateway<ICityRepository, City> {
 
     private final PageableBuilder pageableBuilder;
 
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public CityService(PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public CityServiceGateway(PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
