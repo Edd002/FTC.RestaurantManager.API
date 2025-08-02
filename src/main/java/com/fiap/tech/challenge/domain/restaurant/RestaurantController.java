@@ -43,11 +43,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Restaurantes - Endpoints de Restaurantes")
 public class RestaurantController {
 
-    private final RestaurantService restaurantService;
+    private final RestaurantServiceGateway restaurantServiceGateway;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService) {
-        this.restaurantService = restaurantService;
+    public RestaurantController(RestaurantServiceGateway restaurantServiceGateway) {
+        this.restaurantServiceGateway = restaurantServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Criar restaurante - Permissão necessária: [OWNER]", description = "Criar restaurante.")
@@ -55,7 +55,7 @@ public class RestaurantController {
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> create(@RequestBody @Valid RestaurantPostRequestDTO restaurantPostRequestDTO) {
         log.info("Criando restaurante...");
-        return new BaseSuccessResponse201<>(restaurantService.create(restaurantPostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(restaurantServiceGateway.create(restaurantPostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar restaurante - Permissão necessária: [OWNER]", description = "Atualizar restaurante.")
@@ -63,7 +63,7 @@ public class RestaurantController {
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid RestaurantPutRequestDTO restaurantPutRequestDTO) {
         log.info("Atualizando restaurante...");
-        return new BaseSuccessResponse200<>(restaurantService.update(hashId, restaurantPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(restaurantServiceGateway.update(hashId, restaurantPutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar restaurante por filtro", description = "Buscar restaurante por filtro.")
@@ -71,7 +71,7 @@ public class RestaurantController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<RestaurantResponseDTO>> find(@ParameterObject @Valid RestaurantGetFilter filter) {
         log.info("Buscando restaurantes por filtro...");
-        return new BasePageableSuccessResponse200<>(restaurantService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(restaurantServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar restaurante", description = "Buscar restaurante.")
@@ -79,7 +79,7 @@ public class RestaurantController {
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando restaurante...");
-        return new BaseSuccessResponse200<>(restaurantService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(restaurantServiceGateway.find(hashId)).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir restaurante - Permissão necessária: [OWNER]", description = "Excluir restaurante.")
@@ -87,7 +87,7 @@ public class RestaurantController {
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo restaurante...");
-        restaurantService.delete(hashId);
+        restaurantServiceGateway.delete(hashId);
         return new NoPayloadBaseSuccessResponse200<RestaurantResponseDTO>().buildResponseWithoutPayload();
     }
 }

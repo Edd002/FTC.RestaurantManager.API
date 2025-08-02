@@ -2,7 +2,7 @@ package com.fiap.tech.challenge.config.security.filter;
 
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
 import com.fiap.tech.challenge.domain.jwt.JwtClaims;
-import com.fiap.tech.challenge.domain.jwt.JwtService;
+import com.fiap.tech.challenge.domain.jwt.JwtServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
 import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
@@ -26,12 +26,12 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtBuilder jwtBuilder;
-    private final JwtService jwtService;
+    private final JwtServiceGateway jwtServiceGateway;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
-    public JwtFilter(JwtBuilder jwtBuilder, JwtService jwtService, BundleAuthUserDetailsService bundleAuthUserDetailsService) {
+    public JwtFilter(JwtBuilder jwtBuilder, JwtServiceGateway jwtServiceGateway, BundleAuthUserDetailsService bundleAuthUserDetailsService) {
         this.jwtBuilder = jwtBuilder;
-        this.jwtService = jwtService;
+        this.jwtServiceGateway = jwtServiceGateway;
         this.bundleAuthUserDetailsService = bundleAuthUserDetailsService;
     }
 
@@ -44,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain) throws IOException, ServletException {
         try {
             JwtClaims jwt = jwtBuilder.resolveBearerToken(httpServletRequest);
-            if (!jwtService.isJwtActiveByBearerToken(jwt.getBearerToken())) {
+            if (!jwtServiceGateway.isJwtActiveByBearerToken(jwt.getBearerToken())) {
                 httpServletRequest.setAttribute("jwtError", "Sessão encerrada ou expirada. O tempo de expiração da sessão é de 1 hora.");
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
@@ -52,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(jwt.getLogin()));
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             if (httpServletResponse.getStatus() != HttpStatus.UNAUTHORIZED.value() && (!ArrayUtils.contains(PathFilterEnum.getIgnoreResponseFilterPaths().stream().map(PathFilterEnum::getPath).toArray(), httpServletRequest.getServletPath()) && !isDeletingUser(httpServletRequest))) {
-                jwtService.refreshByBearerToken(jwt.getBearerToken());
+                jwtServiceGateway.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
         } catch (TokenValidationException tokenValidationException) {

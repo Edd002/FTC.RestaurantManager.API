@@ -40,11 +40,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Menus - Endpoints de Menus")
 public class MenuController {
 
-    private final MenuService menuService;
+    private final MenuServiceGateway menuServiceGateway;
 
     @Autowired
-    public MenuController(MenuService menuService) {
-        this.menuService = menuService;
+    public MenuController(MenuServiceGateway menuServiceGateway) {
+        this.menuServiceGateway = menuServiceGateway;
     }
 
     @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu - Permissão necessária: [OWNER]", description = "Criar ou atualizar lista de itens do menu.")
@@ -52,6 +52,6 @@ public class MenuController {
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> createOrUpdate(@RequestBody @Valid MenuBatchPutRequestDTO menuBatchPutRequestDTO) {
         log.info("Atualizando menu com lista de itens...");
-        return new BaseSuccessResponse200<>(menuService.createOrUpdate(menuBatchPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(menuServiceGateway.createOrUpdate(menuBatchPutRequestDTO)).buildResponse();
     }
 }

@@ -42,11 +42,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Cidades - Endpoints de Cidades")
 public class CityController {
 
-    private final CityService cityService;
+    private final CityServiceGateway cityServiceGateway;
 
     @Autowired
-    public CityController(CityService cityService) {
-        this.cityService = cityService;
+    public CityController(CityServiceGateway cityServiceGateway) {
+        this.cityServiceGateway = cityServiceGateway;
     }
 
     @Operation(method = "GET", summary = "Buscar cidade por filtro", description = "Buscar cidade por filtro.")
@@ -54,7 +54,7 @@ public class CityController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<CityResponseDTO>> find(@ParameterObject @Valid CityGetFilter filter) {
         log.info("Buscando cidades por filtro...");
-        return new BasePageableSuccessResponse200<>(cityService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(cityServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar cidade por hash id", description = "Buscar cidade por hash id.")
@@ -62,6 +62,6 @@ public class CityController {
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<CityResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando cidade por hash id...");
-        return new BaseSuccessResponse200<>(cityService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(cityServiceGateway.find(hashId)).buildResponse();
     }
 }

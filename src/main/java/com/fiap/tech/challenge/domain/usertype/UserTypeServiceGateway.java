@@ -9,7 +9,7 @@ import com.fiap.tech.challenge.domain.usertype.specification.UserTypeSpecificati
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCheckForDeleteUseCase;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeCreateUseCase;
 import com.fiap.tech.challenge.domain.usertype.usecase.UserTypeUpdateUseCase;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -25,30 +25,30 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class UserTypeService extends BaseService<IUserTypeRepository, UserType> {
+public class UserTypeServiceGateway extends BaseServiceGateway<IUserTypeRepository, UserType> {
 
     private final IUserTypeRepository userTypeRepository;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public UserTypeService(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserTypeServiceGateway(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.userTypeRepository = userTypeRepository;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
     public UserTypeResponseDTO create(UserTypePostRequestDTO userTypePostRequestDTO) {
         UserType newUserType = new UserTypeCreateUseCase(userTypePostRequestDTO).getBuiltedUserType();
-        return modelMapper.map(save(newUserType), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(save(newUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
     public UserTypeResponseDTO update(String hashId, UserTypePutRequestDTO userTypePutRequestDTO) {
         UserType existingUserType = findByHashId(hashId);
         UserType updatedUserType = new UserTypeUpdateUseCase(existingUserType, userTypePutRequestDTO).getRebuiltedUserType();
-        return modelMapper.map(save(updatedUserType), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(save(updatedUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
@@ -58,12 +58,12 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(userType -> modelMapper.map(userType, UserTypeResponseDTO.class));
+                .map(userType -> modelMapperPresenter.map(userType, UserTypeResponseDTO.class));
     }
 
     @Transactional
     public UserTypeResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(findByHashId(hashId), UserTypeResponseDTO.class);
     }
 
     @Transactional

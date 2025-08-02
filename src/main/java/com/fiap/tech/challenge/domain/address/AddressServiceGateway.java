@@ -1,11 +1,11 @@
 package com.fiap.tech.challenge.domain.address;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddressService extends BaseService<IAddressRepository, Address> {
+public class AddressServiceGateway extends BaseServiceGateway<IAddressRepository, Address> {
 
     @Override
     public Address findByHashId(String hashId) {

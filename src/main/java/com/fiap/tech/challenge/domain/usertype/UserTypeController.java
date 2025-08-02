@@ -43,11 +43,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Tipos de Usuário - Endpoints de Tipos de Usuário")
 public class UserTypeController {
 
-    private final UserTypeService userTypeService;
+    private final UserTypeServiceGateway userTypeServiceGateway;
 
     @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
+    public UserTypeController(UserTypeServiceGateway userTypeServiceGateway) {
+        this.userTypeServiceGateway = userTypeServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Criar tipo de usuário - Permissão necessária: [ADMIN]", description = "Criar tipo de usuário.")
@@ -55,7 +55,7 @@ public class UserTypeController {
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserTypeResponseDTO>> create(@RequestBody @Valid UserTypePostRequestDTO userTypePostRequestDTO) {
         log.info("Criando tipo de usuário...");
-        return new BaseSuccessResponse201<>(userTypeService.create(userTypePostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(userTypeServiceGateway.create(userTypePostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar tipo do usuário - Permissão necessária: [ADMIN]", description = "Atualizar tipo do usuário.")
@@ -63,7 +63,7 @@ public class UserTypeController {
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserTypePutRequestDTO userTypePutRequestDTO) {
         log.info("Criando tipo de usuário...");
-        return new BaseSuccessResponse200<>(userTypeService.update(hashId, userTypePutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(userTypeServiceGateway.update(hashId, userTypePutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar tipo de usuário por filtro", description = "Buscar tipo de usuário por filtro.")
@@ -71,7 +71,7 @@ public class UserTypeController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserTypeResponseDTO>> find(@ParameterObject @Valid UserTypeGetFilter filter) {
         log.info("Buscando tipos de usuário por filtro...");
-        return new BasePageableSuccessResponse200<>(userTypeService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(userTypeServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar tipo de usuário", description = "Buscar tipo de usuário.")
@@ -79,7 +79,7 @@ public class UserTypeController {
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando tipo de usuário...");
-        return new BaseSuccessResponse200<>(userTypeService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(userTypeServiceGateway.find(hashId)).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir tipo de usuário - Permissão necessária: [ADMIN]", description = "Excluir tipo de usuário.")
@@ -87,7 +87,7 @@ public class UserTypeController {
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo tipo de usuário...");
-        userTypeService.delete(hashId);
+        userTypeServiceGateway.delete(hashId);
         return new NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>().buildResponseWithoutPayload();
     }
 }

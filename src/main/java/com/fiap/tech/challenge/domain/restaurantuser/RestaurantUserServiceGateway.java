@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.domain.restaurantuser;
 
-import com.fiap.tech.challenge.domain.restaurant.RestaurantService;
+import com.fiap.tech.challenge.domain.restaurant.RestaurantServiceGateway;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserGetFilter;
 import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostRequestDTO;
@@ -11,7 +11,7 @@ import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCheck
 import com.fiap.tech.challenge.domain.restaurantuser.usecase.RestaurantUserCreateUseCase;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
-import com.fiap.tech.challenge.global.base.BaseService;
+import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.exception.EntityNotFoundException;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -27,26 +27,26 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class RestaurantUserService extends BaseService<IRestaurantUserRepository, RestaurantUser> {
+public class RestaurantUserServiceGateway extends BaseServiceGateway<IRestaurantUserRepository, RestaurantUser> {
 
     private final IRestaurantUserRepository restaurantUserRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantServiceGateway restaurantServiceGateway;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public RestaurantUserService(IRestaurantUserRepository restaurantUserRepository, RestaurantService restaurantService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public RestaurantUserServiceGateway(IRestaurantUserRepository restaurantUserRepository, RestaurantServiceGateway restaurantServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.restaurantUserRepository = restaurantUserRepository;
-        this.restaurantService = restaurantService;
+        this.restaurantServiceGateway = restaurantServiceGateway;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
     public RestaurantUserResponseDTO create(RestaurantUserPostRequestDTO restaurantUserPostRequestDTO) {
-        Restaurant restaurant = restaurantService.findByHashId(restaurantUserPostRequestDTO.getHashIdRestaurant());
+        Restaurant restaurant = restaurantServiceGateway.findByHashId(restaurantUserPostRequestDTO.getHashIdRestaurant());
         RestaurantUser newRestaurantUser = new RestaurantUserCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant).getBuiltedURestaurantUser();
-        return modelMapper.map(save(newRestaurantUser), RestaurantUserResponseDTO.class);
+        return modelMapperPresenter.map(save(newRestaurantUser), RestaurantUserResponseDTO.class);
     }
 
     @Transactional
@@ -56,12 +56,12 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(restaurantUser -> modelMapper.map(restaurantUser, RestaurantUserResponseDTO.class));
+                .map(restaurantUser -> modelMapperPresenter.map(restaurantUser, RestaurantUserResponseDTO.class));
     }
 
     @Transactional
     public RestaurantUserResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser()), RestaurantUserResponseDTO.class);
+        return modelMapperPresenter.map(findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser()), RestaurantUserResponseDTO.class);
     }
 
     @Transactional

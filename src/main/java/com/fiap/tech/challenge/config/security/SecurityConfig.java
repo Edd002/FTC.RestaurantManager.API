@@ -1,7 +1,7 @@
 package com.fiap.tech.challenge.config.security;
 
 import com.fiap.tech.challenge.domain.jwt.JwtBuilder;
-import com.fiap.tech.challenge.domain.jwt.JwtService;
+import com.fiap.tech.challenge.domain.jwt.JwtServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.BundleAuthUserDetailsService;
 import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
 import com.fiap.tech.challenge.global.base.BaseErrorResponse;
@@ -50,7 +50,7 @@ public class SecurityConfig {
     private String cryptoKey;
 
     private final JwtBuilder jwtBuilder;
-    private final JwtService jwtService;
+    private final JwtServiceGateway jwtServiceGateway;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
 
     private static final String[] IGNORE_SECURITY_CONFIG_PATHS = {
@@ -69,9 +69,9 @@ public class SecurityConfig {
     };
 
     @Autowired
-    public SecurityConfig(@Lazy JwtBuilder jwtBuilder, @Lazy JwtService jwtService, @Lazy BundleAuthUserDetailsService bundleAuthUserDetailsService) {
+    public SecurityConfig(@Lazy JwtBuilder jwtBuilder, @Lazy JwtServiceGateway jwtServiceGateway, @Lazy BundleAuthUserDetailsService bundleAuthUserDetailsService) {
         this.jwtBuilder = jwtBuilder;
-        this.jwtService = jwtService;
+        this.jwtServiceGateway = jwtServiceGateway;
         this.bundleAuthUserDetailsService = bundleAuthUserDetailsService;
     }
 
@@ -99,7 +99,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
-                .with(new SecurityConfigurer(jwtBuilder, jwtService, bundleAuthUserDetailsService), securityConfigurer -> {})
+                .with(new SecurityConfigurer(jwtBuilder, jwtServiceGateway, bundleAuthUserDetailsService), securityConfigurer -> {})
                 .exceptionHandling(eh -> eh.authenticationEntryPoint((request, response, e) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType("application/json");

@@ -43,11 +43,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Itens do Menu - Endpoints de Itens do Menu")
 public class MenuItemController {
 
-    private final MenuItemService menuItemService;
+    private final MenuItemServiceGateway menuItemServiceGateway;
 
     @Autowired
-    public MenuItemController(MenuItemService menuItemService) {
-        this.menuItemService = menuItemService;
+    public MenuItemController(MenuItemServiceGateway menuItemServiceGateway) {
+        this.menuItemServiceGateway = menuItemServiceGateway;
     }
 
     @Operation(method = "POST", summary = "Criar item do menu - Permissão necessária: [OWNER]", description = "Criar item do menu.")
@@ -55,7 +55,7 @@ public class MenuItemController {
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<MenuItemResponseDTO>> create(@RequestBody @Valid MenuItemPostRequestDTO menuItemPostRequestDTO) {
         log.info("Criando item do menu...");
-        return new BaseSuccessResponse201<>(menuItemService.create(menuItemPostRequestDTO)).buildResponse();
+        return new BaseSuccessResponse201<>(menuItemServiceGateway.create(menuItemPostRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PUT", summary = "Atualizar item do menu - Permissão necessária: [OWNER]", description = "Atualizar item do menu.")
@@ -63,7 +63,7 @@ public class MenuItemController {
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<MenuItemResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid MenuItemPutRequestDTO menuItemPutRequestDTO) {
         log.info("Atualizando item do menu...");
-        return new BaseSuccessResponse200<>(menuItemService.update(hashId, menuItemPutRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(menuItemServiceGateway.update(hashId, menuItemPutRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar item do menu por filtro", description = "Buscar item do menu por filtro.")
@@ -71,7 +71,7 @@ public class MenuItemController {
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<MenuItemResponseDTO>> find(@ParameterObject @Valid MenuItemGetFilter filter) {
         log.info("Buscando itens do menu por filtro...");
-        return new BasePageableSuccessResponse200<>(menuItemService.find(filter)).buildPageableResponse();
+        return new BasePageableSuccessResponse200<>(menuItemServiceGateway.find(filter)).buildPageableResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar item do menu", description = "Buscar item do menu.")
@@ -79,7 +79,7 @@ public class MenuItemController {
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<MenuItemResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando item do menu...");
-        return new BaseSuccessResponse200<>(menuItemService.find(hashId)).buildResponse();
+        return new BaseSuccessResponse200<>(menuItemServiceGateway.find(hashId)).buildResponse();
     }
 
     @Operation(method = "DELETE", summary = "Excluir item do menu - Permissão necessária: [OWNER]", description = "Excluir item do menu.")
@@ -87,7 +87,7 @@ public class MenuItemController {
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo item do menu...");
-        menuItemService.delete(hashId);
+        menuItemServiceGateway.delete(hashId);
         return new NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>().buildResponseWithoutPayload();
     }
 }
