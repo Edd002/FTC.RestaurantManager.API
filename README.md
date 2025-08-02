@@ -18,7 +18,8 @@ A arquitetura do sistema segue uma abordagem baseada em **Domínios** e **Clean 
 
 - **Config**: Configuração de dependências necessárias para o levantamento e funcionamento do container de aplicação.
 - **Controller**: Gerencia requisições HTTP e as direciona para os serviços apropriados.
-- **Service**: Coordena acessos sistêmicos como arquivos de configuração e repositórios.
+- **ServiceGateway**: Coordena acessos sistêmicos como arquivos de configuração, repositórios e orquestra use cases.
+- **MapperPresenter**: Prepara os dados para retorno ao cliente.
 - **Repository**: Interface para acesso e manipulação de dados armazenados no banco de dados.
 - **Entity**: Representação das tabelas do banco de dados como classes Java (ORM) e core de domínio.
 - **UseCases**: Implementações de regras de negócio para cada caso de uso de cada domínio.
