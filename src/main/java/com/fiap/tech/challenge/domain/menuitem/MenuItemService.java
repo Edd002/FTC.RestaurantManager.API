@@ -36,15 +36,15 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
     private final RestaurantService restaurantService;
     private final RestaurantUserService restaurantUserService;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public MenuItemService(IMenuItemRepository menuItemRepository, RestaurantService restaurantService, RestaurantUserService restaurantUserService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public MenuItemService(IMenuItemRepository menuItemRepository, RestaurantService restaurantService, RestaurantUserService restaurantUserService, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.menuItemRepository = menuItemRepository;
         this.restaurantService = restaurantService;
         this.restaurantUserService = restaurantUserService;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
@@ -53,14 +53,14 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
         Restaurant existingRestaurant = restaurantUserService.findByRestaurantHashIdAndUser(menuItemPostRequestDTO.getMenu().getHashIdRestaurant(), loggedUser).getRestaurant();
         MenuItem newMenuItem = new MenuItemCreateUseCase(existingRestaurant, menuItemPostRequestDTO).getBuiltedMenuItem();
 
-        return modelMapper.map(save(newMenuItem), MenuItemResponseDTO.class);
+        return modelMapperPresenter.map(save(newMenuItem), MenuItemResponseDTO.class);
     }
 
     @Transactional
     public MenuItemResponseDTO update(String hashId, MenuItemPutRequestDTO menuItemPutRequestDTO) {
         Restaurant existingRestaurant = restaurantUserService.findByRestaurantAndUser(restaurantService.findByHashId(menuItemPutRequestDTO.getMenu().getHashIdRestaurant()), AuthUserContextHolder.getAuthUser()).getRestaurant();
         MenuItem updatedMenuItem = new MenuItemUpdateUseCase(findByHashIdAndMenu(hashId, existingRestaurant.getMenu()), existingRestaurant, menuItemPutRequestDTO).getRebuiltedMenuItem();
-        return modelMapper.map(save(updatedMenuItem), MenuItemResponseDTO.class);
+        return modelMapperPresenter.map(save(updatedMenuItem), MenuItemResponseDTO.class);
     }
 
     @Transactional
@@ -70,12 +70,12 @@ public class MenuItemService extends BaseService<IMenuItemRepository, MenuItem> 
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(menuItem -> modelMapper.map(menuItem, MenuItemResponseDTO.class));
+                .map(menuItem -> modelMapperPresenter.map(menuItem, MenuItemResponseDTO.class));
     }
 
     @Transactional
     public MenuItemResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId), MenuItemResponseDTO.class);
+        return modelMapperPresenter.map(findByHashId(hashId), MenuItemResponseDTO.class);
     }
 
     @Transactional

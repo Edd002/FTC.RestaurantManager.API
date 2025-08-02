@@ -23,12 +23,12 @@ public class CityService extends BaseService<ICityRepository, City> {
 
     private final PageableBuilder pageableBuilder;
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public CityService(PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public CityService(PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
@@ -38,12 +38,12 @@ public class CityService extends BaseService<ICityRepository, City> {
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(city -> modelMapper.map(city, CityResponseDTO.class));
+                .map(city -> modelMapperPresenter.map(city, CityResponseDTO.class));
     }
 
     @Transactional
     public CityResponseDTO find(String hashId) {
-        return modelMapper.map(this.findByHashId(hashId), CityResponseDTO.class);
+        return modelMapperPresenter.map(this.findByHashId(hashId), CityResponseDTO.class);
     }
 
     @Override

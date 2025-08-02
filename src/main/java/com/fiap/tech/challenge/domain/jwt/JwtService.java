@@ -35,15 +35,15 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
     private final JwtBuilder jwtBuilder;
     private final BundleAuthUserDetailsService bundleAuthUserDetailsService;
     private final AuthenticationManager authenticationManager;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public JwtService(IJwtRepository jwtRepository, JwtBuilder jwtBuilder, BundleAuthUserDetailsService bundleAuthUserDetailsService, AuthenticationManager authenticationManager, ModelMapper modelMapper) {
+    public JwtService(IJwtRepository jwtRepository, JwtBuilder jwtBuilder, BundleAuthUserDetailsService bundleAuthUserDetailsService, AuthenticationManager authenticationManager, ModelMapper modelMapperPresenter) {
         this.jwtRepository = jwtRepository;
         this.jwtBuilder = jwtBuilder;
         this.bundleAuthUserDetailsService = bundleAuthUserDetailsService;
         this.authenticationManager = authenticationManager;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class JwtService extends BaseService<IJwtRepository, Jwt> {
             BundleAuthUserDetails bundleAuthUserDetails = (BundleAuthUserDetails) authenticationManager.authenticate(authentication).getPrincipal();
             SecurityContextHolder.getContext().setAuthentication(bundleAuthUserDetailsService.getAuthentication(bundleAuthUserDetails));
             User user = bundleAuthUserDetails.getUser();
-            return modelMapper.map(save(new Jwt(jwtBuilder.createBearerToken(user), user)), JwtResponseDTO.class);
+            return modelMapperPresenter.map(save(new Jwt(jwtBuilder.createBearerToken(user), user)), JwtResponseDTO.class);
         } catch (AuthenticationException exception) {
             throw new JwtNotFoundHttpException("Login ou senha do usuário inválido(s).");
         }

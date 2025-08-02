@@ -28,15 +28,15 @@ public class MenuService extends BaseService<IMenuRepository, Menu> {
 
     private final RestaurantService restaurantService;
     private final RestaurantUserService restaurantUserService;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
     private final MenuItemService menuItemService;
 
     @Autowired
-    public MenuService(RestaurantService restaurantService, RestaurantUserService restaurantUserService, ModelMapper modelMapper, MenuItemService menuItemService) {
+    public MenuService(RestaurantService restaurantService, RestaurantUserService restaurantUserService, MenuItemService menuItemService, ModelMapper modelMapperPresenter) {
         this.restaurantService = restaurantService;
         this.restaurantUserService = restaurantUserService;
-        this.modelMapper = modelMapper;
         this.menuItemService = menuItemService;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
@@ -45,10 +45,10 @@ public class MenuService extends BaseService<IMenuRepository, Menu> {
         List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
                 menuItemService.save(
                         Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())
-                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemService.findByHashId(manuItemHashId), restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getRebuiltedMenuItem())
-                                .orElseGet(() -> new MenuItemCreateUseCase(restaurant, modelMapper.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
+                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemService.findByHashId(manuItemHashId), restaurant, modelMapperPresenter.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getRebuiltedMenuItem())
+                                .orElseGet(() -> new MenuItemCreateUseCase(restaurant, modelMapperPresenter.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
                 )).toList();
-        return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapper.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());
+        return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapperPresenter.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());
     }
 
     @Override

@@ -32,21 +32,21 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
     private final IRestaurantUserRepository restaurantUserRepository;
     private final RestaurantService restaurantService;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public RestaurantUserService(IRestaurantUserRepository restaurantUserRepository, RestaurantService restaurantService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public RestaurantUserService(IRestaurantUserRepository restaurantUserRepository, RestaurantService restaurantService, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.restaurantUserRepository = restaurantUserRepository;
         this.restaurantService = restaurantService;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
     public RestaurantUserResponseDTO create(RestaurantUserPostRequestDTO restaurantUserPostRequestDTO) {
         Restaurant restaurant = restaurantService.findByHashId(restaurantUserPostRequestDTO.getHashIdRestaurant());
         RestaurantUser newRestaurantUser = new RestaurantUserCreateUseCase(AuthUserContextHolder.getAuthUser(), restaurant).getBuiltedURestaurantUser();
-        return modelMapper.map(save(newRestaurantUser), RestaurantUserResponseDTO.class);
+        return modelMapperPresenter.map(save(newRestaurantUser), RestaurantUserResponseDTO.class);
     }
 
     @Transactional
@@ -56,12 +56,12 @@ public class RestaurantUserService extends BaseService<IRestaurantUserRepository
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(restaurantUser -> modelMapper.map(restaurantUser, RestaurantUserResponseDTO.class));
+                .map(restaurantUser -> modelMapperPresenter.map(restaurantUser, RestaurantUserResponseDTO.class));
     }
 
     @Transactional
     public RestaurantUserResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser()), RestaurantUserResponseDTO.class);
+        return modelMapperPresenter.map(findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser()), RestaurantUserResponseDTO.class);
     }
 
     @Transactional

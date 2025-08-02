@@ -39,15 +39,15 @@ public class UserService extends BaseService<IUserRepository, User> {
     private final UserTypeService userTypeService;
     private final CityService cityService;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public UserService(IUserRepository userRepository, UserTypeService userTypeService, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserService(IUserRepository userRepository, UserTypeService userTypeService, CityService cityService, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.userRepository = userRepository;
         this.userTypeService = userTypeService;
         this.cityService = cityService;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class UserService extends BaseService<IUserRepository, User> {
         User newUser = AuthUserContextHolder.getAuthUserIfExists()
                 .map(loggedUser -> new UserCreateUseCase(loggedUser, userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser())
                 .orElseGet(() -> new UserCreateUseCase(userType, city, userPostRequestDTO, cryptoKey).getBuiltedUser());
-        return modelMapper.map(save(newUser), UserResponseDTO.class);
+        return modelMapperPresenter.map(save(newUser), UserResponseDTO.class);
     }
 
     @Transactional
@@ -65,7 +65,7 @@ public class UserService extends BaseService<IUserRepository, User> {
         City city = cityService.findByHashId(userPutRequestDTO.getAddress().getHashIdCity());
         UserType userType = userTypeService.findByNameIgnoreCase(userPutRequestDTO.getType());
         User updatedUser = new UserUpdateUseCase(AuthUserContextHolder.getAuthUser(), userType, city, userPutRequestDTO).getRebuiltedUser();
-        return modelMapper.map(save(updatedUser), UserResponseDTO.class);
+        return modelMapperPresenter.map(save(updatedUser), UserResponseDTO.class);
     }
 
     @Transactional
@@ -80,12 +80,12 @@ public class UserService extends BaseService<IUserRepository, User> {
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(user -> modelMapper.map(user, UserResponseDTO.class));
+                .map(user -> modelMapperPresenter.map(user, UserResponseDTO.class));
     }
 
     @Transactional
     public UserResponseDTO find() {
-        return modelMapper.map(AuthUserContextHolder.getAuthUser(), UserResponseDTO.class);
+        return modelMapperPresenter.map(AuthUserContextHolder.getAuthUser(), UserResponseDTO.class);
     }
 
     @Transactional

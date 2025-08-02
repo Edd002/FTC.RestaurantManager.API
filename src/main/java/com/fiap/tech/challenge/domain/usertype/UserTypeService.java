@@ -29,26 +29,26 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
 
     private final IUserTypeRepository userTypeRepository;
     private final PageableBuilder pageableBuilder;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public UserTypeService(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapper) {
+    public UserTypeService(IUserTypeRepository userTypeRepository, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.userTypeRepository = userTypeRepository;
         this.pageableBuilder = pageableBuilder;
-        this.modelMapper = modelMapper;
+        this.modelMapperPresenter = modelMapperPresenter;
     }
 
     @Transactional
     public UserTypeResponseDTO create(UserTypePostRequestDTO userTypePostRequestDTO) {
         UserType newUserType = new UserTypeCreateUseCase(userTypePostRequestDTO).getBuiltedUserType();
-        return modelMapper.map(save(newUserType), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(save(newUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
     public UserTypeResponseDTO update(String hashId, UserTypePutRequestDTO userTypePutRequestDTO) {
         UserType existingUserType = findByHashId(hashId);
         UserType updatedUserType = new UserTypeUpdateUseCase(existingUserType, userTypePutRequestDTO).getRebuiltedUserType();
-        return modelMapper.map(save(updatedUserType), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(save(updatedUserType), UserTypeResponseDTO.class);
     }
 
     @Transactional
@@ -58,12 +58,12 @@ public class UserTypeService extends BaseService<IUserTypeRepository, UserType> 
         return specification
                 .map(spec -> findAll(spec, pageable))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()))
-                .map(userType -> modelMapper.map(userType, UserTypeResponseDTO.class));
+                .map(userType -> modelMapperPresenter.map(userType, UserTypeResponseDTO.class));
     }
 
     @Transactional
     public UserTypeResponseDTO find(String hashId) {
-        return modelMapper.map(findByHashId(hashId), UserTypeResponseDTO.class);
+        return modelMapperPresenter.map(findByHashId(hashId), UserTypeResponseDTO.class);
     }
 
     @Transactional
