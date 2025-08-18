@@ -42,7 +42,7 @@ Para executar o projeto utilizando Docker Compose:
 Em contexto de desenvolvimento, enquanto os testes automatizados estiverem em execução ou em pausa (thread breakpoint) é possível acessar a estrutura do banco de dados enquanto está em memória em http://localhost:8085/restaurant-manager/h2-console com as credenciais:
 
 Driver Class: org.h2.Driver<br>
-JDBC URL: jdbc:h2:tcp://localhost:9092/mem:db<br>
+JDBC URL: jdbc:h2:tcp://localhost:9093/mem:db<br>
 User Name: sa<br>
 Password:<br>
 
