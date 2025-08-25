@@ -20,10 +20,13 @@ public class RestaurantUpdateUseCase {
                 restaurantPutRequestDTO.getName(),
                 restaurantPutRequestDTO.getBreakfastOpeningHours(),
                 restaurantPutRequestDTO.getBreakfastClosingHours(),
+                restaurantPutRequestDTO.getBreakfastLimitReservations(),
                 restaurantPutRequestDTO.getLunchOpeningHours(),
                 restaurantPutRequestDTO.getLunchClosingHours(),
+                restaurantPutRequestDTO.getLunchLimitReservations(),
                 restaurantPutRequestDTO.getDinnerOpeningHours(),
                 restaurantPutRequestDTO.getDinnerClosingHours(),
+                restaurantPutRequestDTO.getDinnerLimitReservations(),
                 RestaurantTypeEnum.valueOf(restaurantPutRequestDTO.getType()),
                 existingRestaurant.getMenu(),
                 new Address(

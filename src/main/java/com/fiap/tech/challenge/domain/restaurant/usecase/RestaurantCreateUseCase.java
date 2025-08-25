@@ -21,10 +21,13 @@ public class RestaurantCreateUseCase {
                 restaurantPostRequestDTO.getName(),
                 restaurantPostRequestDTO.getBreakfastOpeningHours(),
                 restaurantPostRequestDTO.getBreakfastClosingHours(),
+                restaurantPostRequestDTO.getBreakfastLimitReservations(),
                 restaurantPostRequestDTO.getLunchOpeningHours(),
                 restaurantPostRequestDTO.getLunchClosingHours(),
+                restaurantPostRequestDTO.getLunchLimitReservations(),
                 restaurantPostRequestDTO.getDinnerOpeningHours(),
                 restaurantPostRequestDTO.getDinnerClosingHours(),
+                restaurantPostRequestDTO.getDinnerLimitReservations(),
                 RestaurantTypeEnum.valueOf(restaurantPostRequestDTO.getType()),
                 new Menu(),
                 new Address(

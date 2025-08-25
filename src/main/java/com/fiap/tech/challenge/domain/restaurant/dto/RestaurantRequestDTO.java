@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
+import com.fiap.tech.challenge.global.util.deserializer.StrictIntegerDeserializer;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringNormalizeSpaceDeserializer;
 import com.fiap.tech.challenge.global.util.deserializer.TimeDeserializer;
 import com.fiap.tech.challenge.global.util.enumerated.validation.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -40,6 +42,13 @@ public abstract class RestaurantRequestDTO extends BaseRequestDTO {
     @JsonProperty("breakfastClosingHours")
     private Date breakfastClosingHours;
 
+    @Schema(description = "Quantidade máxima de reservas para o horário de café da manhã.", example = "100")
+    @NotNull(message = "A quantidade máxima de reservas para o horário de café da manhã não pode ser nula.")
+    @Positive(message = "A quantidade máxima de reservas para o horário de café da manhã ser um número positivo.")
+    @JsonDeserialize(using = StrictIntegerDeserializer.class)
+    @JsonProperty("breakfastLimitReservations")
+    private Integer breakfastLimitReservations;
+
     @Schema(description = "Horário de abertura do restaurante para o almoço.", example = "11:00")
     @NotNull(message = "O horário de abertura do restaurante para o almoço não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
@@ -54,6 +63,13 @@ public abstract class RestaurantRequestDTO extends BaseRequestDTO {
     @JsonProperty("lunchClosingHours")
     private Date lunchClosingHours;
 
+    @Schema(description = "Quantidade máxima de reservas para o horário de almoço.", example = "100")
+    @NotNull(message = "A quantidade máxima de reservas para o horário de almoço não pode ser nula.")
+    @Positive(message = "A quantidade máxima de reservas para o horário de almoço ser um número positivo.")
+    @JsonDeserialize(using = StrictIntegerDeserializer.class)
+    @JsonProperty("lunchLimitReservations")
+    private Integer lunchLimitReservations;
+
     @Schema(description = "Horário de abertura do restaurante para a janta.", example = "19:00")
     @NotNull(message = "O horário de abertura do restaurante para a janta não pode ser nulo.")
     @JsonDeserialize(using = TimeDeserializer.class)
@@ -67,6 +83,13 @@ public abstract class RestaurantRequestDTO extends BaseRequestDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
     @JsonProperty("dinnerClosingHours")
     private Date dinnerClosingHours;
+
+    @Schema(description = "Quantidade máxima de reservas para o horário de janta.", example = "100")
+    @NotNull(message = "A quantidade máxima de reservas para o horário de janta não pode ser nula.")
+    @Positive(message = "A quantidade máxima de reservas para o horário de janta ser um número positivo.")
+    @JsonDeserialize(using = StrictIntegerDeserializer.class)
+    @JsonProperty("dinnerLimitReservations")
+    private Integer dinnerLimitReservations;
 
     @Schema(description = "Tipo do restaurante.", example = "STEAKHOUSE", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o tipo do restaurante é 255 caracteres.")
