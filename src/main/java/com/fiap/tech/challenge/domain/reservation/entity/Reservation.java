@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.reservation.entity;
 import com.fiap.tech.challenge.domain.menuitemorder.MenuItemOrderEntityListener;
 import com.fiap.tech.challenge.domain.menuitemorder.enumerated.constraint.MenuItemOrderConstraint;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -30,12 +32,20 @@ public class Reservation extends Audit implements Serializable {
 
     protected Reservation() {}
 
-    public Reservation(@NonNull Restaurant restaurant, @NonNull User user) {
+    public Reservation(@NonNull ReservationStatusEnum bookingStatus, @NonNull ReservationBookingTimeEnum bookingTime, @NonNull Date bookingDate, @NonNull Long bookingQuantity, @NonNull Restaurant restaurant, @NonNull User user) {
+        this.setBookingStatus(bookingStatus);
+        this.setBookingTime(bookingTime);
+        this.setBookingDate(bookingDate);
+        this.setBookingQuantity(bookingQuantity);
         this.setRestaurant(restaurant);
         this.setUser(user);
     }
 
-    public Reservation rebuild(@NonNull Restaurant restaurant, @NonNull User user) {
+    public Reservation rebuild(@NonNull ReservationStatusEnum bookingStatus, @NonNull ReservationBookingTimeEnum bookingTime, @NonNull Date bookingDate, @NonNull Long bookingQuantity, @NonNull Restaurant restaurant, @NonNull User user) {
+        this.setBookingStatus(bookingStatus);
+        this.setBookingTime(bookingTime);
+        this.setBookingDate(bookingDate);
+        this.setBookingQuantity(bookingQuantity);
         this.setRestaurant(restaurant);
         this.setUser(user);
         return this;
@@ -50,9 +60,20 @@ public class Reservation extends Audit implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "booking_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ReservationStatusEnum status;
+    private ReservationStatusEnum bookingStatus;
+
+    @Column(name = "booking_time", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReservationBookingTimeEnum bookingTime;
+
+    @Column(name = "booking_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date bookingDate;
+
+    @Column(name = "booking_quantity", nullable = false)
+    private Long bookingQuantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_restaurant", nullable = false)

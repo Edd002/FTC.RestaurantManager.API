@@ -69,11 +69,11 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonProperty("dinnerLimitReservations")
     private Integer dinnerLimitReservations;
 
-    @Schema(description = "Permissão do usuário.", example = "OWNER")
+    @Schema(description = "Tipo do restaurante.", example = "QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD")
     @JsonProperty("type")
     private RestaurantTypeEnum type;
 
-    @Schema(description = "Tipo do restaurante.")
+    @Schema(description = "Endereço do restaurante.")
     @JsonProperty("address")
     private AddressResponseDTO address;
 }

@@ -1,7 +1,9 @@
 package com.fiap.tech.challenge.domain.reservation.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
@@ -10,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,8 +26,21 @@ public class ReservationResponseDTO extends BaseResponseDTO {
     private String hashId;
 
     @Schema(description = "Status da reserva do restaurante.", example = "REQUESTED")
-    @JsonProperty("status")
-    private ReservationStatusEnum status;
+    @JsonProperty("bookingStatus")
+    private ReservationStatusEnum bookingStatus;
+
+    @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST")
+    @JsonProperty("bookingTime")
+    private ReservationBookingTimeEnum bookingTime;
+
+    @Schema(description = "Data da reserva do restaurante.", example = "30/08/2025")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "GMT-3")
+    @JsonProperty("bookingDate")
+    private Date bookingDate;
+
+    @Schema(description = "Quantidade de reservas do restaurante.", example = "3")
+    @JsonProperty("bookingQuantity")
+    private Long bookingQuantity;
 
     @Schema(description = "Restaurante do pedido.")
     @JsonProperty("restaurant")

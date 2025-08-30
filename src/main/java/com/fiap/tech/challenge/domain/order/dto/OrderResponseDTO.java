@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.domain.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fiap.tech.challenge.domain.menuitemorder.dto.MenuItemOrderResponseDTO;
 import com.fiap.tech.challenge.domain.order.enumerated.OrderStatusEnum;
 import com.fiap.tech.challenge.domain.order.enumerated.OrderTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,7 +33,9 @@ public class OrderResponseDTO extends BaseResponseDTO {
     @JsonProperty("type")
     private OrderTypeEnum type;
 
-
+    @Schema(description = "Itens do menu do pedido.")
+    @JsonProperty("menuItemOrders")
+    private List<MenuItemOrderResponseDTO> menuItemOrders;
 
     @Schema(description = "Restaurante do pedido.")
     @JsonProperty("restaurant")
