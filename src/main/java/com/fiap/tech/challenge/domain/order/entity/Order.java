@@ -10,6 +10,8 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.exception.OrderStatusException;
+import com.fiap.tech.challenge.global.exception.OrderTypeException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,10 +47,10 @@ public class Order extends Audit implements Serializable {
 
     public Order rebuild(@NonNull OrderTypeEnum type) {
         if (OrderStatusEnum.isDelivered(this.status)) {
-            throw new RuntimeException("Pedidos entregues não podem ser atualizados.");
+            throw new OrderStatusException("Pedidos entregues não podem ser atualizados.");
         }
         if (OrderTypeEnum.isForPickup(type) && OrderStatusEnum.isForDelivery(this.status)) {
-            throw new RuntimeException("O tipo do pedido não pode ser atualizado para buscar no local se já estiver em rota de entrega.");
+            throw new OrderTypeException("O pedido não pode ser atualizado para buscar no local se já estiver em rota de entrega.");
         }
         this.setType(type);
         return this;
@@ -56,13 +58,13 @@ public class Order extends Audit implements Serializable {
 
     public Order rebuild(@NonNull OrderStatusEnum status) {
         if (OrderStatusEnum.isDelivered(this.status)) {
-            throw new RuntimeException("Pedidos entregues não podem ser atualizados.");
+            throw new OrderStatusException("Pedidos entregues não podem ser atualizados.");
         }
         if (OrderTypeEnum.isForDelivery(this.type) && OrderStatusEnum.isForPickup(status)) {
-            throw new RuntimeException("O pedido que está para entrega não pode ser atualizado para aguardando buscar no local.");
+            throw new OrderStatusException("O pedido que está para entrega não pode ser atualizado para aguardando buscar no local.");
         }
         if (OrderStatusEnum.isBefore(status, this.status)) {
-            throw new RuntimeException("O status do pedido não pode ser retrocedido.");
+            throw new OrderStatusException("O status do pedido não pode ser retrocedido.");
         }
         this.setStatus(status);
         return this;
