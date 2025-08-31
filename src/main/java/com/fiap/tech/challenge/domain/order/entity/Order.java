@@ -33,18 +33,36 @@ public class Order extends Audit implements Serializable {
 
     protected Order() {}
 
-    public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull Restaurant restaurant, @NonNull User user) {
+    public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull List<MenuItemOrder> menuItemOrders, @NonNull Restaurant restaurant, @NonNull User user) {
         this.setStatus(status);
         this.setType(type);
+        this.setMenuItemOrders(menuItemOrders);
         this.setRestaurant(restaurant);
         this.setUser(user);
     }
 
-    public Order rebuild(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull Restaurant restaurant, @NonNull User user) {
-        this.setStatus(status);
+    public Order rebuild(@NonNull OrderTypeEnum type) {
+        if (OrderStatusEnum.isDelivered(this.status)) {
+            throw new RuntimeException("Pedidos entregues não podem ser atualizados.");
+        }
+        if (OrderTypeEnum.isForPickup(type) && OrderStatusEnum.isForDelivery(this.status)) {
+            throw new RuntimeException("O tipo do pedido não pode ser atualizado para buscar no local se já estiver em rota de entrega.");
+        }
         this.setType(type);
-        this.setRestaurant(restaurant);
-        this.setUser(user);
+        return this;
+    }
+
+    public Order rebuild(@NonNull OrderStatusEnum status) {
+        if (OrderStatusEnum.isDelivered(this.status)) {
+            throw new RuntimeException("Pedidos entregues não podem ser atualizados.");
+        }
+        if (OrderTypeEnum.isForDelivery(this.type) && OrderStatusEnum.isForPickup(status)) {
+            throw new RuntimeException("O pedido que está para entrega não pode ser atualizado para aguardando buscar no local.");
+        }
+        if (OrderStatusEnum.isBefore(status, this.status)) {
+            throw new RuntimeException("O status do pedido não pode ser retrocedido.");
+        }
+        this.setStatus(status);
         return this;
     }
 

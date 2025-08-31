@@ -29,9 +29,8 @@ public class MenuItemOrder extends Audit implements Serializable {
 
     protected MenuItemOrder() {}
 
-    public MenuItemOrder(@NonNull MenuItem menuItem, @NonNull Order order) {
+    public MenuItemOrder(@NonNull MenuItem menuItem) {
         this.setMenuItem(menuItem);
-        this.setOrder(order);
     }
 
     public MenuItemOrder rebuild(@NonNull MenuItem menuItem, @NonNull Order order) {
