@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.domain.menuitem.entity;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.menuitem.MenuItemEntityListener;
 import com.fiap.tech.challenge.domain.menuitem.enumerated.constraint.MenuItemConstraint;
+import com.fiap.tech.challenge.domain.menuitemorder.entity.MenuItemOrder;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import jakarta.persistence.*;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.SQLRestriction;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -71,6 +73,9 @@ public class MenuItem extends Audit implements Serializable {
 
     @Column(name = "photo_url", nullable = false)
     private String photoUrl;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menuItem", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
+    private List<MenuItemOrder> menuItemOrders;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "fk_menu", nullable = false)

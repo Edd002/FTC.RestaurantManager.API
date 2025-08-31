@@ -20,6 +20,11 @@ spring:
     url: jdbc:postgresql://localhost:5453/ftc_restaurant_manager_database
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic:
+      name:
+        producer: dto
   jackson:
     default-property-inclusion: non_null
     deserialization:

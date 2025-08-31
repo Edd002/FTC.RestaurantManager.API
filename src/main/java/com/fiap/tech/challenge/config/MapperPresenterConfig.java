@@ -6,12 +6,17 @@ import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemResponseDTO;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
+import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
+import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Objects;
 
 @Configuration
 public class MapperPresenterConfig {
@@ -29,6 +34,7 @@ public class MapperPresenterConfig {
         configModelMapperPresenter(modelMapperPresenter);
         configMenuToMenuBatchResponseDTOMapperPresenter(modelMapperPresenter);
         configMenuItemToMenuItemResponseDTOMapperPresenter(modelMapperPresenter);
+        configOrderToOrderResponseDTOMapperPresenter(modelMapperPresenter);
         configUserToUserResponseDTOModelMapperPresenter(modelMapperPresenter);
         return modelMapperPresenter;
     }
@@ -52,9 +58,21 @@ public class MapperPresenterConfig {
                 .addMappings(mapperPresenter -> mapperPresenter.map(menuItem -> menuItem.getMenu().getRestaurant().getHashId(), (menuItemResponseDTO, hashIdRestaurant) -> menuItemResponseDTO.getMenu().setHashIdRestaurant((String) hashIdRestaurant)));
     }
 
+    private void configOrderToOrderResponseDTOMapperPresenter(ModelMapper modelMapperPresenter) {
+        PropertyMap<Order, OrderResponseDTO> orderPropertyMap = new PropertyMap<>() {
+            @Override
+            protected void configure() {
+                if (Objects.nonNull(destination.getMenuItemOrders())) {
+                    destination.getMenuItemOrders().forEach(menuItemOrderResponseDTO -> skip(menuItemOrderResponseDTO.getMenuItem().getMenu()));
+                }
+            }
+        };
+        modelMapperPresenter.typeMap(Order.class, OrderResponseDTO.class)
+                .addMappings(orderPropertyMap);
+    }
+
     private void configUserToUserResponseDTOModelMapperPresenter(ModelMapper modelMapperPresenter) {
-        modelMapperPresenter.typeMap(User.class, UserResponseDTO.class).addMappings(mapperPresenter -> {
-            mapperPresenter.map(src -> src.getType().getName(), UserResponseDTO::setType);
-        });
+        modelMapperPresenter.typeMap(User.class, UserResponseDTO.class)
+                .addMappings(mapperPresenter -> mapperPresenter.map(src -> src.getType().getName(), UserResponseDTO::setType));
     }
 }

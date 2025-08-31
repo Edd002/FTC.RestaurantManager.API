@@ -45,7 +45,7 @@ public class MenuServiceGateway extends BaseServiceGateway<IMenuRepository, Menu
         List<MenuItem> newOrUpdatedMenuItems = menuBatchPostRequestDTO.getMenuItems().stream().map(menuItemBatchPutRequestDTO ->
                 menuItemServiceGateway.save(
                         Optional.ofNullable(menuItemBatchPutRequestDTO.getHashId())
-                                .map(manuItemHashId -> new MenuItemUpdateUseCase(menuItemServiceGateway.findByHashId(manuItemHashId), restaurant, modelMapperPresenter.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getRebuiltedMenuItem())
+                                .map(menuItemHashId -> new MenuItemUpdateUseCase(menuItemServiceGateway.findByHashId(menuItemHashId), restaurant, modelMapperPresenter.map(menuItemBatchPutRequestDTO, MenuItemPutRequestDTO.class)).getRebuiltedMenuItem())
                                 .orElseGet(() -> new MenuItemCreateUseCase(restaurant, modelMapperPresenter.map(menuItemBatchPutRequestDTO, MenuItemPostRequestDTO.class)).getBuiltedMenuItem())
                 )).toList();
         return new MenuBatchResponseDTO(restaurant.getHashId(), newOrUpdatedMenuItems.stream().map(newOrUpdatedMenuItem -> modelMapperPresenter.map(newOrUpdatedMenuItem, MenuItemBatchResponseDTO.class)).toList());

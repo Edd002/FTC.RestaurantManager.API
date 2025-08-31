@@ -2,6 +2,8 @@ package com.fiap.tech.challenge.domain.user.entity;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.jwt.entity.Jwt;
+import com.fiap.tech.challenge.domain.order.entity.Order;
+import com.fiap.tech.challenge.domain.reservation.entity.Reservation;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
 import com.fiap.tech.challenge.domain.user.UserEntityListener;
 import com.fiap.tech.challenge.domain.user.enumerated.DefaultUserTypeEnum;
@@ -84,6 +86,12 @@ public class User extends Audit implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<RestaurantUser> restaurantUsers;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE })
+    private List<Order> orders;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE })
+    private List<Reservation> reservations;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<Jwt> jwts;

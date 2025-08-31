@@ -37,6 +37,10 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonProperty("breakfastClosingHours")
     private Date breakfastClosingHours;
 
+    @Schema(description = "Quantidade máxima de reservas para o horário de café da manhã.", example = "100")
+    @JsonProperty("breakfastLimitReservations")
+    private Integer breakfastLimitReservations;
+
     @Schema(description = "Horário de abertura do restaurante para o almoço.", example = "11:00")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
     @JsonProperty("lunchOpeningHours")
@@ -46,6 +50,10 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
     @JsonProperty("lunchClosingHours")
     private Date lunchClosingHours;
+
+    @Schema(description = "Quantidade máxima de reservas para o horário de almoço.", example = "100")
+    @JsonProperty("lunchLimitReservations")
+    private Integer lunchLimitReservations;
 
     @Schema(description = "Horário de abertura do restaurante para a janta.", example = "19:00")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
@@ -57,11 +65,15 @@ public class RestaurantResponseDTO extends BaseResponseDTO {
     @JsonProperty("dinnerClosingHours")
     private Date dinnerClosingHours;
 
-    @Schema(description = "Permissão do usuário.", example = "OWNER")
+    @Schema(description = "Quantidade máxima de reservas para o horário de janta.", example = "100")
+    @JsonProperty("dinnerLimitReservations")
+    private Integer dinnerLimitReservations;
+
+    @Schema(description = "Tipo do restaurante.", example = "QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD")
     @JsonProperty("type")
     private RestaurantTypeEnum type;
 
-    @Schema(description = "Tipo do restaurante.")
+    @Schema(description = "Endereço do restaurante.")
     @JsonProperty("address")
     private AddressResponseDTO address;
 }
