@@ -16,6 +16,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Objects;
+
 @Configuration
 public class MapperPresenterConfig {
 
@@ -60,7 +62,9 @@ public class MapperPresenterConfig {
         PropertyMap<Order, OrderResponseDTO> orderPropertyMap = new PropertyMap<>() {
             @Override
             protected void configure() {
-                destination.getMenuItemOrders().forEach(menuItemOrderResponseDTO -> skip(menuItemOrderResponseDTO.getMenuItem().getMenu()));
+                if (Objects.nonNull(destination.getMenuItemOrders())) {
+                    destination.getMenuItemOrders().forEach(menuItemOrderResponseDTO -> skip(menuItemOrderResponseDTO.getMenuItem().getMenu()));
+                }
             }
         };
         modelMapperPresenter.typeMap(Order.class, OrderResponseDTO.class)
