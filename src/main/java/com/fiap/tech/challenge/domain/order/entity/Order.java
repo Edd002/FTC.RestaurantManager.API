@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.order.entity;
 
+import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
 import com.fiap.tech.challenge.domain.menuitemorder.entity.MenuItemOrder;
 import com.fiap.tech.challenge.domain.order.OrderEntityListener;
 import com.fiap.tech.challenge.domain.order.enumerated.OrderStatusEnum;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.SQLRestriction;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter(value = AccessLevel.PUBLIC)
 @Setter(value = AccessLevel.PROTECTED)
@@ -33,10 +35,10 @@ public class Order extends Audit implements Serializable {
 
     protected Order() {}
 
-    public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull List<MenuItemOrder> menuItemOrders, @NonNull Restaurant restaurant, @NonNull User user) {
+    public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull List<MenuItem> menuItems, @NonNull Restaurant restaurant, @NonNull User user) {
         this.setStatus(status);
         this.setType(type);
-        this.setMenuItemOrders(menuItemOrders);
+        this.setMenuItemOrders(menuItems.stream().map(menuItem -> new MenuItemOrder(menuItem, this)).collect(Collectors.toList()));
         this.setRestaurant(restaurant);
         this.setUser(user);
     }

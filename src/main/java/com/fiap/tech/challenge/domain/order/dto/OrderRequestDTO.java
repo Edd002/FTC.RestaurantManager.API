@@ -24,7 +24,7 @@ public abstract class OrderRequestDTO extends BaseRequestDTO {
     @JsonProperty("hashIdRestaurant")
     private String hashIdRestaurant;
 
-    @Schema(description = "Hash ids de itens do menu.", type = "List", example = "a6sac15as1a6d15as4fd21as12as4sde, 58qsa7df4ef4as4c15sa4d5a4sa8ef4a")
+    @Schema(description = "Hash ids de itens do menu.", type = "List", example = "[\"a6sac15as1a6d15as4fd21as12as4sde\", \"58qsa7df4ef4as4c15sa4d5a4sa8ef4a\"]")
     @NotEmpty(message = "Deve ser informado pelo menos um item do menu para o pedido.")
     @JsonProperty("hashIdsMenuItems")
     private List<@NotBlank(message = "Os itens do menu para o pedido não podem ser nulos ou em branco.") String> hashIdsMenuItems;

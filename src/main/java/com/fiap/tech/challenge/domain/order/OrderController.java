@@ -57,7 +57,7 @@ public class OrderController {
 
     @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PatchMapping(value = "/{hashId}")
+    @PatchMapping(value = "/change-status/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
         log.info("Atualizando status do pedido...");
         return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
@@ -65,7 +65,7 @@ public class OrderController {
 
     @Operation(method = "PATCH", summary = "Atualizar tipo do pedido", description = "Atualizar tipo do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PatchMapping(value = "/{hashId}")
+    @PatchMapping(value = "/change-type/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
         log.info("Atualizando tipo do pedido...");
         return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();

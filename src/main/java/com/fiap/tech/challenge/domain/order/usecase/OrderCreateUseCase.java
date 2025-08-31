@@ -1,7 +1,6 @@
 package com.fiap.tech.challenge.domain.order.usecase;
 
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
-import com.fiap.tech.challenge.domain.menuitemorder.entity.MenuItemOrder;
 import com.fiap.tech.challenge.domain.order.dto.OrderPostRequestDTO;
 import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.order.enumerated.OrderStatusEnum;
@@ -11,7 +10,6 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import lombok.NonNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderCreateUseCase {
 
@@ -25,7 +23,7 @@ public class OrderCreateUseCase {
         return new Order(
                 OrderStatusEnum.REQUESTED,
                 OrderTypeEnum.valueOf(orderPostRequestDTO.getType()),
-                menuItems.stream().map(MenuItemOrder::new).collect(Collectors.toList()),
+                menuItems,
                 restaurant,
                 loggedUser
         );
