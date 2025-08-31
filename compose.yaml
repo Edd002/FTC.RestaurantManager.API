@@ -62,7 +62,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.1
     hostname: zookeeper
-    container_name: zookeeper
+    container_name: ftc_restaurant_manager_zookeeper
     ports:
       - "2181:2181"
     environment:
@@ -72,7 +72,7 @@ services:
   broker:
     image: confluentinc/cp-kafka:5.5.1
     hostname: broker
-    container_name: broker
+    container_name: ftc_restaurant_manager_broker
     depends_on:
       - zookeeper
     ports:
@@ -93,7 +93,7 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:5.5.1
     hostname: schema-registry
-    container_name: schema-registry
+    container_name: ftc_restaurant_manager_schema_registry
     depends_on:
       - zookeeper
       - broker
@@ -112,7 +112,7 @@ services:
     ports:
       - 8082:8082
     hostname: rest-proxy
-    container_name: rest-proxy
+    container_name: ftc_restaurant_manager_rest_proxy
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
@@ -122,7 +122,7 @@ services:
   control-center:
     image: confluentinc/cp-enterprise-control-center:5.4.0
     hostname: control-center
-    container_name: control-center
+    container_name: ftc_restaurant_manager_control_center
     depends_on:
       - zookeeper
       - broker
@@ -138,7 +138,6 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
-
 
 networks:
   ftc_restaurant_manager_database_net:
