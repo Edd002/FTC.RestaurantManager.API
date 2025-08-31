@@ -13,15 +13,15 @@ public class OrderSpecificationBuilder extends BasicSpecificationBuilder<Order, 
     @Override
     protected void initParams(OrderGetFilter filter) {
         if (ValidationUtil.isNotBlank(filter.getHashIdRestaurant())) {
-            where("order.restaurant.hashId", SearchOperationEnum.EQUAL, filter.getHashIdRestaurant());
-        }
-
-        if (ValidationUtil.isNotNull(filter.getType())) {
-            where("type", SearchOperationEnum.EQUAL, filter.getType());
+            where("restaurant.hashId", SearchOperationEnum.EQUAL, filter.getHashIdRestaurant());
         }
 
         if (ValidationUtil.isNotNull(filter.getStatus())) {
             where("status", SearchOperationEnum.EQUAL, filter.getStatus());
+        }
+
+        if (ValidationUtil.isNotNull(filter.getType())) {
+            where("type", SearchOperationEnum.EQUAL, filter.getType());
         }
     }
 
