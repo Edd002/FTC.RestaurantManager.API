@@ -7,7 +7,6 @@ import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.order.specification.OrderSpecificationBuilder;
 import com.fiap.tech.challenge.domain.order.usecase.OrderCreateUseCase;
 import com.fiap.tech.challenge.domain.order.usecase.OrderUpdateUseCase;
-import com.fiap.tech.challenge.domain.restaurant.RestaurantServiceGateway;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
@@ -32,16 +31,14 @@ import java.util.Optional;
 public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Order> {
 
     private final IOrderRepository orderRepository;
-    private final RestaurantServiceGateway restaurantServiceGateway;
     private final RestaurantUserServiceGateway restaurantUserServiceGateway;
     private final MenuItemServiceGateway menuItemServiceGateway;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantServiceGateway restaurantServiceGateway, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.orderRepository = orderRepository;
-        this.restaurantServiceGateway = restaurantServiceGateway;
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
         this.menuItemServiceGateway = menuItemServiceGateway;
         this.pageableBuilder = pageableBuilder;
@@ -90,6 +87,10 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
 
     @Transactional
     public void delete(String hashId) {
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        findByHashIdAndUser(hashId, loggedUser);
+        flush();
+        deleteByHashId(hashId);
     }
 
     @Transactional

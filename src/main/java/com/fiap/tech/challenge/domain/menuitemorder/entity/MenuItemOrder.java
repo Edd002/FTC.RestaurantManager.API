@@ -47,7 +47,7 @@ public class MenuItemOrder extends Audit implements Serializable {
     @JoinColumn(name = "fk_menu_item", nullable = false)
     private MenuItem menuItem;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_order", nullable = false)
     private Order order;
 
