@@ -67,7 +67,7 @@ public class RestaurantUserServiceGateway extends BaseServiceGateway<IRestaurant
     @Transactional
     public void delete(String hashId) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
-        RestaurantUser existingRestaurantUser = findByHashIdAndUser(hashId, AuthUserContextHolder.getAuthUser());
+        RestaurantUser existingRestaurantUser = findByHashIdAndUser(hashId, loggedUser);
         if (new RestaurantUserCheckForDeleteUseCase(loggedUser, restaurantUserRepository.findByRestaurant(existingRestaurantUser.getRestaurant())).isAllowedToDelete()) {
             flush();
             deleteByHashId(existingRestaurantUser.getHashId());

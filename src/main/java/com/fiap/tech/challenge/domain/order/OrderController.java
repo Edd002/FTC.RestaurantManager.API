@@ -1,9 +1,6 @@
 package com.fiap.tech.challenge.domain.order;
 
-import com.fiap.tech.challenge.domain.order.dto.OrderGetFilter;
-import com.fiap.tech.challenge.domain.order.dto.OrderPostRequestDTO;
-import com.fiap.tech.challenge.domain.order.dto.OrderPutRequestDTO;
-import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
+import com.fiap.tech.challenge.domain.order.dto.*;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -58,12 +55,20 @@ public class OrderController {
         return new BaseSuccessResponse201<>(orderServiceGateway.create(orderPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar pedido", description = "Atualizar pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PutMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderPutRequestDTO orderPutRequestDTO) {
-        log.info("Atualizando pedido...");
-        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderPutRequestDTO)).buildResponse();
+    @PatchMapping(value = "/change-status/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
+        log.info("Atualizando status do pedido...");
+        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
+    }
+
+    @Operation(method = "PATCH", summary = "Atualizar tipo do pedido", description = "Atualizar tipo do pedido.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PatchMapping(value = "/change-type/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
+        log.info("Atualizando tipo do pedido...");
+        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar pedido por filtro", description = "Buscar pedido por filtro.")

@@ -34,12 +34,6 @@ public class MenuItemOrder extends Audit implements Serializable {
         this.setOrder(order);
     }
 
-    public MenuItemOrder rebuild(@NonNull MenuItem menuItem, @NonNull Order order) {
-        this.setMenuItem(menuItem);
-        this.setOrder(order);
-        return this;
-    }
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -53,7 +47,7 @@ public class MenuItemOrder extends Audit implements Serializable {
     @JoinColumn(name = "fk_menu_item", nullable = false)
     private MenuItem menuItem;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_order", nullable = false)
     private Order order;
 
