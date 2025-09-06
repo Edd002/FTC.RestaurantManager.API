@@ -10,6 +10,7 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.exception.OrderCreateException;
 import com.fiap.tech.challenge.global.exception.OrderStatusException;
 import com.fiap.tech.challenge.global.exception.OrderTypeException;
 import jakarta.persistence.*;
@@ -38,6 +39,9 @@ public class Order extends Audit implements Serializable {
     protected Order() {}
 
     public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull List<MenuItem> menuItems, @NonNull Restaurant restaurant, @NonNull User user) {
+        if (menuItems.stream().anyMatch(menuItem -> !menuItem.getAvailability())) {
+            throw new OrderCreateException("Um ou mais items do menu selecionados para o pedido estão indisponíveis.");
+        }
         this.setStatus(status);
         this.setType(type);
         this.setMenuItemOrders(menuItems.stream().map(menuItem -> new MenuItemOrder(menuItem, this)).collect(Collectors.toList()));
