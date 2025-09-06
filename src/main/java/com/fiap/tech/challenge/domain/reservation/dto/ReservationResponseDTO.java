@@ -2,8 +2,8 @@ package com.fiap.tech.challenge.domain.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationStatusEnum;
-import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationBookingTimeEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.global.base.dto.BaseResponseDTO;
@@ -27,7 +27,7 @@ public class ReservationResponseDTO extends BaseResponseDTO {
 
     @Schema(description = "Status da reserva do restaurante.", example = "REQUESTED")
     @JsonProperty("bookingStatus")
-    private ReservationStatusEnum bookingStatus;
+    private ReservationBookingStatusEnum bookingStatus;
 
     @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST")
     @JsonProperty("bookingTime")

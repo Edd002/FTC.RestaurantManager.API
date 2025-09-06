@@ -4,6 +4,7 @@ import com.fiap.tech.challenge.domain.menuitem.MenuItemServiceGateway;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
 import com.fiap.tech.challenge.domain.order.dto.*;
 import com.fiap.tech.challenge.domain.order.entity.Order;
+import com.fiap.tech.challenge.domain.order.enumerated.OrderStatusEnum;
 import com.fiap.tech.challenge.domain.order.specification.OrderSpecificationBuilder;
 import com.fiap.tech.challenge.domain.order.usecase.OrderCreateUseCase;
 import com.fiap.tech.challenge.domain.order.usecase.OrderUpdateUseCase;
@@ -71,6 +72,14 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     }
 
     @Transactional
+    public OrderResponseDTO cancel(String hashId) {
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Order existingOrder = findByHashIdAndUser(hashId, loggedUser);
+        Order updatedOrder = new OrderUpdateUseCase(existingOrder, OrderStatusEnum.CANCELED).getRebuiltedOrder();
+        return modelMapperPresenter.map(save(updatedOrder), OrderResponseDTO.class);
+    }
+
+    @Transactional
     public Page<OrderResponseDTO> find(OrderGetFilter filter) {
         Pageable pageable = pageableBuilder.build(filter);
         Optional<Specification<Order>> specification = new OrderSpecificationBuilder().build(filter);
@@ -83,14 +92,6 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     @Transactional
     public OrderResponseDTO find(String hashId) {
         return modelMapperPresenter.map(findByHashId(hashId), OrderResponseDTO.class);
-    }
-
-    @Transactional
-    public void delete(String hashId) {
-        User loggedUser = AuthUserContextHolder.getAuthUser();
-        findByHashIdAndUser(hashId, loggedUser);
-        flush();
-        deleteByHashId(hashId);
     }
 
     @Transactional

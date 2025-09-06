@@ -22,3 +22,8 @@ ALTER TABLE public.t_order ADD CONSTRAINT t_order__fk_restaurant FOREIGN KEY (fk
 ALTER TABLE public.t_order ADD CONSTRAINT t_order__fk_user FOREIGN KEY (fk_user) REFERENCES public.t_user (id);
 
 CREATE UNIQUE INDEX T_ORDER__HASH_ID_UK ON public.t_order (hash_id);
+
+ALTER TABLE public.t_order
+    ADD CONSTRAINT T_ORDER__STATUS_CHECK CHECK (status IN ('REQUESTED', 'CONFIRMED', 'WAITING_FOR_PICKUP', 'ON_DELIVERY_ROUTE', 'DELIVERED', 'CANCELED'));
+ALTER TABLE public.t_order
+    ADD CONSTRAINT T_ORDER__TYPE_CHECK CHECK (type IN ('DELIVERY', 'PICKUP'));

@@ -27,3 +27,8 @@ ALTER TABLE public.t_reservation
 
 CREATE UNIQUE INDEX T_RESERVATION__HASH_ID_UK ON public.t_reservation (hash_id);
 CREATE UNIQUE INDEX T_RESERVATION__FK_RESTAURANT_AND_FK_USER_AND_B_TIM_AND_B_DAT_UK ON public.t_reservation (fk_restaurant, fk_user, booking_time, booking_date, deleted) WHERE deleted IS NULL OR deleted = false;
+
+ALTER TABLE public.t_reservation
+    ADD CONSTRAINT T_RESERVATION__BOOKING_STATUS_CHECK CHECK (booking_status IN ('REQUESTED', 'ACCEPTED', 'REJECTED'));
+ALTER TABLE public.t_reservation
+    ADD CONSTRAINT T_RESERVATION__BOOKING_TIME_CHECK CHECK (booking_time IN ('BREAKFAST', 'LUNCH', 'DINNER'));

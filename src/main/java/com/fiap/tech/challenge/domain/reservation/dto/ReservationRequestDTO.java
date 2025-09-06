@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fiap.tech.challenge.domain.order.enumerated.OrderTypeEnum;
-import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationBookingTimeEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.deserializer.DateDeserializer;
 import com.fiap.tech.challenge.global.util.deserializer.StrictLongDeserializer;

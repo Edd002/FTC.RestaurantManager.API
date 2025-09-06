@@ -1,7 +1,7 @@
 package com.fiap.tech.challenge.domain.reservation.dto;
 
-import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationStatusEnum;
-import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationBookingTimeEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.global.base.BasePaginationFilter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +19,7 @@ public final class ReservationGetFilter extends BasePaginationFilter {
     private String hashIdRestaurant;
 
     @Schema(description = "Status da reserva do restaurante.", example = "REQUESTED")
-    private ReservationStatusEnum bookingStatus;
+    private ReservationBookingStatusEnum bookingStatus;
 
     @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST")
     private ReservationBookingTimeEnum bookingTime;
