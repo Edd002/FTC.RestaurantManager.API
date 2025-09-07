@@ -17,15 +17,15 @@ public class ReservationSpecificationBuilder extends BasicSpecificationBuilder<R
         }
 
         if (ValidationUtil.isNotNull(filter.getBookingStatus())) {
-            where("bookingStatus", SearchOperationEnum.EQUAL, filter.getBookingTime());
+            where("bookingStatus", SearchOperationEnum.EQUAL, filter.getBookingStatus());
         }
 
         if (ValidationUtil.isNotNull(filter.getBookingTime())) {
             where("bookingTime", SearchOperationEnum.EQUAL, filter.getBookingTime());
         }
 
-        if (ValidationUtil.isNotNull(filter.getDate())) {
-            where("date", SearchOperationEnum.EQUAL, filter.getDate());
+        if (ValidationUtil.isNotNull(filter.getBookingDate())) {
+            where("bookingDate", SearchOperationEnum.EQUAL, filter.getBookingDate());
         }
     }
 

@@ -3,7 +3,6 @@ package com.fiap.tech.challenge.domain.reservation.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fiap.tech.challenge.domain.order.enumerated.OrderTypeEnum;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.deserializer.DateDeserializer;
@@ -21,12 +20,12 @@ import java.util.Date;
 @Getter
 public abstract class ReservationRequestDTO extends BaseRequestDTO {
 
-    @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST", maxLength = 255)
+    @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST", maxLength = 255, allowableValues = { "BREAKFAST", "LUNCH", "DINNER" })
     @Size(max = 255, message = "O número de caracteres máximo para o horário da reserva do restaurante é 255 caracteres.")
-    @ValueOfEnum(enumClass = OrderTypeEnum.class, message = "Horário da reserva do restaurante inválido.")
+    @ValueOfEnum(enumClass = ReservationBookingTimeEnum.class, message = "Horário da reserva do restaurante inválido.")
     @NotBlank(message = "O horário da reserva do restaurante não pode ser nulo ou em branco.")
     @JsonProperty("bookingTime")
-    private ReservationBookingTimeEnum bookingTime;
+    private String bookingTime;
 
     @Schema(description = "Data da reserva do restaurante.", example = "30/08/2025")
     @NotNull(message = "A data da reserva do restaurante não pode ser nula.")

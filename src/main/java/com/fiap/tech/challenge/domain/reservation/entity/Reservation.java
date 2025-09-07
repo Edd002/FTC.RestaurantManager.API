@@ -8,6 +8,7 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.exception.ReservationCreateException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +34,15 @@ public class Reservation extends Audit implements Serializable {
     protected Reservation() {}
 
     public Reservation(@NonNull ReservationBookingStatusEnum bookingStatus, @NonNull ReservationBookingTimeEnum bookingTime, @NonNull Date bookingDate, @NonNull Long bookingQuantity, @NonNull Restaurant restaurant, @NonNull User user) {
+        long totalReservationQuantityInBookingTimeAndBookingDate = restaurant.getReservations().stream()
+                .filter(restaurantReservation -> !restaurantReservation.getBookingStatus().equals(ReservationBookingStatusEnum.REJECTED)
+                        && (restaurantReservation.getBookingTime().equals(bookingTime)
+                        && restaurantReservation.getBookingDate().equals(bookingDate)))
+                .mapToLong(Reservation::getBookingQuantity)
+                .sum();
+        if (totalReservationQuantityInBookingTimeAndBookingDate > bookingQuantity) {
+            throw new ReservationCreateException("O restaurante já alcançou o limite máximo de quantidade de reservas para o horário e data informados.");
+        }
         this.setBookingStatus(bookingStatus);
         this.setBookingTime(bookingTime);
         this.setBookingDate(bookingDate);

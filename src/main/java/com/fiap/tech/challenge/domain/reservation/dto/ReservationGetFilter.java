@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -24,8 +25,9 @@ public final class ReservationGetFilter extends BasePaginationFilter {
     @Schema(description = "Horário da reserva do restaurante.", example = "BREAKFAST")
     private ReservationBookingTimeEnum bookingTime;
 
-    @Schema(description = "Data da reserva do restaurante.", example = "30/08/2025")
-    private Date date;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Schema(description = "Data da reserva do restaurante.", type = "string", format = "date", example = "30/08/2025")
+    private Date bookingDate;
 
     public ReservationGetFilter(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);

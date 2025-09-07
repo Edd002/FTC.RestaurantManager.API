@@ -6,8 +6,12 @@ import com.fiap.tech.challenge.domain.reservation.dto.ReservationPutRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import com.fiap.tech.challenge.domain.reservation.entity.Reservation;
 import com.fiap.tech.challenge.domain.reservation.specification.ReservationSpecificationBuilder;
+import com.fiap.tech.challenge.domain.reservation.usecase.ReservationCreateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantServiceGateway;
+import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
+import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
+import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseServiceGateway;
 import com.fiap.tech.challenge.global.search.builder.PageableBuilder;
 import jakarta.transaction.Transactional;
@@ -42,7 +46,11 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     @Transactional
     public ReservationResponseDTO create(ReservationPostRequestDTO reservationPostRequestDTO) {
-        return null;
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(reservationPostRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
+        //Long totalReservationQuantityInBookingTimeAndBookingDate = new TotalReservationQuantityInBookingTimeAndBookingDateUseCase(existingRestaurant.getReservations(), reservationPostRequestDTO).getBuiltedTotalReservationQuantityInBookingTimeAndBookingDate();
+        Reservation newReservation = new ReservationCreateUseCase(loggedUser, existingRestaurant, reservationPostRequestDTO).getBuiltedReservation();
+        return modelMapperPresenter.map(save(newReservation), ReservationResponseDTO.class);
     }
 
     @Transactional

@@ -91,7 +91,7 @@ public abstract class RestaurantRequestDTO extends BaseRequestDTO {
     @JsonProperty("dinnerLimitReservations")
     private Integer dinnerLimitReservations;
 
-    @Schema(description = "Tipo do restaurante.", example = "STEAKHOUSE", maxLength = 255)
+    @Schema(description = "Tipo do restaurante.", example = "STEAKHOUSE", maxLength = 255, allowableValues = { "QUICK_SERVICE_RESTAURANTS_OR_FAST_FOOD", "FAST_CASUAL_CONCEPTS", "CASUAL_DINING_RESTAURANTS", "CONTEMPORARY_CASUAL", "PREMIUM_CASUAL", "FINE_DINING", "FAMILY_STYLE_DINING", "DINER_SOMETIMES_KNOWN_AS_A_GREASY_SPOON", "CAFES_AND_COFFEE_SHOPS", "BAKERY", "DRINK_SHOP", "BAR_OR_PUB", "FOOD_TRUCKS_AND_MOBILE_EATERIES", "POP_UP_RESTAURANTS", "GHOST_OR_DELIVERY_ONLY_KITCHENS", "DELIVERY_ONLY_CONCEPTS", "DRIVE_IN_DINING_EXPERIENCES", "CONCESSION_STAND", "STEAKHOUSE", "SUSHI_BAR", "BBQ_RESTAURANT", "TAPAS_BAR", "ROTISSERIE", "NOODLE_BAR", "DESSERT_CAFE", "ICE_CREAM_PARLORS_AND_FROZEN_DESSERT_SHOPS", "BISTRO", "PIZZERIA", "BUFFET", "THEMED_RESTAURANTS", "ETHNIC_RESTAURANTS", "BRASSERIE", "CAFETERIA", "PASTA_RESTAURANT", "TABLE_SERVICE", "COUNTER_SERVICE", "TABLETOP_COOKING", "FULL_SERVICE", "FARM_TO_TABLE_RESTAURANTS", "FUSION_CONCEPTS_RESTAURANTS", "FOOD_HALLS_AND_SHARED_DINING_SPACES", "EMERGING_AND_INNOVATIVE_DINING_MODELS" })
     @Size(max = 255, message = "O número de caracteres máximo para o tipo do restaurante é 255 caracteres.")
     @ValueOfEnum(enumClass = RestaurantTypeEnum.class, message = "Tipo do restaurante inválido.")
     @NotBlank(message = "O tipo do restaurante não pode ser nulo ou em branco.")

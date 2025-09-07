@@ -14,7 +14,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderUpdateTypePatchRequestDTO extends BaseRequestDTO {
 
-    @Schema(description = "Tipo do pedido.", example = "DELIVERY", maxLength = 255)
+    @Schema(description = "Tipo do pedido.", example = "DELIVERY", maxLength = 255, allowableValues = { "DELIVERY", "PICKUP" })
     @Size(max = 255, message = "O número de caracteres máximo para o tipo do pedido é 255 caracteres.")
     @ValueOfEnum(enumClass = OrderTypeEnum.class, message = "Tipo do pedido inválido.")
     @NotBlank(message = "O tipo do pedido não pode ser nulo ou em branco.")

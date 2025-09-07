@@ -87,10 +87,10 @@ public class User extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<RestaurantUser> restaurantUsers;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<Order> orders;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.REMOVE })
     private List<Reservation> reservations;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
