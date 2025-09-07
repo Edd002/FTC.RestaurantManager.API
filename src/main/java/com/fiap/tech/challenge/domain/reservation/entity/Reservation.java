@@ -1,9 +1,9 @@
 package com.fiap.tech.challenge.domain.reservation.entity;
 
-import com.fiap.tech.challenge.domain.menuitemorder.MenuItemOrderEntityListener;
-import com.fiap.tech.challenge.domain.menuitemorder.enumerated.constraint.MenuItemOrderConstraint;
+import com.fiap.tech.challenge.domain.reservation.ReservationEntityListener;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.constraint.ReservationConstraint;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
@@ -27,8 +27,8 @@ import java.util.Date;
 @Table(name = "t_reservation")
 @SQLDelete(sql = "UPDATE t_reservation SET deleted = true WHERE id = ?")
 @SQLRestriction(value = "deleted = false")
-@EntityListeners({ MenuItemOrderEntityListener.class })
-@ConstraintMapper(constraintClass = MenuItemOrderConstraint.class)
+@EntityListeners({ ReservationEntityListener.class })
+@ConstraintMapper(constraintClass = ReservationConstraint.class)
 public class Reservation extends Audit implements Serializable {
 
     protected Reservation() {}
