@@ -11,12 +11,9 @@ import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Objects;
 
 @Configuration
 public class MapperPresenterConfig {
@@ -59,16 +56,7 @@ public class MapperPresenterConfig {
     }
 
     private void configOrderToOrderResponseDTOMapperPresenter(ModelMapper modelMapperPresenter) {
-        PropertyMap<Order, OrderResponseDTO> orderPropertyMap = new PropertyMap<>() {
-            @Override
-            protected void configure() {
-                if (Objects.nonNull(destination.getMenuItemOrders())) {
-                    destination.getMenuItemOrders().forEach(menuItemOrderResponseDTO -> skip(menuItemOrderResponseDTO.getMenuItem().getMenu()));
-                }
-            }
-        };
-        modelMapperPresenter.typeMap(Order.class, OrderResponseDTO.class)
-                .addMappings(orderPropertyMap);
+        modelMapperPresenter.typeMap(Order.class, OrderResponseDTO.class);
     }
 
     private void configUserToUserResponseDTOModelMapperPresenter(ModelMapper modelMapperPresenter) {
