@@ -120,10 +120,10 @@ public class Restaurant extends Audit implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private List<RestaurantUser> restaurantUsers;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = { CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = { CascadeType.REMOVE })
     private List<Order> orders;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = { CascadeType.REMOVE })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = { CascadeType.REMOVE })
     private List<Reservation> reservations;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
