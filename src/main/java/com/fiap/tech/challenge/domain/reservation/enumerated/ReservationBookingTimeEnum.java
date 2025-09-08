@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.domain.reservation.enumerated.constraint;
+package com.fiap.tech.challenge.domain.reservation.enumerated;
 
 import lombok.Getter;
 

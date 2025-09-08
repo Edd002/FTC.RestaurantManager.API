@@ -19,6 +19,10 @@ public class OrderUpdateUseCase {
         this.order = rebuildOrder(existingOrder, orderUpdateTypePatchRequestDTO);
     }
 
+    public OrderUpdateUseCase(@NonNull Order existingOrder, @NonNull OrderStatusEnum status) {
+        this.order = rebuildOrder(existingOrder, status);
+    }
+
     private Order rebuildOrder(Order existingOrder, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
         return existingOrder.rebuild(
                 OrderStatusEnum.valueOf(orderUpdateStatusPatchRequestDTO.getStatus())
@@ -29,6 +33,10 @@ public class OrderUpdateUseCase {
         return existingOrder.rebuild(
                 OrderTypeEnum.valueOf(orderUpdateTypePatchRequestDTO.getType())
         );
+    }
+
+    private Order rebuildOrder(Order existingOrder, OrderStatusEnum status) {
+        return existingOrder.rebuild(status);
     }
 
     public Order getRebuiltedOrder() {

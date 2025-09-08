@@ -3,7 +3,7 @@ package com.fiap.tech.challenge.domain.reservation.enumerated;
 import lombok.Getter;
 
 @Getter
-public enum ReservationStatusEnum {
+public enum ReservationBookingStatusEnum {
 
     REQUESTED("Reservation status for requested"),
     ACCEPTED("Reservation status for accepted"),
@@ -11,7 +11,7 @@ public enum ReservationStatusEnum {
 
     private final String description;
 
-    ReservationStatusEnum(String description) {
+    ReservationBookingStatusEnum(String description) {
         this.description = description;
     }
 }

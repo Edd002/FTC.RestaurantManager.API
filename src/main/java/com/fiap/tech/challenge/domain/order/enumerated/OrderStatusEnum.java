@@ -10,7 +10,8 @@ public enum OrderStatusEnum {
     CONFIRMED(2, "Order status confirmed"),
     WAITING_FOR_PICKUP(3, "Order status waiting for pickup"),
     ON_DELIVERY_ROUTE(4, "Order status on delivery route"),
-    DELIVERED(5, "Order status delivered");
+    DELIVERED(5, "Order status delivered"),
+    CANCELED(6, "Order status canceled");
 
     private final Integer sequence;
     private final String description;
@@ -30,6 +31,10 @@ public enum OrderStatusEnum {
 
     public static boolean isDelivered(OrderStatusEnum status) {
         return ValidationUtil.isNotNull(status) && (status.equals(DELIVERED));
+    }
+
+    public static boolean isCanceled(OrderStatusEnum status) {
+        return ValidationUtil.isNotNull(status) && (status.equals(CANCELED));
     }
 
     public static boolean isBefore(OrderStatusEnum status1, OrderStatusEnum status2) {

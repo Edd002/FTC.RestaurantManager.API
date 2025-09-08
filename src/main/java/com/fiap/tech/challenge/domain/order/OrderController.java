@@ -4,7 +4,6 @@ import com.fiap.tech.challenge.domain.order.dto.*;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
-import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -71,6 +70,14 @@ public class OrderController {
         return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
     }
 
+    @Operation(method = "PATCH", summary = "Cancelar tipo do pedido", description = "Cancelar tipo do pedido.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PatchMapping(value = "/cancel/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> cancel(@PathVariable("hashId") String hashId) {
+        log.info("Cancelando tipo do pedido...");
+        return new BaseSuccessResponse200<>(orderServiceGateway.cancel(hashId)).buildResponse();
+    }
+
     @Operation(method = "GET", summary = "Buscar pedido por filtro", description = "Buscar pedido por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
@@ -85,14 +92,5 @@ public class OrderController {
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando pedido...");
         return new BaseSuccessResponse200<>(orderServiceGateway.find(hashId)).buildResponse();
-    }
-
-    @Operation(method = "DELETE", summary = "Excluir pedido", description = "Excluir pedido.")
-    @ApiResponse(responseCode = "200", description = "OK")
-    @DeleteMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<OrderResponseDTO>> delete(@PathVariable("hashId") String hashId) {
-        log.info("Excluindo pedido...");
-        orderServiceGateway.delete(hashId);
-        return new NoPayloadBaseSuccessResponse200<OrderResponseDTO>().buildResponseWithoutPayload();
     }
 }

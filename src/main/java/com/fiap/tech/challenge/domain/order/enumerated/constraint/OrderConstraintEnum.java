@@ -10,8 +10,8 @@ import lombok.experimental.FieldNameConstants;
 public enum OrderConstraintEnum {
 
     @FieldNameConstants.Include T_ORDER__HASH_ID_UK("O hash id informado para o pedido já encontra-se cadastrado."),
-    @FieldNameConstants.Include T_ORDER__STATUS_CHECK("O status informada para o pedido não é uma opção válida."),
-    @FieldNameConstants.Include T_ORDER__TYPE_CHECK("O tipo informada para o pedido não é uma opção válida.");
+    @FieldNameConstants.Include T_ORDER__STATUS_CHECK("O status informado para o pedido não é uma opção válida."),
+    @FieldNameConstants.Include T_ORDER__TYPE_CHECK("O tipo informado para o pedido não é uma opção válida.");
 
     private final String errorMessage;
 }

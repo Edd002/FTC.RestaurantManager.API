@@ -6,17 +6,22 @@ import com.fiap.tech.challenge.domain.menu.dto.MenuBatchResponseDTO;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.menuitem.dto.MenuItemResponseDTO;
 import com.fiap.tech.challenge.domain.menuitem.entity.MenuItem;
+import com.fiap.tech.challenge.domain.menuitemorder.dto.MenuItemOrderResponseDTO;
+import com.fiap.tech.challenge.domain.menuitemorder.entity.MenuItemOrder;
 import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
 import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.user.dto.UserResponseDTO;
 import com.fiap.tech.challenge.domain.user.entity.User;
+import com.fiap.tech.challenge.global.util.ValidationUtil;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 public class MapperPresenterConfig {
@@ -59,20 +64,24 @@ public class MapperPresenterConfig {
     }
 
     private void configOrderToOrderResponseDTOMapperPresenter(ModelMapper modelMapperPresenter) {
-        PropertyMap<Order, OrderResponseDTO> orderPropertyMap = new PropertyMap<>() {
-            @Override
-            protected void configure() {
-                if (Objects.nonNull(destination.getMenuItemOrders())) {
-                    destination.getMenuItemOrders().forEach(menuItemOrderResponseDTO -> skip(menuItemOrderResponseDTO.getMenuItem().getMenu()));
-                }
-            }
-        };
         modelMapperPresenter.typeMap(Order.class, OrderResponseDTO.class)
-                .addMappings(orderPropertyMap);
+        .addMappings(mapper -> mapper.using(generateConverterListMenuItemOrderResponseDTOForOrderResponseDTO())
+                .map(Order::getMenuItemOrders, (orderResponseDTO, menuItemOrdersResponseDTO) -> orderResponseDTO.setMenuItemOrders((List<MenuItemOrderResponseDTO>) menuItemOrdersResponseDTO)));
     }
 
     private void configUserToUserResponseDTOModelMapperPresenter(ModelMapper modelMapperPresenter) {
         modelMapperPresenter.typeMap(User.class, UserResponseDTO.class)
                 .addMappings(mapperPresenter -> mapperPresenter.map(src -> src.getType().getName(), UserResponseDTO::setType));
     }
+
+    private Converter<List<MenuItemOrder>, List<MenuItemOrderResponseDTO>> generateConverterListMenuItemOrderResponseDTOForOrderResponseDTO() {
+        return context -> ValidationUtil.isNotNull(context.getSource()) ?
+                context.getSource().stream()
+                        .map(menuItemOrder -> {
+                            MenuItemResponseDTO menuItemResponseDTO = new MenuItemResponseDTO();
+                            BeanUtils.copyProperties(menuItemOrder.getMenuItem(), menuItemResponseDTO);
+                            return new MenuItemOrderResponseDTO(menuItemResponseDTO);
+                        }).collect(Collectors.toList()) : null;
+    }
+
 }

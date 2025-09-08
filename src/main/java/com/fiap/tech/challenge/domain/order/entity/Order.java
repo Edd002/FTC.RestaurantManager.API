@@ -10,6 +10,7 @@ import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
+import com.fiap.tech.challenge.global.exception.OrderCreateException;
 import com.fiap.tech.challenge.global.exception.OrderStatusException;
 import com.fiap.tech.challenge.global.exception.OrderTypeException;
 import jakarta.persistence.*;
@@ -38,6 +39,9 @@ public class Order extends Audit implements Serializable {
     protected Order() {}
 
     public Order(@NonNull OrderStatusEnum status, @NonNull OrderTypeEnum type, @NonNull List<MenuItem> menuItems, @NonNull Restaurant restaurant, @NonNull User user) {
+        if (menuItems.stream().anyMatch(menuItem -> !menuItem.getAvailability())) {
+            throw new OrderCreateException("Um ou mais items do menu selecionados para o pedido estão indisponíveis.");
+        }
         this.setStatus(status);
         this.setType(type);
         this.setMenuItemOrders(menuItems.stream().map(menuItem -> new MenuItemOrder(menuItem, this)).collect(Collectors.toList()));
@@ -49,6 +53,9 @@ public class Order extends Audit implements Serializable {
         if (OrderStatusEnum.isDelivered(this.status)) {
             throw new OrderStatusException("Pedidos entregues não podem ser atualizados.");
         }
+        if (OrderStatusEnum.isCanceled(this.status)) {
+            throw new OrderStatusException("Pedidos cancelados não podem ser atualizados.");
+        }
         if (OrderTypeEnum.isForPickup(type) && OrderStatusEnum.isForDelivery(this.status)) {
             throw new OrderTypeException("O pedido não pode ser atualizado para buscar no local se já estiver em rota de entrega.");
         }
@@ -59,6 +66,12 @@ public class Order extends Audit implements Serializable {
     public Order rebuild(@NonNull OrderStatusEnum status) {
         if (OrderStatusEnum.isDelivered(this.status)) {
             throw new OrderStatusException("Pedidos entregues não podem ser atualizados.");
+        }
+        if (OrderStatusEnum.isCanceled(this.status)) {
+            throw new OrderStatusException("Pedidos cancelados não podem ser atualizados.");
+        }
+        if (OrderStatusEnum.isForDelivery(this.status) && OrderStatusEnum.isCanceled(status)) {
+            throw new OrderStatusException("O pedido que está em rota de entrega não pode ser cancelado.");
         }
         if (OrderTypeEnum.isForDelivery(this.type) && OrderStatusEnum.isForPickup(status)) {
             throw new OrderStatusException("O pedido que está para entrega não pode ser atualizado para aguardando buscar no local.");
