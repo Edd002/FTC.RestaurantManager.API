@@ -7,7 +7,6 @@ import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
-import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -80,14 +79,5 @@ public class ReservationController {
     public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando reserva...");
         return new BaseSuccessResponse200<>(reservationServiceGateway.find(hashId)).buildResponse();
-    }
-
-    @Operation(method = "DELETE", summary = "Excluir reserva", description = "Excluir reserva.")
-    @ApiResponse(responseCode = "200", description = "OK")
-    @DeleteMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<ReservationResponseDTO>> delete(@PathVariable("hashId") String hashId) {
-        log.info("Excluindo reserva...");
-        reservationServiceGateway.delete(hashId);
-        return new NoPayloadBaseSuccessResponse200<ReservationResponseDTO>().buildResponseWithoutPayload();
     }
 }

@@ -73,10 +73,6 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
         return modelMapperPresenter.map(findByHashId(hashId), ReservationResponseDTO.class);
     }
 
-    @Transactional
-    public void delete(String hashId) {
-    }
-
     @Override
     public Reservation findByHashId(String hashId) {
         return super.findByHashId(hashId, String.format("A reserva com o hash id %s não foi encontrada.", hashId));

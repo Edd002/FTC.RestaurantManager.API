@@ -250,6 +250,10 @@ public class DateUtil {
         return new Date();
     }
 
+    public static Date nowTruncate() {
+        return truncateDate(now());
+    }
+
     public static Date parseDatetime(String text) {
         return parse(text, configureDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss.getValue()));
     }
