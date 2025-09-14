@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.config;
 
-import com.fiap.tech.challenge.messaging.DTO;
+import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -30,7 +30,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, DTO> carProducerFactory() {
+    public ProducerFactory<String, OrderResponseDTO> orderProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -39,7 +39,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, DTO> carkafkaTemplate() {
-        return new KafkaTemplate<>(carProducerFactory());
+    public KafkaTemplate<String, OrderResponseDTO> orderKafkaTemplate() {
+        return new KafkaTemplate<>(orderProducerFactory());
     }
 }
