@@ -92,7 +92,8 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
 
     @Transactional
     public OrderResponseDTO find(String hashId) {
-        return modelMapperPresenter.map(findByHashId(hashId), OrderResponseDTO.class);
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        return modelMapperPresenter.map(findByHashIdAndUser(hashId, loggedUser), OrderResponseDTO.class);
     }
 
     @Transactional

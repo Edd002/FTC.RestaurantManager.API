@@ -81,7 +81,8 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     @Transactional
     public ReservationResponseDTO find(String hashId) {
-        return modelMapperPresenter.map(findByHashId(hashId), ReservationResponseDTO.class);
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        return modelMapperPresenter.map(findByHashIdAndUser(hashId, loggedUser), ReservationResponseDTO.class);
     }
 
     @Transactional

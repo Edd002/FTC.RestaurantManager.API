@@ -3,6 +3,7 @@ package com.fiap.tech.challenge.global.base;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
+import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse422;
 import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse500;
 import com.fiap.tech.challenge.global.constraint.ConstraintComponent;
@@ -21,6 +22,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -101,6 +103,11 @@ public class BaseController {
     @ExceptionHandler(value = {ApiException.class})
     public ResponseEntity<?> handleApiException(ApiException apiException) {
         return apiException.getBaseErrorResponse().buildResponse();
+    }
+
+    @ExceptionHandler(value = {AuthorizationDeniedException.class})
+    ResponseEntity<?> handleAuthorizationDeniedException(AuthorizationDeniedException authorizationDeniedException) {
+        return new BaseErrorResponse403(List.of("O usuário não possui permissão para a operação solicitada.")).buildResponse();
     }
 
     @ExceptionHandler(value = {Exception.class})
