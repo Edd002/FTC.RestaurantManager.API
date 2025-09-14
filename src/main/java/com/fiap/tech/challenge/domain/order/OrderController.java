@@ -17,6 +17,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,48 +47,54 @@ public class OrderController {
         this.orderServiceGateway = orderServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar pedido", description = "Criar pedido.")
+    @Operation(method = "POST", summary = "Criar pedido.", description = "Criar pedido.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<OrderResponseDTO>> create(@RequestBody @Valid OrderPostRequestDTO orderPostRequestDTO) {
         log.info("Criando pedido...");
         return new BaseSuccessResponse201<>(orderServiceGateway.create(orderPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar status do pedido.", description = "Atualizar status do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PatchMapping(value = "/change-status/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> updateStatus(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
         log.info("Atualizando status do pedido...");
-        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(orderServiceGateway.updateStatus(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar tipo do pedido", description = "Atualizar tipo do pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar tipo do pedido.", description = "Atualizar tipo do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PatchMapping(value = "/change-type/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> updateType(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
         log.info("Atualizando tipo do pedido...");
-        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(orderServiceGateway.updateType(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Cancelar tipo do pedido", description = "Cancelar tipo do pedido.")
+    @Operation(method = "PATCH", summary = "Cancelar pedido.", description = "Cancelar pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PatchMapping(value = "/cancel/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> cancel(@PathVariable("hashId") String hashId) {
-        log.info("Cancelando tipo do pedido...");
+        log.info("Cancelando pedido...");
         return new BaseSuccessResponse200<>(orderServiceGateway.cancel(hashId)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar pedido por filtro", description = "Buscar pedido por filtro.")
+    @Operation(method = "GET", summary = "Buscar pedido por filtro.", description = "Buscar pedido por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<OrderResponseDTO>> find(@ParameterObject @Valid OrderGetFilter filter) {
         log.info("Buscando pedidos por filtro...");
         return new BasePageableSuccessResponse200<>(orderServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar pedido", description = "Buscar pedido.")
+    @Operation(method = "GET", summary = "Buscar pedido.", description = "Buscar pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando pedido...");

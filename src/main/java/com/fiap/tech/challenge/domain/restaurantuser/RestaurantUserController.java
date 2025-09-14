@@ -49,7 +49,7 @@ public class RestaurantUserController {
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar associação de usuário com restaurante", description = "Criar associação de usuário com restaurante.")
+    @Operation(method = "POST", summary = "Criar associação de usuário com restaurante.", description = "Criar associação de usuário com restaurante.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantUserResponseDTO>> create(@RequestBody @Valid RestaurantUserPostRequestDTO restaurantUserPostRequestDTO) {
@@ -57,7 +57,7 @@ public class RestaurantUserController {
         return new BaseSuccessResponse201<>(restaurantUserServiceGateway.create(restaurantUserPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar associações de usuários com restaurantes por filtro", description = "Buscar associações de usuários com restaurantes por filtro.")
+    @Operation(method = "GET", summary = "Buscar associações de usuários com restaurantes por filtro.", description = "Buscar associações de usuários com restaurantes por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<RestaurantUserResponseDTO>> find(@ParameterObject @Valid RestaurantUserGetFilter filter) {
@@ -65,7 +65,7 @@ public class RestaurantUserController {
         return new BasePageableSuccessResponse200<>(restaurantUserServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar associação de usuário com restaurante", description = "Buscar associação de usuário com restaurante.")
+    @Operation(method = "GET", summary = "Buscar associação de usuário com restaurante.", description = "Buscar associação de usuário com restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantUserResponseDTO>> find(@PathVariable("hashId") String hashId) {
@@ -73,7 +73,7 @@ public class RestaurantUserController {
         return new BaseSuccessResponse200<>(restaurantUserServiceGateway.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir associação de usuário com restaurante", description = "Excluir associação de usuário com restaurante.")
+    @Operation(method = "DELETE", summary = "Excluir associação de usuário com restaurante.", description = "Excluir associação de usuário com restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantUserResponseDTO>> delete(@PathVariable("hashId") String hashId) {

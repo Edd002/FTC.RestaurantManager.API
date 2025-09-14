@@ -56,15 +56,16 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     }
 
     @Transactional
-    public OrderResponseDTO update(String hashId, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
+    public OrderResponseDTO updateStatus(String hashId, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
-        Order existingOrder = findByHashIdAndUser(hashId, loggedUser);
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(orderUpdateStatusPatchRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
+        Order existingOrder = findByHashIdAndRestaurantAndUserHashId(hashId, existingRestaurant, orderUpdateStatusPatchRequestDTO.getHashIdUser());
         Order updatedOrder = new OrderUpdateUseCase(existingOrder, orderUpdateStatusPatchRequestDTO).getRebuiltedOrder();
         return modelMapperPresenter.map(save(updatedOrder), OrderResponseDTO.class);
     }
 
     @Transactional
-    public OrderResponseDTO update(String hashId, OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
+    public OrderResponseDTO updateType(String hashId, OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
         Order existingOrder = findByHashIdAndUser(hashId, loggedUser);
         Order updatedOrder = new OrderUpdateUseCase(existingOrder, orderUpdateTypePatchRequestDTO).getRebuiltedOrder();
@@ -91,12 +92,18 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
 
     @Transactional
     public OrderResponseDTO find(String hashId) {
-        return modelMapperPresenter.map(findByHashId(hashId), OrderResponseDTO.class);
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        return modelMapperPresenter.map(findByHashIdAndUser(hashId, loggedUser), OrderResponseDTO.class);
     }
 
     @Transactional
     public Order findByHashIdAndUser(String hashId, User user) {
         return orderRepository.findByHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhum pedido para o usuário com hash id %s foi encontrado.", hashId)));
+    }
+
+    @Transactional
+    public Order findByHashIdAndRestaurantAndUserHashId(String hashId, Restaurant restaurant, String userHashId) {
+        return orderRepository.findByHashIdAndRestaurantAndUserHashId(hashId, restaurant, userHashId).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhum pedido para o restaurante e usuário com hash id %s foi encontrado.", hashId)));
     }
 
     @Override

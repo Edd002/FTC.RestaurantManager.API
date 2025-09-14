@@ -21,6 +21,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,23 +51,25 @@ public class RestaurantController {
         this.restaurantServiceGateway = restaurantServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar restaurante - Permissão necessária: [OWNER]", description = "Criar restaurante.")
+    @Operation(method = "POST", summary = "Criar restaurante.", description = "Criar restaurante.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> create(@RequestBody @Valid RestaurantPostRequestDTO restaurantPostRequestDTO) {
         log.info("Criando restaurante...");
         return new BaseSuccessResponse201<>(restaurantServiceGateway.create(restaurantPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar restaurante - Permissão necessária: [OWNER]", description = "Atualizar restaurante.")
+    @Operation(method = "PUT", summary = "Atualizar restaurante.", description = "Atualizar restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid RestaurantPutRequestDTO restaurantPutRequestDTO) {
         log.info("Atualizando restaurante...");
         return new BaseSuccessResponse200<>(restaurantServiceGateway.update(hashId, restaurantPutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar restaurante por filtro", description = "Buscar restaurante por filtro.")
+    @Operation(method = "GET", summary = "Buscar restaurante por filtro.", description = "Buscar restaurante por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<RestaurantResponseDTO>> find(@ParameterObject @Valid RestaurantGetFilter filter) {
@@ -74,7 +77,7 @@ public class RestaurantController {
         return new BasePageableSuccessResponse200<>(restaurantServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar restaurante", description = "Buscar restaurante.")
+    @Operation(method = "GET", summary = "Buscar restaurante.", description = "Buscar restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<RestaurantResponseDTO>> find(@PathVariable("hashId") String hashId) {
@@ -82,8 +85,9 @@ public class RestaurantController {
         return new BaseSuccessResponse200<>(restaurantServiceGateway.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir restaurante - Permissão necessária: [OWNER]", description = "Excluir restaurante.")
+    @Operation(method = "DELETE", summary = "Excluir restaurante.", description = "Excluir restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo restaurante...");

@@ -15,6 +15,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +48,9 @@ public class MenuController {
         this.menuServiceGateway = menuServiceGateway;
     }
 
-    @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu - Permissão necessária: [OWNER]", description = "Criar ou atualizar lista de itens do menu.")
+    @Operation(method = "PUT", summary = "Criar ou atualizar lista de itens do menu.", description = "Criar ou atualizar lista de itens do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> createOrUpdate(@RequestBody @Valid MenuBatchPutRequestDTO menuBatchPutRequestDTO) {
         log.info("Atualizando menu com lista de itens...");

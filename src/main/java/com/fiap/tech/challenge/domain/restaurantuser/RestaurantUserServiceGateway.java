@@ -80,8 +80,13 @@ public class RestaurantUserServiceGateway extends BaseServiceGateway<IRestaurant
     }
 
     @Transactional
-    public RestaurantUser findByRestaurantHashIdAndUser(String hashId, User user) {
-        return restaurantUserRepository.findByRestaurantHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma associação para o usuário com o restaurante com hash id %s foi encontrada.", hashId)));
+    public RestaurantUser findByRestaurantHashIdAndUser(String restaurantHashId, User user) {
+        return restaurantUserRepository.findByRestaurantHashIdAndUser(restaurantHashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma associação para o usuário com o restaurante com hash id %s foi encontrada.", restaurantHashId)));
+    }
+
+    @Transactional
+    public RestaurantUser findByRestaurantHashIdAndUserHashId(String restaurantHashId, String userHashId) {
+        return restaurantUserRepository.findByRestaurantHashIdAndUserHashId(restaurantHashId, userHashId).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma associação para o usuário com o restaurante com hash id %s foi encontrada.", restaurantHashId)));
     }
 
     @Transactional

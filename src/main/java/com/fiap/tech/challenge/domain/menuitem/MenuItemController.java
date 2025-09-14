@@ -21,6 +21,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,23 +51,25 @@ public class MenuItemController {
         this.menuItemServiceGateway = menuItemServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar item do menu - Permissão necessária: [OWNER]", description = "Criar item do menu.")
+    @Operation(method = "POST", summary = "Criar item do menu.", description = "Criar item do menu.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<MenuItemResponseDTO>> create(@RequestBody @Valid MenuItemPostRequestDTO menuItemPostRequestDTO) {
         log.info("Criando item do menu...");
         return new BaseSuccessResponse201<>(menuItemServiceGateway.create(menuItemPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar item do menu - Permissão necessária: [OWNER]", description = "Atualizar item do menu.")
+    @Operation(method = "PUT", summary = "Atualizar item do menu.", description = "Atualizar item do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<MenuItemResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid MenuItemPutRequestDTO menuItemPutRequestDTO) {
         log.info("Atualizando item do menu...");
         return new BaseSuccessResponse200<>(menuItemServiceGateway.update(hashId, menuItemPutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar item do menu por filtro", description = "Buscar item do menu por filtro.")
+    @Operation(method = "GET", summary = "Buscar item do menu por filtro.", description = "Buscar item do menu por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<MenuItemResponseDTO>> find(@ParameterObject @Valid MenuItemGetFilter filter) {
@@ -74,7 +77,7 @@ public class MenuItemController {
         return new BasePageableSuccessResponse200<>(menuItemServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar item do menu", description = "Buscar item do menu.")
+    @Operation(method = "GET", summary = "Buscar item do menu.", description = "Buscar item do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<MenuItemResponseDTO>> find(@PathVariable("hashId") String hashId) {
@@ -82,8 +85,9 @@ public class MenuItemController {
         return new BaseSuccessResponse200<>(menuItemServiceGateway.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir item do menu - Permissão necessária: [OWNER]", description = "Excluir item do menu.")
+    @Operation(method = "DELETE", summary = "Excluir item do menu.", description = "Excluir item do menu.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('OWNER')")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<MenuItemResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo item do menu...");

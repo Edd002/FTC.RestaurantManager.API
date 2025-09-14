@@ -17,6 +17,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class JwtController {
         this.jwtServiceGateway = jwtServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Gerar um novo JWT", description = "Gerar um novo JWT.")
+    @Operation(method = "POST", summary = "Gerar um novo JWT.", description = "Gerar um novo JWT.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping("/generate")
     public ResponseEntity<BaseSuccessResponse201<JwtResponseDTO>> generate(@RequestBody @Valid JwtGeneratePostRequestDTO jwtGeneratePostRequestDTO) {
@@ -54,8 +55,9 @@ public class JwtController {
         return new BaseSuccessResponse201<>(jwtServiceGateway.generate(jwtGeneratePostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Verificar se o JWT está válido", description = "Verificar se o JWT está válido.")
+    @Operation(method = "GET", summary = "Verificar se o JWT está válido.", description = "Verificar se o JWT está válido.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping("/validate")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<JwtResponseDTO>> validate(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
         log.info("Validando JWT...");
@@ -63,8 +65,9 @@ public class JwtController {
         return new NoPayloadBaseSuccessResponse200<JwtResponseDTO>().buildResponseWithoutPayload();
     }
 
-    @Operation(method = "POST", summary = "Invalidar o JWT", description = "Invalidar o JWT.")
+    @Operation(method = "POST", summary = "Invalidar o JWT.", description = "Invalidar o JWT.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping("/invalidate")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<JwtResponseDTO>> invalidate(@Parameter(required = true, hidden = true) @RequestHeader("Authorization") String bearerToken) {
         log.info("Invalidando JWT...");

@@ -2,12 +2,11 @@ package com.fiap.tech.challenge.domain.reservation;
 
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationGetFilter;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationPostRequestDTO;
-import com.fiap.tech.challenge.domain.reservation.dto.ReservationPutRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
+import com.fiap.tech.challenge.domain.reservation.dto.ReservationUpdateStatusPatchRequestDTO;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
-import com.fiap.tech.challenge.global.base.response.success.nocontent.NoPayloadBaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.pageable.BasePageableSuccessResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +20,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,44 +50,48 @@ public class ReservationController {
         this.reservationServiceGateway = reservationServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar reserva", description = "Criar reserva.")
+    @Operation(method = "POST", summary = "Criar reserva.", description = "Criar reserva.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<ReservationResponseDTO>> create(@RequestBody @Valid ReservationPostRequestDTO reservationPostRequestDTO) {
         log.info("Criando reserva...");
         return new BaseSuccessResponse201<>(reservationServiceGateway.create(reservationPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar reserva", description = "Atualizar reserva.")
+    @Operation(method = "PATCH", summary = "Atualizar status da reserva.", description = "Atualizar status da reserva.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PutMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid ReservationPutRequestDTO reservationPutRequestDTO) {
-        log.info("Atualizando reserva...");
-        return new BaseSuccessResponse200<>(reservationServiceGateway.update(hashId, reservationPutRequestDTO)).buildResponse();
+    @PreAuthorize(value = "hasAuthority('OWNER')")
+    @PatchMapping(value = "/change-status/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> updateStatus(@PathVariable("hashId") String hashId, @RequestBody @Valid ReservationUpdateStatusPatchRequestDTO reservationUpdateStatusPatchRequestDTO) {
+        log.info("Atualizando status da reserva...");
+        return new BaseSuccessResponse200<>(reservationServiceGateway.updateStatus(hashId, reservationUpdateStatusPatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar reserva por filtro", description = "Buscar reserva por filtro.")
+    @Operation(method = "PATCH", summary = "Cancelar reserva.", description = "Cancelar reserva.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
+    @PatchMapping(value = "/cancel/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> cancel(@PathVariable("hashId") String hashId) {
+        log.info("Cancelando reserva...");
+        return new BaseSuccessResponse200<>(reservationServiceGateway.cancel(hashId)).buildResponse();
+    }
+
+    @Operation(method = "GET", summary = "Buscar reserva por filtro.", description = "Buscar reserva por filtro.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<ReservationResponseDTO>> find(@ParameterObject @Valid ReservationGetFilter filter) {
         log.info("Buscando reservas por filtro...");
         return new BasePageableSuccessResponse200<>(reservationServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar reserva", description = "Buscar reserva.")
+    @Operation(method = "GET", summary = "Buscar reserva.", description = "Buscar reserva.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> find(@PathVariable("hashId") String hashId) {
         log.info("Buscando reserva...");
         return new BaseSuccessResponse200<>(reservationServiceGateway.find(hashId)).buildResponse();
-    }
-
-    @Operation(method = "DELETE", summary = "Excluir reserva", description = "Excluir reserva.")
-    @ApiResponse(responseCode = "200", description = "OK")
-    @DeleteMapping(value = "/{hashId}")
-    public ResponseEntity<NoPayloadBaseSuccessResponse200<ReservationResponseDTO>> delete(@PathVariable("hashId") String hashId) {
-        log.info("Excluindo reserva...");
-        reservationServiceGateway.delete(hashId);
-        return new NoPayloadBaseSuccessResponse200<ReservationResponseDTO>().buildResponseWithoutPayload();
     }
 }

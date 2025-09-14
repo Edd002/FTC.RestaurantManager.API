@@ -9,6 +9,8 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ReservationCreateException;
+import com.fiap.tech.challenge.global.exception.ReservationUpdateException;
+import com.fiap.tech.challenge.global.util.DateTimeUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,8 +42,11 @@ public class Reservation extends Audit implements Serializable {
                         && restaurantReservation.getBookingDate().equals(bookingDate)))
                 .mapToLong(Reservation::getBookingQuantity)
                 .sum();
-        if (totalReservationQuantityInBookingTimeAndBookingDate > bookingQuantity) {
-            throw new ReservationCreateException("O restaurante já alcançou o limite máximo de quantidade de reservas para o horário e data informados.");
+        if (bookingDate.before(DateTimeUtil.nowTruncate())) {
+            throw new ReservationCreateException("A reserva não pode ser realizada para um dia anterior à hoje.");
+        }
+        if ((totalReservationQuantityInBookingTimeAndBookingDate + bookingQuantity) > restaurant.getLimitReservations(bookingTime)) {
+            throw new ReservationCreateException("A quantidade de reservas solicitadas ultrapassa o limite que o restaurante tem disponível.");
         }
         this.setBookingStatus(bookingStatus);
         this.setBookingTime(bookingTime);
@@ -51,13 +56,14 @@ public class Reservation extends Audit implements Serializable {
         this.setUser(user);
     }
 
-    public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus, @NonNull ReservationBookingTimeEnum bookingTime, @NonNull Date bookingDate, @NonNull Long bookingQuantity, @NonNull Restaurant restaurant, @NonNull User user) {
+    public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus) {
+        if (bookingDate.before(DateTimeUtil.nowTruncate())) {
+            throw new ReservationUpdateException("Reservas anteriores ao dia de hoje não podem ser atualizadas.");
+        }
+        if (ReservationBookingStatusEnum.isCanceled(this.bookingStatus)) {
+            throw new ReservationUpdateException("Reservas canceladas não podem ser atualizadas.");
+        }
         this.setBookingStatus(bookingStatus);
-        this.setBookingTime(bookingTime);
-        this.setBookingDate(bookingDate);
-        this.setBookingQuantity(bookingQuantity);
-        this.setRestaurant(restaurant);
-        this.setUser(user);
         return this;
     }
 

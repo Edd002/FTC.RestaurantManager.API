@@ -19,7 +19,7 @@ import static com.fiap.tech.challenge.global.util.enumerated.SplitModeEnum.*;
 
 @Log
 @UtilityClass
-public class DateUtil {
+public class DateTimeUtil {
 
     public static SimpleDateFormat configureDateFormat(String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
@@ -248,6 +248,10 @@ public class DateUtil {
 
     public static Date now() {
         return new Date();
+    }
+
+    public static Date nowTruncate() {
+        return truncateDate(now());
     }
 
     public static Date parseDatetime(String text) {

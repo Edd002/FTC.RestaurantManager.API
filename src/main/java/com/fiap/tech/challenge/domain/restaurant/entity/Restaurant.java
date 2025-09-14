@@ -4,6 +4,7 @@ import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.menu.entity.Menu;
 import com.fiap.tech.challenge.domain.order.entity.Order;
 import com.fiap.tech.challenge.domain.reservation.entity.Reservation;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
 import com.fiap.tech.challenge.domain.restaurant.RestaurantEntityListener;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.RestaurantTypeEnum;
 import com.fiap.tech.challenge.domain.restaurant.enumerated.constraint.RestaurantConstraint;
@@ -133,6 +134,14 @@ public class Restaurant extends Audit implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_address", nullable = false)
     private Address address;
+
+    public Integer getLimitReservations(ReservationBookingTimeEnum bookingTime) {
+        return switch (bookingTime) {
+            case BREAKFAST -> getBreakfastLimitReservations();
+            case LUNCH -> getLunchLimitReservations();
+            case DINNER -> getDinnerLimitReservations();
+        };
+    }
 
     @Transient
     private transient Restaurant restaurantSavedState;
