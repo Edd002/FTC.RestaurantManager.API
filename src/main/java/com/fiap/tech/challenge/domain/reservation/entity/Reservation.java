@@ -55,13 +55,11 @@ public class Reservation extends Audit implements Serializable {
         this.setUser(user);
     }
 
-    public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus, @NonNull ReservationBookingTimeEnum bookingTime, @NonNull Date bookingDate, @NonNull Long bookingQuantity, @NonNull Restaurant restaurant, @NonNull User user) {
+    public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus) {
+        if (bookingDate.before(DateUtil.nowTruncate())) {
+            throw new ReservationCreateException("Reservas anteriores ao dia de hoje não podem ser atualizadas.");
+        }
         this.setBookingStatus(bookingStatus);
-        this.setBookingTime(bookingTime);
-        this.setBookingDate(bookingDate);
-        this.setBookingQuantity(bookingQuantity);
-        this.setRestaurant(restaurant);
-        this.setUser(user);
         return this;
     }
 

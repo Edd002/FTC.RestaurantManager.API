@@ -1,8 +1,8 @@
-package com.fiap.tech.challenge.domain.order.dto;
+package com.fiap.tech.challenge.domain.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fiap.tech.challenge.domain.order.enumerated.OrderStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
 import com.fiap.tech.challenge.global.base.dto.BaseRequestDTO;
 import com.fiap.tech.challenge.global.util.deserializer.StrictStringNormalizeSpaceDeserializer;
 import com.fiap.tech.challenge.global.util.enumerated.validation.ValueOfEnum;
@@ -14,7 +14,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class OrderUpdateStatusPatchRequestDTO extends BaseRequestDTO {
+public class ReservationUpdateStatusPatchRequestDTO extends BaseRequestDTO {
 
     @Schema(description = "Hash id do usuário.", example = "98e91489d4234e7fba35cc9842828d16", maxLength = 255)
     @Size(max = 255, message = "O número de caracteres máximo para o hash id do usuário é 255 caracteres.")
@@ -23,10 +23,10 @@ public class OrderUpdateStatusPatchRequestDTO extends BaseRequestDTO {
     @JsonProperty("hashIdUser")
     private String hashIdUser;
 
-    @Schema(description = "Status do pedido.", example = "CONFIRMED", maxLength = 255, allowableValues = { "REQUESTED", "CONFIRMED", "WAITING_FOR_PICKUP", "ON_DELIVERY_ROUTE", "DELIVERED", "CANCELED" })
-    @Size(max = 255, message = "O número de caracteres máximo para o status do pedido é 255 caracteres.")
-    @ValueOfEnum(enumClass = OrderStatusEnum.class, message = "Status do pedido inválido.")
-    @NotBlank(message = "O status do pedido não pode ser nulo ou em branco.")
+    @Schema(description = "Status da reserva.", example = "CONFIRMED", maxLength = 255, allowableValues = { "REQUESTED", "ACCEPTED", "REJECTED", "CANCELED" })
+    @Size(max = 255, message = "O número de caracteres máximo para o status da reserva é 255 caracteres.")
+    @ValueOfEnum(enumClass = ReservationBookingStatusEnum.class, message = "Status da reserva inválido.")
+    @NotBlank(message = "O status da reserva não pode ser nulo ou em branco.")
     @JsonProperty("status")
     private String status;
 }

@@ -2,8 +2,8 @@ package com.fiap.tech.challenge.domain.reservation;
 
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationGetFilter;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationPostRequestDTO;
-import com.fiap.tech.challenge.domain.reservation.dto.ReservationPutRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
+import com.fiap.tech.challenge.domain.reservation.dto.ReservationUpdateStatusPatchRequestDTO;
 import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse200;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
@@ -57,12 +57,20 @@ public class ReservationController {
         return new BaseSuccessResponse201<>(reservationServiceGateway.create(reservationPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar reserva", description = "Atualizar reserva.")
+    @Operation(method = "PATCH", summary = "Atualizar status da reserva", description = "Atualizar status da reserva.")
     @ApiResponse(responseCode = "200", description = "OK")
-    @PutMapping(value = "/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid ReservationPutRequestDTO reservationPutRequestDTO) {
-        log.info("Atualizando reserva...");
-        return new BaseSuccessResponse200<>(reservationServiceGateway.update(hashId, reservationPutRequestDTO)).buildResponse();
+    @PatchMapping(value = "/change-status/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> updateStatus(@PathVariable("hashId") String hashId, @RequestBody @Valid ReservationUpdateStatusPatchRequestDTO reservationUpdateStatusPatchRequestDTO) {
+        log.info("Atualizando status da reserva...");
+        return new BaseSuccessResponse200<>(reservationServiceGateway.updateStatus(hashId, reservationUpdateStatusPatchRequestDTO)).buildResponse();
+    }
+
+    @Operation(method = "PATCH", summary = "Cancelar reserva", description = "Cancelar reserva.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PatchMapping(value = "/cancel/{hashId}")
+    public ResponseEntity<BaseSuccessResponse200<ReservationResponseDTO>> cancel(@PathVariable("hashId") String hashId) {
+        log.info("Cancelando reserva...");
+        return new BaseSuccessResponse200<>(reservationServiceGateway.cancel(hashId)).buildResponse();
     }
 
     @Operation(method = "GET", summary = "Buscar reserva por filtro", description = "Buscar reserva por filtro.")

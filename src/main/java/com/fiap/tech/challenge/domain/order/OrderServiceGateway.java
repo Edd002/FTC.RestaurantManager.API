@@ -10,6 +10,8 @@ import com.fiap.tech.challenge.domain.order.usecase.OrderCreateUseCase;
 import com.fiap.tech.challenge.domain.order.usecase.OrderUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
+import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
+import com.fiap.tech.challenge.domain.user.UserServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseServiceGateway;
@@ -34,14 +36,16 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     private final IOrderRepository orderRepository;
     private final RestaurantUserServiceGateway restaurantUserServiceGateway;
     private final MenuItemServiceGateway menuItemServiceGateway;
+    private final UserServiceGateway userServiceGateway;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, UserServiceGateway userServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.orderRepository = orderRepository;
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
         this.menuItemServiceGateway = menuItemServiceGateway;
+        this.userServiceGateway = userServiceGateway;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
@@ -56,15 +60,16 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     }
 
     @Transactional
-    public OrderResponseDTO update(String hashId, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
-        User loggedUser = AuthUserContextHolder.getAuthUser();
-        Order existingOrder = findByHashIdAndUser(hashId, loggedUser);
-        Order updatedOrder = new OrderUpdateUseCase(existingOrder, orderUpdateStatusPatchRequestDTO).getRebuiltedOrder();
+    public OrderResponseDTO updateStatus(String hashId, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
+        List<RestaurantUser> loggedRestaurantUsers = AuthUserContextHolder.getAuthUser().getRestaurantUsers();
+        User existingUserOrder = userServiceGateway.findByHashId(orderUpdateStatusPatchRequestDTO.getHashIdUser());
+        Order existingOrder = findByHashIdAndUser(hashId, existingUserOrder);
+        Order updatedOrder = new OrderUpdateUseCase(loggedRestaurantUsers, existingOrder, orderUpdateStatusPatchRequestDTO).getRebuiltedOrder();
         return modelMapperPresenter.map(save(updatedOrder), OrderResponseDTO.class);
     }
 
     @Transactional
-    public OrderResponseDTO update(String hashId, OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
+    public OrderResponseDTO updateType(String hashId, OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
         User loggedUser = AuthUserContextHolder.getAuthUser();
         Order existingOrder = findByHashIdAndUser(hashId, loggedUser);
         Order updatedOrder = new OrderUpdateUseCase(existingOrder, orderUpdateTypePatchRequestDTO).getRebuiltedOrder();

@@ -54,27 +54,27 @@ public class OrderController {
         return new BaseSuccessResponse201<>(orderServiceGateway.create(orderPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PatchMapping(value = "/change-status/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> updateStatus(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
         log.info("Atualizando status do pedido...");
-        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(orderServiceGateway.updateStatus(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
     }
 
     @Operation(method = "PATCH", summary = "Atualizar tipo do pedido", description = "Atualizar tipo do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PatchMapping(value = "/change-type/{hashId}")
-    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
+    public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> updateType(@PathVariable("hashId") String hashId, @RequestBody @Valid OrderUpdateTypePatchRequestDTO orderUpdateTypePatchRequestDTO) {
         log.info("Atualizando tipo do pedido...");
-        return new BaseSuccessResponse200<>(orderServiceGateway.update(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
+        return new BaseSuccessResponse200<>(orderServiceGateway.updateType(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Cancelar tipo do pedido", description = "Cancelar tipo do pedido.")
+    @Operation(method = "PATCH", summary = "Cancelar pedido", description = "Cancelar pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PatchMapping(value = "/cancel/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<OrderResponseDTO>> cancel(@PathVariable("hashId") String hashId) {
-        log.info("Cancelando tipo do pedido...");
+        log.info("Cancelando pedido...");
         return new BaseSuccessResponse200<>(orderServiceGateway.cancel(hashId)).buildResponse();
     }
 
