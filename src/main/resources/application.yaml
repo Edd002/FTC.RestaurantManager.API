@@ -71,10 +71,10 @@ logging:
 # SECURITY
 security:
   jwt:
-    expiration-in-milliseconds: 3600000 #one hour
+    expiration-in-milliseconds: 21600000 #six hours
     tokens:
       bearer-token-secret-key: cyy4KhQAOWuj94LtM6Yvt$FGOQb8KBN6lIXmFFG7!Yv6K#ewWCnH#Q5IS2MhxKp&
-      bearer-token-validity-in-milliseconds: 3600000
+      bearer-token-validity-in-milliseconds: 21600000
 
 #CRYPTO
 crypto:

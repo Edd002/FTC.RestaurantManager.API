@@ -2,13 +2,11 @@ package com.fiap.tech.challenge.global.base;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse400;
-import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse403;
-import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse422;
-import com.fiap.tech.challenge.global.base.response.error.BaseErrorResponse500;
+import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.constraint.ConstraintComponent;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ApiException;
+import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.ConstraintNotAssociatedWithEntityException;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import jakarta.persistence.EntityManager;
@@ -103,6 +101,11 @@ public class BaseController {
     @ExceptionHandler(value = {ApiException.class})
     public ResponseEntity<?> handleApiException(ApiException apiException) {
         return apiException.getBaseErrorResponse().buildResponse();
+    }
+
+    @ExceptionHandler(value = {AuthenticationHttpException.class})
+    ResponseEntity<?> handleAuthorizationDeniedException(AuthenticationHttpException authenticationHttpException) {
+        return new BaseErrorResponse401(List.of("O usuário não possui autenticação para a operação solicitada.")).buildResponse();
     }
 
     @ExceptionHandler(value = {AuthorizationDeniedException.class})

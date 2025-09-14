@@ -10,7 +10,7 @@ import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ReservationCreateException;
 import com.fiap.tech.challenge.global.exception.ReservationUpdateException;
-import com.fiap.tech.challenge.global.util.DateUtil;
+import com.fiap.tech.challenge.global.util.DateTimeUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public class Reservation extends Audit implements Serializable {
                         && restaurantReservation.getBookingDate().equals(bookingDate)))
                 .mapToLong(Reservation::getBookingQuantity)
                 .sum();
-        if (bookingDate.before(DateUtil.nowTruncate())) {
+        if (bookingDate.before(DateTimeUtil.nowTruncate())) {
             throw new ReservationCreateException("A reserva não pode ser realizada para um dia anterior à hoje.");
         }
         if ((totalReservationQuantityInBookingTimeAndBookingDate + bookingQuantity) > restaurant.getLimitReservations(bookingTime)) {
@@ -57,7 +57,7 @@ public class Reservation extends Audit implements Serializable {
     }
 
     public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus) {
-        if (bookingDate.before(DateUtil.nowTruncate())) {
+        if (bookingDate.before(DateTimeUtil.nowTruncate())) {
             throw new ReservationUpdateException("Reservas anteriores ao dia de hoje não podem ser atualizadas.");
         }
         if (ReservationBookingStatusEnum.isCanceled(this.bookingStatus)) {

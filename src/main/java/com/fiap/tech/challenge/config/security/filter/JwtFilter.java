@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Log
 public class JwtFilter extends OncePerRequestFilter {
@@ -45,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             JwtClaims jwt = jwtBuilder.resolveBearerToken(httpServletRequest);
             if (!jwtServiceGateway.isJwtActiveByBearerToken(jwt.getBearerToken())) {
-                httpServletRequest.setAttribute("jwtError", "Sessão encerrada ou expirada. O tempo de expiração da sessão é de 1 hora.");
+                httpServletRequest.setAttribute("jwtError", "Sessão encerrada ou expirada. O tempo de expiração da sessão é de " + Duration.ofMillis(21600000).toHours() + " horas.");
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }

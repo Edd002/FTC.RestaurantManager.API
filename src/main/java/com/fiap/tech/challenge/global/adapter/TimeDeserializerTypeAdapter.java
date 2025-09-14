@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.global.adapter;
 
-import com.fiap.tech.challenge.global.util.DateUtil;
+import com.fiap.tech.challenge.global.util.DateTimeUtil;
 import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -27,9 +27,9 @@ public class TimeDeserializerTypeAdapter implements JsonDeserializer<Date> {
 
     private Date forceParseFormat(String date) throws ParseException {
         try {
-            return DateUtil.configureDateFormat(DatePatternEnum.DATE_FORMAT_HH_mm.getValue()).parse(date);
+            return DateTimeUtil.configureDateFormat(DatePatternEnum.DATE_FORMAT_HH_mm.getValue()).parse(date);
         } catch (ParseException e) {
-            return DateUtil.configureDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).parse(date);
+            return DateTimeUtil.configureDateFormat(DatePatternEnum.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.getValue()).parse(date);
         }
     }
 }
