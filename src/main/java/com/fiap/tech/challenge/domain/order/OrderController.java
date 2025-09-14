@@ -47,7 +47,7 @@ public class OrderController {
         this.orderServiceGateway = orderServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar pedido", description = "Criar pedido.")
+    @Operation(method = "POST", summary = "Criar pedido.", description = "Criar pedido.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PostMapping
@@ -56,7 +56,7 @@ public class OrderController {
         return new BaseSuccessResponse201<>(orderServiceGateway.create(orderPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar status do pedido", description = "Atualizar status do pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar status do pedido.", description = "Atualizar status do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PreAuthorize(value = "hasAuthority('OWNER')")
     @PatchMapping(value = "/change-status/{hashId}")
@@ -65,7 +65,7 @@ public class OrderController {
         return new BaseSuccessResponse200<>(orderServiceGateway.updateStatus(hashId, orderUpdateStatusPatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar tipo do pedido", description = "Atualizar tipo do pedido.")
+    @Operation(method = "PATCH", summary = "Atualizar tipo do pedido.", description = "Atualizar tipo do pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PatchMapping(value = "/change-type/{hashId}")
@@ -74,7 +74,7 @@ public class OrderController {
         return new BaseSuccessResponse200<>(orderServiceGateway.updateType(hashId, orderUpdateTypePatchRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Cancelar pedido", description = "Cancelar pedido.")
+    @Operation(method = "PATCH", summary = "Cancelar pedido.", description = "Cancelar pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PatchMapping(value = "/cancel/{hashId}")
@@ -83,7 +83,7 @@ public class OrderController {
         return new BaseSuccessResponse200<>(orderServiceGateway.cancel(hashId)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar pedido por filtro", description = "Buscar pedido por filtro.")
+    @Operation(method = "GET", summary = "Buscar pedido por filtro.", description = "Buscar pedido por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/filter")
@@ -92,7 +92,7 @@ public class OrderController {
         return new BasePageableSuccessResponse200<>(orderServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar pedido", description = "Buscar pedido.")
+    @Operation(method = "GET", summary = "Buscar pedido.", description = "Buscar pedido.")
     @ApiResponse(responseCode = "200", description = "OK")
     @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{hashId}")

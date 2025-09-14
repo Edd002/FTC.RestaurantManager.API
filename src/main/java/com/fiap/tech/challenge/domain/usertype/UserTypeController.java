@@ -21,6 +21,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,23 +51,25 @@ public class UserTypeController {
         this.userTypeServiceGateway = userTypeServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar tipo de usuário - Permissão necessária: [ADMIN]", description = "Criar tipo de usuário.")
+    @Operation(method = "POST", summary = "Criar tipo de usuário.", description = "Criar tipo de usuário.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserTypeResponseDTO>> create(@RequestBody @Valid UserTypePostRequestDTO userTypePostRequestDTO) {
         log.info("Criando tipo de usuário...");
         return new BaseSuccessResponse201<>(userTypeServiceGateway.create(userTypePostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar tipo do usuário - Permissão necessária: [ADMIN]", description = "Atualizar tipo do usuário.")
+    @Operation(method = "PUT", summary = "Atualizar tipo do usuário.", description = "Atualizar tipo do usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PutMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> update(@PathVariable("hashId") String hashId, @RequestBody @Valid UserTypePutRequestDTO userTypePutRequestDTO) {
         log.info("Criando tipo de usuário...");
         return new BaseSuccessResponse200<>(userTypeServiceGateway.update(hashId, userTypePutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar tipo de usuário por filtro", description = "Buscar tipo de usuário por filtro.")
+    @Operation(method = "GET", summary = "Buscar tipo de usuário por filtro.", description = "Buscar tipo de usuário por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserTypeResponseDTO>> find(@ParameterObject @Valid UserTypeGetFilter filter) {
@@ -74,7 +77,7 @@ public class UserTypeController {
         return new BasePageableSuccessResponse200<>(userTypeServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar tipo de usuário", description = "Buscar tipo de usuário.")
+    @Operation(method = "GET", summary = "Buscar tipo de usuário.", description = "Buscar tipo de usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<UserTypeResponseDTO>> find(@PathVariable("hashId") String hashId) {
@@ -82,8 +85,9 @@ public class UserTypeController {
         return new BaseSuccessResponse200<>(userTypeServiceGateway.find(hashId)).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir tipo de usuário - Permissão necessária: [ADMIN]", description = "Excluir tipo de usuário.")
+    @Operation(method = "DELETE", summary = "Excluir tipo de usuário.", description = "Excluir tipo de usuário.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserTypeResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo tipo de usuário...");

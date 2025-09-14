@@ -49,7 +49,7 @@ public class CityController {
         this.cityServiceGateway = cityServiceGateway;
     }
 
-    @Operation(method = "GET", summary = "Buscar cidade por filtro", description = "Buscar cidade por filtro.")
+    @Operation(method = "GET", summary = "Buscar cidade por filtro.", description = "Buscar cidade por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<CityResponseDTO>> find(@ParameterObject @Valid CityGetFilter filter) {
@@ -57,7 +57,7 @@ public class CityController {
         return new BasePageableSuccessResponse200<>(cityServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar cidade por hash id", description = "Buscar cidade por hash id.")
+    @Operation(method = "GET", summary = "Buscar cidade por hash id.", description = "Buscar cidade por hash id.")
     @ApiResponse(responseCode = "200", description = "OK")
     @GetMapping(value = "/{hashId}")
     public ResponseEntity<BaseSuccessResponse200<CityResponseDTO>> find(@PathVariable("hashId") String hashId) {

@@ -18,6 +18,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class UserController {
         this.userServiceGateway = userServiceGateway;
     }
 
-    @Operation(method = "POST", summary = "Criar usuário", description = "Criar usuário.")
+    @Operation(method = "POST", summary = "Criar usuário.", description = "Criar usuário.")
     @ApiResponse(responseCode = "201", description = "Created")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<UserResponseDTO>> create(@RequestBody @Valid UserPostRequestDTO userPostRequestDTO) {
@@ -55,16 +56,18 @@ public class UserController {
         return new BaseSuccessResponse201<>(userServiceGateway.create(userPostRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PUT", summary = "Atualizar usuário logado", description = "Atualizar usuário logado.")
+    @Operation(method = "PUT", summary = "Atualizar usuário logado.", description = "Atualizar usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> update(@RequestBody @Valid UserPutRequestDTO userPutRequestDTO) {
         log.info("Atualizando usuário...");
         return new BaseSuccessResponse200<>(userServiceGateway.update(userPutRequestDTO)).buildResponse();
     }
 
-    @Operation(method = "PATCH", summary = "Atualizar senha do usuário logado", description = "Atualizar senha do usuário logado.")
+    @Operation(method = "PATCH", summary = "Atualizar senha do usuário logado.", description = "Atualizar senha do usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @PatchMapping(value = "/change-password")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> updatePassword(@RequestBody @Valid UserUpdatePasswordPatchRequestDTO userUpdatePasswordPatchRequestDTO) {
         log.info("Atualizando senha do usuário...");
@@ -72,24 +75,27 @@ public class UserController {
         return new NoPayloadBaseSuccessResponse200<UserResponseDTO>().buildResponseWithoutPayload();
     }
 
-    @Operation(method = "GET", summary = "Buscar usuário por filtro - Permissão necessária: [ADMIN, OWNER]", description = "Buscar usuário por filtro.")
+    @Operation(method = "GET", summary = "Buscar usuário por filtro.", description = "Buscar usuário por filtro.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "hasAnyAuthority('ADMIN', 'OWNER')")
     @GetMapping(value = "/filter")
     public ResponseEntity<BasePageableSuccessResponse200<UserResponseDTO>> find(@ParameterObject @Valid UserGetFilter filter) {
         log.info("Buscando usuários por filtro...");
         return new BasePageableSuccessResponse200<>(userServiceGateway.find(filter)).buildPageableResponse();
     }
 
-    @Operation(method = "GET", summary = "Buscar usuário logado", description = "Buscar usuário logado.")
+    @Operation(method = "GET", summary = "Buscar usuário logado.", description = "Buscar usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping
     public ResponseEntity<BaseSuccessResponse200<UserResponseDTO>> find() {
         log.info("Buscando usuário...");
         return new BaseSuccessResponse200<>(userServiceGateway.find()).buildResponse();
     }
 
-    @Operation(method = "DELETE", summary = "Excluir usuário logado", description = "Excluir usuário logado.")
+    @Operation(method = "DELETE", summary = "Excluir usuário logado.", description = "Excluir usuário logado.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @DeleteMapping
     public ResponseEntity<NoPayloadBaseSuccessResponse200<UserResponseDTO>> delete() {
         log.info("Excluindo usuário...");
