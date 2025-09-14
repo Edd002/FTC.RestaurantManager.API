@@ -11,8 +11,6 @@ import com.fiap.tech.challenge.domain.reservation.usecase.ReservationCreateUseCa
 import com.fiap.tech.challenge.domain.reservation.usecase.ReservationUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
-import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
-import com.fiap.tech.challenge.domain.user.UserServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseServiceGateway;
@@ -28,7 +26,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,15 +33,13 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     private final IReservationRepository reservationRepository;
     private final RestaurantUserServiceGateway restaurantUserServiceGateway;
-    private final UserServiceGateway userServiceGateway;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public ReservationServiceGateway(IReservationRepository reservationRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, UserServiceGateway userServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public ReservationServiceGateway(IReservationRepository reservationRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.reservationRepository = reservationRepository;
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
-        this.userServiceGateway = userServiceGateway;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
@@ -59,10 +54,10 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     @Transactional
     public ReservationResponseDTO updateStatus(String hashId, ReservationUpdateStatusPatchRequestDTO reservationUpdateStatusPatchRequestDTO) {
-        List<RestaurantUser> loggedRestaurantUsers = AuthUserContextHolder.getAuthUser().getRestaurantUsers();
-        User existingUserReservation = userServiceGateway.findByHashId(reservationUpdateStatusPatchRequestDTO.getHashIdUser());
-        Reservation existingReservation = findByHashIdAndUser(hashId, existingUserReservation);
-        Reservation updatedReservation = new ReservationUpdateUseCase(loggedRestaurantUsers, existingReservation, reservationUpdateStatusPatchRequestDTO).getRebuiltedReservation();
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(reservationUpdateStatusPatchRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
+        Reservation existingReservation = findByHashIdAndRestaurantAndUserHashId(hashId, existingRestaurant, reservationUpdateStatusPatchRequestDTO.getHashIdUser());
+        Reservation updatedReservation = new ReservationUpdateUseCase(existingReservation, reservationUpdateStatusPatchRequestDTO).getRebuiltedReservation();
         return modelMapperPresenter.map(save(updatedReservation), ReservationResponseDTO.class);
     }
 
@@ -91,7 +86,12 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     @Transactional
     public Reservation findByHashIdAndUser(String hashId, User user) {
-        return reservationRepository.findByHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhum pedido para o usuário com hash id %s foi encontrado.", hashId)));
+        return reservationRepository.findByHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma reserva para o usuário com hash id %s foi encontrado.", hashId)));
+    }
+
+    @Transactional
+    public Reservation findByHashIdAndRestaurantAndUserHashId(String hashId, Restaurant restaurant, String userHashId) {
+        return reservationRepository.findByHashIdAndRestaurantAndUserHashId(hashId, restaurant, userHashId).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhuma reserva para o restaurante e usuário com hash id %s foi encontrado.", hashId)));
     }
 
     @Override

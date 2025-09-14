@@ -14,7 +14,9 @@ public interface IRestaurantUserRepository extends IBaseRepository<RestaurantUse
 
     List<RestaurantUser> findByRestaurant(Restaurant restaurant);
 
-    Optional<RestaurantUser> findByRestaurantHashIdAndUser(String hashId, User user);
+    Optional<RestaurantUser> findByRestaurantHashIdAndUser(String restaurantHashId, User user);
+
+    Optional<RestaurantUser> findByRestaurantHashIdAndUserHashId(String restaurantHashId, String userHashId);
 
     Optional<RestaurantUser> findByHashIdAndUser(String hashId, User user);
 

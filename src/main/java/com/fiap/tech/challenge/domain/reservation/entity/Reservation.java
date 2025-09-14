@@ -9,6 +9,7 @@ import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.audit.Audit;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ReservationCreateException;
+import com.fiap.tech.challenge.global.exception.ReservationUpdateException;
 import com.fiap.tech.challenge.global.util.DateUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -57,7 +58,10 @@ public class Reservation extends Audit implements Serializable {
 
     public Reservation rebuild(@NonNull ReservationBookingStatusEnum bookingStatus) {
         if (bookingDate.before(DateUtil.nowTruncate())) {
-            throw new ReservationCreateException("Reservas anteriores ao dia de hoje não podem ser atualizadas.");
+            throw new ReservationUpdateException("Reservas anteriores ao dia de hoje não podem ser atualizadas.");
+        }
+        if (ReservationBookingStatusEnum.isCanceled(this.bookingStatus)) {
+            throw new ReservationUpdateException("Reservas canceladas não podem ser atualizadas.");
         }
         this.setBookingStatus(bookingStatus);
         return this;

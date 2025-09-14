@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.reservation.enumerated;
 
+import com.fiap.tech.challenge.global.util.ValidationUtil;
 import lombok.Getter;
 
 @Getter
@@ -14,5 +15,9 @@ public enum ReservationBookingStatusEnum {
 
     ReservationBookingStatusEnum(String description) {
         this.description = description;
+    }
+
+    public static boolean isCanceled(ReservationBookingStatusEnum status) {
+        return ValidationUtil.isNotNull(status) && (status.equals(CANCELED));
     }
 }

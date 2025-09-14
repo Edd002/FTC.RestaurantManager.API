@@ -10,8 +10,6 @@ import com.fiap.tech.challenge.domain.order.usecase.OrderCreateUseCase;
 import com.fiap.tech.challenge.domain.order.usecase.OrderUpdateUseCase;
 import com.fiap.tech.challenge.domain.restaurant.entity.Restaurant;
 import com.fiap.tech.challenge.domain.restaurantuser.RestaurantUserServiceGateway;
-import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
-import com.fiap.tech.challenge.domain.user.UserServiceGateway;
 import com.fiap.tech.challenge.domain.user.authuser.AuthUserContextHolder;
 import com.fiap.tech.challenge.domain.user.entity.User;
 import com.fiap.tech.challenge.global.base.BaseServiceGateway;
@@ -36,16 +34,14 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     private final IOrderRepository orderRepository;
     private final RestaurantUserServiceGateway restaurantUserServiceGateway;
     private final MenuItemServiceGateway menuItemServiceGateway;
-    private final UserServiceGateway userServiceGateway;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, UserServiceGateway userServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public OrderServiceGateway(IOrderRepository orderRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, MenuItemServiceGateway menuItemServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.orderRepository = orderRepository;
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
         this.menuItemServiceGateway = menuItemServiceGateway;
-        this.userServiceGateway = userServiceGateway;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
@@ -61,10 +57,10 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
 
     @Transactional
     public OrderResponseDTO updateStatus(String hashId, OrderUpdateStatusPatchRequestDTO orderUpdateStatusPatchRequestDTO) {
-        List<RestaurantUser> loggedRestaurantUsers = AuthUserContextHolder.getAuthUser().getRestaurantUsers();
-        User existingUserOrder = userServiceGateway.findByHashId(orderUpdateStatusPatchRequestDTO.getHashIdUser());
-        Order existingOrder = findByHashIdAndUser(hashId, existingUserOrder);
-        Order updatedOrder = new OrderUpdateUseCase(loggedRestaurantUsers, existingOrder, orderUpdateStatusPatchRequestDTO).getRebuiltedOrder();
+        User loggedUser = AuthUserContextHolder.getAuthUser();
+        Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(orderUpdateStatusPatchRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
+        Order existingOrder = findByHashIdAndRestaurantAndUserHashId(hashId, existingRestaurant, orderUpdateStatusPatchRequestDTO.getHashIdUser());
+        Order updatedOrder = new OrderUpdateUseCase(existingOrder, orderUpdateStatusPatchRequestDTO).getRebuiltedOrder();
         return modelMapperPresenter.map(save(updatedOrder), OrderResponseDTO.class);
     }
 
@@ -102,6 +98,11 @@ public class OrderServiceGateway extends BaseServiceGateway<IOrderRepository, Or
     @Transactional
     public Order findByHashIdAndUser(String hashId, User user) {
         return orderRepository.findByHashIdAndUser(hashId, user).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhum pedido para o usuário com hash id %s foi encontrado.", hashId)));
+    }
+
+    @Transactional
+    public Order findByHashIdAndRestaurantAndUserHashId(String hashId, Restaurant restaurant, String userHashId) {
+        return orderRepository.findByHashIdAndRestaurantAndUserHashId(hashId, restaurant, userHashId).orElseThrow(() -> new EntityNotFoundException(String.format("Nenhum pedido para o restaurante e usuário com hash id %s foi encontrado.", hashId)));
     }
 
     @Override
