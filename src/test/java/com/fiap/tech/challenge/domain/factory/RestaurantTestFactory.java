@@ -55,7 +55,20 @@ public class RestaurantTestFactory {
         Date dinnerOpen = getDateWithTime(2025, Calendar.AUGUST, 14, 18, 0);
         Date dinnerClose = getDateWithTime(2025, Calendar.AUGUST, 14, 22, 0);
 
-        return new Restaurant(name, breakfastOpen, breakfastClose, lunchOpen, lunchClose, dinnerOpen, dinnerClose, type, loadEmptyMenu(), loadDefaultAddress());
+        return new Restaurant(name,
+                breakfastOpen,
+                breakfastClose,
+                10,
+                lunchOpen,
+                lunchClose,
+                10,
+                dinnerOpen,
+                dinnerClose,
+                10,
+                type,
+                loadEmptyMenu(),
+                loadDefaultAddress()
+        );
     }
 
     public static Date getDateWithTime(int year, int month, int day, int hour, int minute) {
