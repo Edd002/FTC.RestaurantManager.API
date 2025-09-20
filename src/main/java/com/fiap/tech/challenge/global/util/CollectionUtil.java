@@ -22,7 +22,7 @@ public class CollectionUtil {
     }
 
     public static boolean containsInAnyElement(String str, String[] list) {
-        return Arrays.stream(list).anyMatch(elem -> elem.contains(str));
+        return Arrays.stream(list).anyMatch(str::contains);
     }
 
     public static boolean containsAtLeastOneElement(List<String> setList, List<String> subsetList) {
@@ -30,15 +30,15 @@ public class CollectionUtil {
     }
 
     public static boolean removeIfContainsInAnyElement(String str, List<String> list) {
-        return list.removeIf(elem -> elem.contains(str));
+        return list.removeIf(str::contains);
     }
 
     public static boolean removeIfNotContainsInAnyElement(String str, List<String> list) {
-        return list.removeIf(elem -> !elem.contains(str));
+        return list.removeIf(elem -> !str.contains(elem));
     }
 
     public static String getElementIfContains(String str, List<String> list) {
-        return list.stream().filter(elem -> elem.contains(str)).findAny().orElse(null);
+        return list.stream().filter(str::contains).findAny().orElse(null);
     }
 
     public static List<String> getElementsIfContains(List<String> setList, List<String> subsetList) {

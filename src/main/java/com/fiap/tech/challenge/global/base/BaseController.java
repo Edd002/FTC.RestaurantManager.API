@@ -6,8 +6,8 @@ import com.fiap.tech.challenge.global.base.response.error.*;
 import com.fiap.tech.challenge.global.constraint.ConstraintComponent;
 import com.fiap.tech.challenge.global.constraint.ConstraintMapper;
 import com.fiap.tech.challenge.global.exception.ApiException;
-import com.fiap.tech.challenge.global.exception.AuthenticationHttpException;
 import com.fiap.tech.challenge.global.exception.ConstraintNotAssociatedWithEntityException;
+import com.fiap.tech.challenge.global.util.HttpUtil;
 import com.fiap.tech.challenge.global.util.ValidationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
@@ -103,13 +103,11 @@ public class BaseController {
         return apiException.getBaseErrorResponse().buildResponse();
     }
 
-    @ExceptionHandler(value = {AuthenticationHttpException.class})
-    ResponseEntity<?> handleAuthorizationDeniedException(AuthenticationHttpException authenticationHttpException) {
-        return new BaseErrorResponse401(List.of("O usuário não possui autenticação para a operação solicitada.")).buildResponse();
-    }
-
     @ExceptionHandler(value = {AuthorizationDeniedException.class})
     ResponseEntity<?> handleAuthorizationDeniedException(AuthorizationDeniedException authorizationDeniedException) {
+        if (HttpUtil.hasCurrentRequest() && ValidationUtil.isNotNull(HttpUtil.getCurrentHttpRequest().getAttribute("jwtError"))) {
+            return new BaseErrorResponse401(List.of(HttpUtil.getCurrentHttpRequest().getAttribute("jwtError").toString())).buildResponse();
+        }
         return new BaseErrorResponse403(List.of("O usuário não possui permissão para a operação solicitada.")).buildResponse();
     }
 
