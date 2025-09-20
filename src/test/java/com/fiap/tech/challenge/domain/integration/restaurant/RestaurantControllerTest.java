@@ -184,7 +184,7 @@ class RestaurantControllerTest {
     @DisplayName(value = "Teste de sucesso - Busca de informações de restaurante por hash id")
     @Test
     public void findSuccess() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithoutBearerToken();
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         final String EXISTING_RESTAURANT_HASH_ID = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
         ResponseEntity<?> responseEntity = testRestTemplate.exchange("/api/v1/restaurants/" + EXISTING_RESTAURANT_HASH_ID, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<RestaurantResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(responseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
