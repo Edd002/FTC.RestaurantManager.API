@@ -56,11 +56,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 jwtServiceGateway.refreshByBearerToken(jwt.getBearerToken());
             }
             return;
-        } catch (TokenValidationException tokenValidationException) {
-            httpServletRequest.setAttribute("jwtError", tokenValidationException.getMessage());
-            log.severe(tokenValidationException.getMessage());
-            SecurityContextHolder.clearContext();
-        } catch (AuthenticationHttpException | EntityNotFoundException exception) {
+        } catch (TokenValidationException | AuthenticationHttpException | EntityNotFoundException exception) {
+            httpServletRequest.setAttribute("jwtError", exception.getMessage());
             log.severe(exception.getMessage());
             SecurityContextHolder.clearContext();
         }
