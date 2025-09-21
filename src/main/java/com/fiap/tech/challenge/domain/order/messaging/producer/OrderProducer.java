@@ -21,7 +21,7 @@ public class OrderProducer {
     public void send(OrderResponseDTO orderResponseDTO) {
         try {
             kafkaTemplate.send(topic, orderResponseDTO);
-            log.info("Mensagem enviada " + orderResponseDTO);
+            log.info("Mensagem de pedido enviada: " + orderResponseDTO);
         } catch (Exception e) {
             log.severe("Erro: " + e.getCause());
             throw e;

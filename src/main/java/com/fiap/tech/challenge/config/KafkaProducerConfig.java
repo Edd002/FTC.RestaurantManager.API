@@ -1,6 +1,7 @@
 package com.fiap.tech.challenge.config;
 
 import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
+import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -21,25 +22,47 @@ public class KafkaProducerConfig {
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootStrapAddress;
 
-    @Value(value = "${spring.kafka.topic.name.producer}")
-    private String topic;
+    @Value(value = "${spring.kafka.topic.name.order-topic}")
+    private String orderTopic;
+
+    @Value(value = "${spring.kafka.topic.name.reservation-topic}")
+    private String reservationTopic;
 
     @Bean
-    public NewTopic createTopic() {
-        return new NewTopic(topic, 3, (short) 1);
+    public NewTopic createOrderTopic() {
+        return new NewTopic(orderTopic, 3, (short) 1);
+    }
+
+    @Bean
+    public NewTopic createReservationTopic() {
+        return new NewTopic(reservationTopic, 3, (short) 1);
     }
 
     @Bean
     public ProducerFactory<String, OrderResponseDTO> orderProducerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+        return new DefaultKafkaProducerFactory<>(configProperties());
+    }
+
+    @Bean
+    public ProducerFactory<String, ReservationResponseDTO> reservationProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(configProperties());
+    }
+
+    private Map<String, Object> configProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return properties;
     }
 
     @Bean
     public KafkaTemplate<String, OrderResponseDTO> orderKafkaTemplate() {
         return new KafkaTemplate<>(orderProducerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ReservationResponseDTO> reservationKafkaTemplate() {
+        return new KafkaTemplate<>(reservationProducerFactory());
     }
 }

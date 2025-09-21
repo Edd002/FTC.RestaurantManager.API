@@ -26,7 +26,8 @@ spring:
     bootstrap-servers: localhost:9092
     topic:
       name:
-        producer: dto
+        order-topic: orders
+        reservation-topic: reservations
   h2:
     console.enabled: true
     console.path: /h2-console

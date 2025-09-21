@@ -32,7 +32,6 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -65,10 +64,6 @@ public class SecurityConfig {
             "/webjars/**",
             "/actuator/health/**",
             "/error"
-    };
-
-    private static final String[] IGNORE_PUBLIC_PATHS = {
-            "/api/v1/jwts/generate"
     };
 
     @Autowired
@@ -113,9 +108,7 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(IGNORE_SECURITY_CONFIG_PATHS).permitAll()
-                        .requestMatchers(IGNORE_PUBLIC_PATHS).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(withDefaults());
         return httpSecurity.build();

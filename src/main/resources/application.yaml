@@ -26,7 +26,8 @@ spring:
     bootstrap-servers: localhost:9092
     topic:
       name:
-        producer: dto
+        order-topic: orders
+        reservation-topic: reservations
   jackson:
     default-property-inclusion: non_null
     deserialization:
