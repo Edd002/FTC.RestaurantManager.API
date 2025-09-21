@@ -20,11 +20,13 @@ spring:
     url: jdbc:postgresql://localhost:5453/ftc_restaurant_manager_database
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  # Apache Kafka Confluent Control Center URL: http://localhost:9021/clusters
   kafka:
     bootstrap-servers: localhost:9092
     topic:
       name:
-        producer: dto
+        order-topic: orders
+        reservation-topic: reservations
   jackson:
     default-property-inclusion: non_null
     deserialization:

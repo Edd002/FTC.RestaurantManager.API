@@ -6,6 +6,7 @@ import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationUpdateStatusPatchRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.entity.Reservation;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
+import com.fiap.tech.challenge.domain.reservation.messaging.producer.ReservationProducer;
 import com.fiap.tech.challenge.domain.reservation.specification.ReservationSpecificationBuilder;
 import com.fiap.tech.challenge.domain.reservation.usecase.ReservationCreateUseCase;
 import com.fiap.tech.challenge.domain.reservation.usecase.ReservationUpdateUseCase;
@@ -33,13 +34,15 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
 
     private final IReservationRepository reservationRepository;
     private final RestaurantUserServiceGateway restaurantUserServiceGateway;
+    private final ReservationProducer reservationProducer;
     private final PageableBuilder pageableBuilder;
     private final ModelMapper modelMapperPresenter;
 
     @Autowired
-    public ReservationServiceGateway(IReservationRepository reservationRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
+    public ReservationServiceGateway(IReservationRepository reservationRepository, RestaurantUserServiceGateway restaurantUserServiceGateway, ReservationProducer reservationProducer, PageableBuilder pageableBuilder, ModelMapper modelMapperPresenter) {
         this.reservationRepository = reservationRepository;
         this.restaurantUserServiceGateway = restaurantUserServiceGateway;
+        this.reservationProducer = reservationProducer;
         this.pageableBuilder = pageableBuilder;
         this.modelMapperPresenter = modelMapperPresenter;
     }
@@ -49,7 +52,9 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
         User loggedUser = AuthUserContextHolder.getAuthUser();
         Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(reservationPostRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
         Reservation newReservation = new ReservationCreateUseCase(loggedUser, existingRestaurant, reservationPostRequestDTO).getBuiltedReservation();
-        return modelMapperPresenter.map(save(newReservation), ReservationResponseDTO.class);
+        ReservationResponseDTO reservationResponseDTO = modelMapperPresenter.map(saveAndFlush(newReservation), ReservationResponseDTO.class);
+        reservationProducer.send(reservationResponseDTO);
+        return reservationResponseDTO;
     }
 
     @Transactional
@@ -58,7 +63,9 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
         Restaurant existingRestaurant = restaurantUserServiceGateway.findByRestaurantHashIdAndUser(reservationUpdateStatusPatchRequestDTO.getHashIdRestaurant(), loggedUser).getRestaurant();
         Reservation existingReservation = findByHashIdAndRestaurantAndUserHashId(hashId, existingRestaurant, reservationUpdateStatusPatchRequestDTO.getHashIdUser());
         Reservation updatedReservation = new ReservationUpdateUseCase(existingReservation, reservationUpdateStatusPatchRequestDTO).getRebuiltedReservation();
-        return modelMapperPresenter.map(save(updatedReservation), ReservationResponseDTO.class);
+        ReservationResponseDTO reservationResponseDTO = modelMapperPresenter.map(saveAndFlush(updatedReservation), ReservationResponseDTO.class);
+        reservationProducer.send(reservationResponseDTO);
+        return reservationResponseDTO;
     }
 
     @Transactional
@@ -66,7 +73,9 @@ public class ReservationServiceGateway extends BaseServiceGateway<IReservationRe
         User loggedUser = AuthUserContextHolder.getAuthUser();
         Reservation existingReservation = findByHashIdAndUser(hashId, loggedUser);
         Reservation updatedReservation = new ReservationUpdateUseCase(existingReservation, ReservationBookingStatusEnum.CANCELED).getRebuiltedReservation();
-        return modelMapperPresenter.map(save(updatedReservation), ReservationResponseDTO.class);
+        ReservationResponseDTO reservationResponseDTO = modelMapperPresenter.map(saveAndFlush(updatedReservation), ReservationResponseDTO.class);
+        reservationProducer.send(reservationResponseDTO);
+        return reservationResponseDTO;
     }
 
     @Transactional
