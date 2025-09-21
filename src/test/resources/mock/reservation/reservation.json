@@ -1,0 +1,8 @@
+{
+  "reservationPostRequestDTO": {
+    "bookingTime": "BREAKFAST",
+    "bookingDate": "11/11/2025",
+    "bookingQuantity": 2,
+    "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
+  }
+}
