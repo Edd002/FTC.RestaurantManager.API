@@ -1,4 +1,4 @@
-package com.fiap.tech.challenge.config;
+package com.fiap.tech.challenge.config.kafka;
 
 import com.fiap.tech.challenge.domain.order.dto.OrderResponseDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@Conditional(KafkaHealthCheck.class)
 public class KafkaProducerConfig {
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
@@ -39,6 +41,16 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    public KafkaTemplate<String, OrderResponseDTO> orderKafkaTemplate() {
+        return new KafkaTemplate<>(orderProducerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ReservationResponseDTO> reservationKafkaTemplate() {
+        return new KafkaTemplate<>(reservationProducerFactory());
+    }
+
+    @Bean
     public ProducerFactory<String, OrderResponseDTO> orderProducerFactory() {
         return new DefaultKafkaProducerFactory<>(configProperties());
     }
@@ -54,15 +66,5 @@ public class KafkaProducerConfig {
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return properties;
-    }
-
-    @Bean
-    public KafkaTemplate<String, OrderResponseDTO> orderKafkaTemplate() {
-        return new KafkaTemplate<>(orderProducerFactory());
-    }
-
-    @Bean
-    public KafkaTemplate<String, ReservationResponseDTO> reservationKafkaTemplate() {
-        return new KafkaTemplate<>(reservationProducerFactory());
     }
 }
