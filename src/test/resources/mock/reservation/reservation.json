@@ -3,6 +3,6 @@
     "bookingTime": "BREAKFAST",
     "bookingDate": "11/11/2025",
     "bookingQuantity": 2,
-    "hashIdRestaurant": "${RESTAURANT_HASH_ID}"
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2"
   }
 }

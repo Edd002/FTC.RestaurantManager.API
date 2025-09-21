@@ -4,10 +4,6 @@ import com.fiap.tech.challenge.domain.reservation.dto.ReservationPostRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum;
 import com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum;
-import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantPostRequestDTO;
-import com.fiap.tech.challenge.domain.restaurant.dto.RestaurantResponseDTO;
-import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserPostRequestDTO;
-import com.fiap.tech.challenge.domain.restaurantuser.dto.RestaurantUserResponseDTO;
 import com.fiap.tech.challenge.global.adapter.MultiFormatDateDeserializerTypeAdapter;
 import com.fiap.tech.challenge.global.base.response.success.BaseSuccessResponse201;
 import com.fiap.tech.challenge.global.component.DatabaseManagementComponent;
@@ -31,15 +27,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(value = {SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReservationControllerTest {
 
     private static final String PATH_RESOURCE_RESERVATION = "/mock/reservation/reservation.json";
-    private static final String PATH_RESOURCE_RESTAURANT_USER = "/mock/restaurantuser/restaurantuser.json";
-    private static final String PATH_RESOURCE_RESTAURANT = "/mock/restaurant/restaurant.json";
 
     private final HttpHeaderComponent httpHeaderComponent;
     private final HttpBodyComponent httpBodyComponent;
@@ -81,8 +74,7 @@ public class ReservationControllerTest {
     @Test
     public void createReservationSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
-        RestaurantUserResponseDTO restaurantUserResponseDTO = this.createRestaurantUserAssociation();
-        ReservationPostRequestDTO reservationPostRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_RESERVATION, "${RESTAURANT_HASH_ID}", restaurantUserResponseDTO.getRestaurant().getHashId(), "reservationPostRequestDTO", ReservationPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_dd_mm_yyyy_WITH_SLASH.getValue());
+        ReservationPostRequestDTO reservationPostRequestDTO = JsonUtil.objectFromJson("reservationPostRequestDTO", PATH_RESOURCE_RESERVATION, ReservationPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_dd_mm_yyyy_WITH_SLASH.getValue());
         ResponseEntity<?> reservationResponseEntity = testRestTemplate.exchange("/api/v1/reservations", HttpMethod.POST, new HttpEntity<>(reservationPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<ReservationResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(reservationResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_dd_mm_yyyy_WITH_SLASH, new MultiFormatDateDeserializerTypeAdapter());
         assertThat(responseObject).isNotNull();
@@ -93,22 +85,5 @@ public class ReservationControllerTest {
         assertThat(responseObject.getItem().getBookingQuantity()).isEqualTo(2);
         assertThat(responseObject.getItem().getBookingStatus()).isEqualTo(ReservationBookingStatusEnum.REQUESTED);
         assertThat(responseObject.getItem().getBookingTime()).isEqualTo(ReservationBookingTimeEnum.BREAKFAST);
-    }
-
-    private RestaurantResponseDTO createNewRestaurant() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        RestaurantPostRequestDTO restaurantPostRequestDTO = JsonUtil.objectFromJson("restaurantPostRequestDTO", PATH_RESOURCE_RESTAURANT, RestaurantPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_HH_mm.getValue());
-        ResponseEntity<BaseSuccessResponse201<RestaurantResponseDTO>> restaurantResponseEntity = testRestTemplate.exchange("/api/v1/restaurants", HttpMethod.POST, new HttpEntity<>(restaurantPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
-        assertNotNull(restaurantResponseEntity.getBody());
-        return restaurantResponseEntity.getBody().getItem();
-    }
-
-    private RestaurantUserResponseDTO createRestaurantUserAssociation() {
-        HttpHeaders clientHeaders = httpHeaderComponent.generateHeaderWithClientBearerToken();
-        RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
-        RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_RESTAURANT_USER, "${RESTAURANT_HASH_ID}", restaurantResponseDTO.getHashId(), "restaurantUserRequestDTO", RestaurantUserPostRequestDTO.class);
-        ResponseEntity<BaseSuccessResponse201<RestaurantUserResponseDTO>> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users", HttpMethod.POST, new HttpEntity<>(restaurantUserPostRequestDTO, clientHeaders), new ParameterizedTypeReference<>() {});
-        assertNotNull(restaurantUserResponseEntity.getBody());
-        return restaurantUserResponseEntity.getBody().getItem();
     }
 }
