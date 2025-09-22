@@ -1,0 +1,19 @@
+{
+  "order": {
+  },
+  "orderPostRequestDTO": {
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "hashIdsMenuItems": [
+      "d921fcd786aeffcaa60e35ccf9f01313"
+    ],
+    "type": "DELIVERY"
+  },
+  "orderUpdateStatusPatchRequestDTO": {
+    "hashIdUser": "d49690a919944be58fbe55b4f729bc3e",
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "status": "CONFIRMED"
+  },
+  "orderUpdateTypePatchRequestDTO": {
+    "type": "DELIVERY"
+  }
+}
