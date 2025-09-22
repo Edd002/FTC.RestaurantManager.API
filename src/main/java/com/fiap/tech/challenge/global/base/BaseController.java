@@ -23,6 +23,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -109,6 +110,14 @@ public class BaseController {
             return new BaseErrorResponse401(List.of(HttpUtil.getCurrentHttpRequest().getAttribute("jwtError").toString())).buildResponse();
         }
         return new BaseErrorResponse403(List.of("O usuário não possui permissão para a operação solicitada.")).buildResponse();
+    }
+
+    @ExceptionHandler(value = {MissingRequestHeaderException.class})
+    ResponseEntity<?> handleAuthorizationDeniedException(MissingRequestHeaderException missingRequestHeaderException) {
+        if (HttpUtil.hasCurrentRequest() && ValidationUtil.isNotNull(HttpUtil.getCurrentHttpRequest().getAttribute("jwtError"))) {
+            return new BaseErrorResponse401(List.of(HttpUtil.getCurrentHttpRequest().getAttribute("jwtError").toString())).buildResponse();
+        }
+        return new BaseErrorResponse400(List.of(String.format("O header %s deve estar presente.", missingRequestHeaderException.getHeaderName()))).buildResponse();
     }
 
     @ExceptionHandler(value = {Exception.class})
