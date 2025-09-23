@@ -28,8 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.net.URI;
 import java.util.List;
 
-import static com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum.ACCEPTED;
-import static com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum.REQUESTED;
+import static com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum.*;
 import static com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingTimeEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -120,10 +119,10 @@ public class ReservationControllerTest {
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getItem().getHashId()).isNotNull();
-        assertThat(responseObject.getItem().getBookingStatus()).isEqualTo(ReservationBookingStatusEnum.CANCELED);
+        assertThat(responseObject.getItem().getBookingStatus()).isEqualTo(CANCELED);
     }
 
-    @DisplayName("Teste de sucesso - Busca Reserva no Restaurante por filtro")
+    @DisplayName("Teste de sucesso - Buscar Reserva no Restaurante por filtro")
     @Test
     public void findReservationByFilterSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
@@ -148,7 +147,7 @@ public class ReservationControllerTest {
             );
     }
 
-    @DisplayName("Teste de sucesso - Busca Reserva no Restaurante por hashId")
+    @DisplayName("Teste de sucesso - Buscar Reserva no Restaurante por hashId")
     @Test
     public void findReservationByHashIdSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
