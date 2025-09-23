@@ -84,7 +84,7 @@ public class RestaurantUserControllerTest {
     public void createRestaurantUserSuccess() {
         HttpHeaders clientHeaders = httpHeaderComponent.generateHeaderWithClientBearerToken();
         RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
-        RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_RESTAURANT_USER, "${RESTAURANT_HASH_ID}", restaurantResponseDTO.getHashId(), "restaurantUserRequestDTO", RestaurantUserPostRequestDTO.class);
+        RestaurantUserPostRequestDTO restaurantUserPostRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_RESTAURANT_USER, "${RESTAURANT_HASH_ID}", restaurantResponseDTO.getHashId(), "restaurantUserRequestDTO", RestaurantUserPostRequestDTO.class);
         ResponseEntity<?> restaurantUserResponseEntity = testRestTemplate.exchange("/api/v1/restaurant-users", HttpMethod.POST, new HttpEntity<>(restaurantUserPostRequestDTO, clientHeaders), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<RestaurantUserResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(restaurantUserResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_HH_mm, new TimeDeserializerTypeAdapter());
         assertNotNull(responseObject);

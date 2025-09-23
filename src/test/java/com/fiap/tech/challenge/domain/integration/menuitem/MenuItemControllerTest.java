@@ -87,7 +87,7 @@ public class MenuItemControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
         MenuBatchResponseDTO menuBatchResponseDTO = this.createNewMenu(restaurantResponseDTO);
-        MenuItemPostRequestDTO menuItemPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", menuBatchResponseDTO.getHashIdRestaurant(), "menuItemPostRequestDTO", MenuItemPostRequestDTO.class);
+        MenuItemPostRequestDTO menuItemPostRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", menuBatchResponseDTO.getHashIdRestaurant(), "menuItemPostRequestDTO", MenuItemPostRequestDTO.class);
         ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange("/api/v1/menu-items", HttpMethod.POST, new HttpEntity<>(menuItemPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
         assertThat(responseObject).isNotNull();
@@ -109,7 +109,7 @@ public class MenuItemControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         RestaurantResponseDTO restaurantResponseDTO = this.createNewRestaurant();
         MenuBatchResponseDTO menuBatchResponseDTO = this.createNewMenu(restaurantResponseDTO);
-        MenuItemPostRequestDTO menuItemPostRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", menuBatchResponseDTO.getHashIdRestaurant(), "menuItemInvalidPostRequestDTO", MenuItemPostRequestDTO.class);
+        MenuItemPostRequestDTO menuItemPostRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", menuBatchResponseDTO.getHashIdRestaurant(), "menuItemInvalidPostRequestDTO", MenuItemPostRequestDTO.class);
         ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange("/api/v1/menu-items", HttpMethod.POST, new HttpEntity<>(menuItemPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
         assertThat(responseObject).isNotNull();
@@ -131,7 +131,7 @@ public class MenuItemControllerTest {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
         String hashIdMenuItemDb = "d921fcd786aeffcaa60e35ccf9f01313";
-        MenuItemPutRequestDTO menuItemPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", hashIdRestaurantDb, "menuItemPutRequestDTO", MenuItemPutRequestDTO.class);
+        MenuItemPutRequestDTO menuItemPutRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU_ITEM, "${RESTAURANT_HASH_ID}", hashIdRestaurantDb, "menuItemPutRequestDTO", MenuItemPutRequestDTO.class);
         ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange("/api/v1/menu-items/{hashId}", HttpMethod.PUT, new HttpEntity<>(menuItemPutRequestDTO, headers), new ParameterizedTypeReference<>() {}, hashIdMenuItemDb);
         BaseSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
         assertThat(responseObject).isNotNull();
@@ -218,7 +218,7 @@ public class MenuItemControllerTest {
     private MenuBatchResponseDTO createNewMenu(RestaurantResponseDTO restaurantResponseDTO) {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String restaurantHashId = restaurantResponseDTO.getHashId();
-        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
+        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
         ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         assertNotNull(menuBatchResponseEntity.getBody());
         return menuBatchResponseEntity.getBody().getItem();

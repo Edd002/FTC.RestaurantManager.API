@@ -72,7 +72,7 @@ public class MenuControllerTest {
     public void createMenuSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String restaurantHashId = createNewRestaurant();
-        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
+        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "menuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
         ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse200<MenuBatchResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
         Assertions.assertNotNull(responseObject);
@@ -102,7 +102,7 @@ public class MenuControllerTest {
     public void createMenuWithInvalidDataFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
         String restaurantHashId = createNewRestaurant();
-        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.loadMockJsonWithReplacement("mock/menu/menu.json", "${RESTAURANT_HASH_ID}", restaurantHashId, "invalidMenuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
+        MenuBatchPutRequestDTO menuBatchPutRequestDTO = JsonUtil.objectFromJsonWithReplacement(PATH_RESOURCE_MENU, "${RESTAURANT_HASH_ID}", restaurantHashId, "invalidMenuBatchPutRequestDTO", MenuBatchPutRequestDTO.class);
         ResponseEntity<?> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseErrorResponse400 responseObject = httpBodyComponent.responseEntityToObject(menuBatchResponseEntity, new TypeToken<>() {});
         Assertions.assertNotNull(responseObject);

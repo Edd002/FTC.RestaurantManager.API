@@ -1,6 +1,6 @@
 package com.fiap.tech.challenge.global.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.tech.challenge.config.RunOnReady;
 import com.fiap.tech.challenge.global.adapter.OptionalTypeAdapter;
@@ -11,15 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.List;
 
 @UtilityClass
@@ -100,15 +97,20 @@ public class JsonUtil {
         }
     }
 
-    public <T> T loadMockJsonWithReplacement(String pathResource, String replacement, String replacementNewValue, String dataGroup, Class<T> targetClass) {
+    public <T> T objectFromJsonWithReplacement(String pathResource, String replacement, String replacementNewValue, String dataGroup, Type type) {
+        return objectFromJsonWithReplacement(pathResource, replacement, replacementNewValue, dataGroup, type, null);
+    }
+
+    public <T> T objectFromJsonWithReplacement(String pathResource, String replacement, String replacementNewValue, String dataGroup, Type type, String datePattern) {
         try {
-            Resource resource = new ClassPathResource(pathResource);
-            String jsonContent = Files.readString(resource.getFile().toPath());
-            jsonContent = jsonContent.replace(replacement, replacementNewValue);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(jsonContent);
-            return objectMapper.convertValue(rootNode.get(dataGroup), targetClass);
-        } catch (IOException | JSONException e) {
+            String json = getContentFromResource(dataGroup, pathResource);
+            json = json.replace(replacement, replacementNewValue);
+
+            GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY);
+            Gson gson = ValidationUtil.isNotBlank(datePattern) ? gsonBuilder.setDateFormat(datePattern).create() : gsonBuilder.create();
+
+            return gson.fromJson(json, type);
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
