@@ -179,7 +179,8 @@ public class MenuItemControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
 
-        this.assertFirstValidElement(url, headers);
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = this.assertFirstValidElement(url, headers);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
     }
 
     @DisplayName("Teste de sucesso - Encontrar um item de menu dado seu nome")
@@ -198,7 +199,8 @@ public class MenuItemControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
 
-        this.assertFirstValidElement(url, headers);
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = this.assertFirstValidElement(url, headers);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
     }
 
     @DisplayName("Teste de sucesso - Encontrar um item de menu dado sua descrição")
@@ -217,7 +219,8 @@ public class MenuItemControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
 
-        this.assertFirstValidElement(url, headers);
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = this.assertFirstValidElement(url, headers);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
     }
 
     @DisplayName("Teste de sucesso - Encontrar um item de menu dado sua disponibilidade")
@@ -236,7 +239,8 @@ public class MenuItemControllerTest {
                 .queryParam("pageSize", filter.getPageSize())
                 .toUriString();
 
-        this.assertFirstValidElement(url, headers);
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = this.assertFirstValidElement(url, headers);
+        assertThat(responseObject.getTotalElements()).isEqualTo(1);
     }
 
     @DisplayName("Teste de sucesso - Deve deletar um item de menu dado seu hash id")
@@ -267,21 +271,24 @@ public class MenuItemControllerTest {
         return menuBatchResponseEntity.getBody().getItem();
     }
 
-    private void assertFirstValidElement(String url, HttpHeaders headers) {
-        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
+    private BasePageableSuccessResponse200<MenuItemResponseDTO> assertFirstValidElement(String url, HttpHeaders headers) {
+        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
+        });
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {
+        });
 
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(1);
 
         MenuItemResponseDTO firstMenuItemFounded = ((ArrayList<MenuItemResponseDTO>) responseObject.getList()).getFirst();
         assertThat(firstMenuItemFounded.getName()).isEqualTo("Espaguete à Bolonhesa");
         assertThat(firstMenuItemFounded.getDescription()).isEqualTo("Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão");
         assertThat(firstMenuItemFounded.getPrice()).isEqualTo(BigDecimal.valueOf(19.99));
         assertThat(firstMenuItemFounded.getAvailability()).isTrue();
+
+        return responseObject;
     }
 }
