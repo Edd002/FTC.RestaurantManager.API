@@ -88,7 +88,7 @@ class RestaurantControllerTest {
         Assertions.assertTrue(ValidationUtil.isNotBlank(responseObject.getItem().getAddress().getHashId()));
     }
 
-    @DisplayName(value = "Teste de falha - Criar um restaurante com um usuário não autenticado")
+    @DisplayName(value = "Teste de falha - Criar um restaurante com um usuário não autenticado como dono de restuarane")
     @Test
     public void createRestaurantWithNoOwnerUserFailure() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
