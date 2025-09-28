@@ -1,31 +1,36 @@
+version: "3.9"
+
 services:
 
-  # FTC RestaurantManager API
+  # API Manager
   app:
     env_file:
-      .env
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
     container_name: ftc_restaurant_manager_api
     ports:
       - "8085:8085"
+      - "5005:5005"
     depends_on:
       - ftc_restaurant_manager_database
+      - broker
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ftc_restaurant_manager_database:5432/ftc_restaurant_manager_database
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     networks:
-      - ftc_restaurant_manager_database_net
+      - ftc_restaurant_manager_net
+      - restaurant_net
     profiles: ["docker"]
 
-
-  # DATABASE
+  # Database
   ftc_restaurant_manager_database:
     env_file:
-      .env
+      - .env
     container_name: ftc_restaurant_manager_database
     image: postgres:17.4
     ports:
@@ -35,16 +40,15 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ftc_restaurant_manager_database
     networks:
-      - ftc_restaurant_manager_database_net
+      - ftc_restaurant_manager_net
     volumes:
       - ftc_restaurant_manager_database:/var/lib/postgresql
       - ftc_restaurant_manager_database_data:/var/lib/postgresql/data
 
-
-  # PGADMIN
+  # PGAdmin
   ftc_restaurant_manager_pgadmin:
     env_file:
-      .env
+      - .env
     container_name: ftc_restaurant_manager_pgadmin
     image: dpage/pgadmin4
     ports:
@@ -53,25 +57,25 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     networks:
-      - ftc_restaurant_manager_database_net
+      - ftc_restaurant_manager_net
     depends_on:
       - ftc_restaurant_manager_database
 
-
-  #KAFKA
+  # Kafka services
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.1
-    hostname: zookeeper
     container_name: ftc_restaurant_manager_zookeeper
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - ftc_restaurant_manager_net
+      - restaurant_net
 
   broker:
     image: confluentinc/cp-kafka:5.5.1
-    hostname: broker
     container_name: ftc_restaurant_manager_broker
     depends_on:
       - zookeeper
@@ -89,10 +93,12 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
+    networks:
+      - ftc_restaurant_manager_net
+      - restaurant_net
 
   schema-registry:
     image: confluentinc/cp-schema-registry:5.5.1
-    hostname: schema-registry
     container_name: ftc_restaurant_manager_schema_registry
     depends_on:
       - zookeeper
@@ -102,26 +108,30 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+    networks:
+      - ftc_restaurant_manager_net
+      - restaurant_net
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest:5.5.1
+    container_name: ftc_restaurant_manager_rest_proxy
     depends_on:
       - zookeeper
       - broker
       - schema-registry
     ports:
-      - 8082:8082
-    hostname: rest-proxy
-    container_name: ftc_restaurant_manager_rest_proxy
+      - "8082:8082"
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+    networks:
+      - ftc_restaurant_manager_net
+      - restaurant_net
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:5.4.0
-    hostname: control-center
     container_name: ftc_restaurant_manager_control_center
     depends_on:
       - zookeeper
@@ -138,9 +148,14 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+    networks:
+      - ftc_restaurant_manager_net
+      - restaurant_net
 
 networks:
-  ftc_restaurant_manager_database_net:
+  restaurant_net:
+    external: true
+  ftc_restaurant_manager_net:
 
 volumes:
   ftc_restaurant_manager_database:

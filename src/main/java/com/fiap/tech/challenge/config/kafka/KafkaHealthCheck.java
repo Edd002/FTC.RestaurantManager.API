@@ -10,6 +10,6 @@ public class KafkaHealthCheck implements Condition {
 
     @Override
     public boolean matches(@NonNull ConditionContext context, @NonNull AnnotatedTypeMetadata annotatedTypeMetadata) {
-        return NetworkUtil.healthCheck("localhost:9092");
+        return NetworkUtil.healthCheck("broker:29092");
     }
 }
