@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -44,4 +45,12 @@ public class OrderResponseDTO extends BaseResponseDTO {
     @Schema(description = "Usuário do pedido.")
     @JsonProperty("user")
     private UserResponseDTO user;
+
+    @Schema(description = "Data de criação do pedido.")
+    @JsonProperty("createdDate")
+    private Date createdIn;
+
+    @Schema(description = "Data de atualização do pedido.")
+    @JsonProperty("updatedDate")
+    private Date updatedIn;
 }
