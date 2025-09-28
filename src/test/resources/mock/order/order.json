@@ -8,10 +8,32 @@
     ],
     "type": "DELIVERY"
   },
+  "orderPostRequestDTOWithNoMenuItemAvailable": {
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "hashIdsMenuItems": [
+      "c4d5a6cfcd70417089d3afdd3afea052"
+    ],
+    "type": "DELIVERY"
+  },
   "orderUpdateStatusPatchRequestDTO": {
     "hashIdUser": "d49690a919944be58fbe55b4f729bc3e",
     "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
     "status": "CONFIRMED"
+  },
+  "orderUpdateStatusPatchRequestDTOCanceled": {
+    "hashIdUser": "d49690a919944be58fbe55b4f729bc3e",
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "status": "CANCELED"
+  },
+  "orderUpdateStatusPatchRequestDTOWaitingForPickup": {
+    "hashIdUser": "d49690a919944be58fbe55b4f729bc3e",
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "status": "WAITING_FOR_PICKUP"
+  },
+  "orderUpdateStatusPatchRequestDTORequested": {
+    "hashIdUser": "d49690a919944be58fbe55b4f729bc3e",
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2",
+    "status": "REQUESTED"
   },
   "orderUpdateTypePatchRequestDTO": {
     "type": "DELIVERY"

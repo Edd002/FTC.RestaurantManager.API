@@ -171,7 +171,7 @@ public class MenuItemControllerTest {
         assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getPageNumber()).isEqualTo(1);
         assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(1);
+        assertThat(responseObject.getTotalElements()).isEqualTo(2);
         MenuItemResponseDTO firstMenuItemFounded = ((ArrayList<MenuItemResponseDTO>) responseObject.getList()).getFirst();
         assertThat(firstMenuItemFounded.getName()).isEqualTo("Espaguete à Bolonhesa");
         assertThat(firstMenuItemFounded.getDescription()).isEqualTo("Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão");
