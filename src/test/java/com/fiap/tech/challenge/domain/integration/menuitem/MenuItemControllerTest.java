@@ -147,38 +147,6 @@ public class MenuItemControllerTest {
         assertThat(responseObject.getItem().getMenu().getHashIdRestaurant()).isEqualTo(hashIdRestaurantDb);
     }
 
-    @DisplayName("Teste de sucesso - Encontrar um item de menu dado um filtro")
-    @Test
-    public void findMenuItemByNameSuccess() {
-        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
-        String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
-        MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
-        filter.setHashIdRestaurant(hashIdRestaurantDb);
-        filter.setName("Espa");
-        String url = UriComponentsBuilder
-                .fromPath("/api/v1/menu-items/filter")
-                .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
-                .queryParam("name", filter.getName())
-                .queryParam("description", filter.getDescription())
-                .queryParam("availability", filter.getAvailability())
-                .queryParam("pageNumber", filter.getPageNumber())
-                .queryParam("pageSize", filter.getPageSize())
-                .toUriString();
-        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
-        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
-        assertThat(responseObject).isNotNull();
-        assertThat(responseObject.isSuccess()).isTrue();
-        assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
-        assertThat(responseObject.getPageNumber()).isEqualTo(1);
-        assertThat(responseObject.getPageSize()).isEqualTo(10);
-        assertThat(responseObject.getTotalElements()).isEqualTo(1);
-        MenuItemResponseDTO firstMenuItemFounded = ((ArrayList<MenuItemResponseDTO>) responseObject.getList()).getFirst();
-        assertThat(firstMenuItemFounded.getName()).isEqualTo("Espaguete à Bolonhesa");
-        assertThat(firstMenuItemFounded.getDescription()).isEqualTo("Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão");
-        assertThat(firstMenuItemFounded.getPrice()).isEqualTo(BigDecimal.valueOf(19.99));
-        assertThat(firstMenuItemFounded.getAvailability()).isTrue();
-    }
-
     @DisplayName("Teste de sucesso - Encontrar um item de menu dado seu hash id")
     @Test
     public void findMenuItemByHashIdWithSuccess() {
@@ -194,6 +162,81 @@ public class MenuItemControllerTest {
         assertThat(responseObject.getItem().getDescription()).isEqualTo("Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão");
         assertThat(responseObject.getItem().getPrice()).isEqualTo(BigDecimal.valueOf(19.99));
         assertThat(responseObject.getItem().getAvailability()).isTrue();
+    }
+
+    @DisplayName("Teste de sucesso - Encontrar um item de menu dado o hashId do Restaurante")
+    @Test
+    public void findMenuItemByHashIdSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
+        MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
+        filter.setHashIdRestaurant(hashIdRestaurantDb);
+        String url = UriComponentsBuilder
+                .fromPath("/api/v1/menu-items/filter")
+                .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
+                .queryParam("name", filter.getName())
+                .queryParam("pageNumber", filter.getPageNumber())
+                .queryParam("pageSize", filter.getPageSize())
+                .toUriString();
+
+        this.assertFirstValidElement(url, headers);
+    }
+
+    @DisplayName("Teste de sucesso - Encontrar um item de menu dado seu nome")
+    @Test
+    public void findMenuItemByNameSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
+        MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
+        filter.setHashIdRestaurant(hashIdRestaurantDb);
+        filter.setName("Espa");
+        String url = UriComponentsBuilder
+                .fromPath("/api/v1/menu-items/filter")
+                .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
+                .queryParam("name", filter.getName())
+                .queryParam("pageNumber", filter.getPageNumber())
+                .queryParam("pageSize", filter.getPageSize())
+                .toUriString();
+
+        this.assertFirstValidElement(url, headers);
+    }
+
+    @DisplayName("Teste de sucesso - Encontrar um item de menu dado sua descrição")
+    @Test
+    public void findMenuItemByDescriptionSuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
+        MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
+        filter.setHashIdRestaurant(hashIdRestaurantDb);
+        filter.setDescription("bolonhesa");
+        String url = UriComponentsBuilder
+                .fromPath("/api/v1/menu-items/filter")
+                .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
+                .queryParam("description", filter.getDescription())
+                .queryParam("pageNumber", filter.getPageNumber())
+                .queryParam("pageSize", filter.getPageSize())
+                .toUriString();
+
+        this.assertFirstValidElement(url, headers);
+    }
+
+    @DisplayName("Teste de sucesso - Encontrar um item de menu dado sua disponibilidade")
+    @Test
+    public void findMenuItemByAvailabilitySuccess() {
+        HttpHeaders headers = httpHeaderComponent.generateHeaderWithOwnerBearerToken();
+        String hashIdRestaurantDb = "6d4b62960a6aa2b1fff43a9c1d95f7b2";
+        MenuItemGetFilter filter = new MenuItemGetFilter(1, 10);
+        filter.setHashIdRestaurant(hashIdRestaurantDb);
+        filter.setAvailability(true);
+        String url = UriComponentsBuilder
+                .fromPath("/api/v1/menu-items/filter")
+                .queryParam("hashIdRestaurant", filter.getHashIdRestaurant())
+                .queryParam("availability", filter.getAvailability())
+                .queryParam("pageNumber", filter.getPageNumber())
+                .queryParam("pageSize", filter.getPageSize())
+                .toUriString();
+
+        this.assertFirstValidElement(url, headers);
     }
 
     @DisplayName("Teste de sucesso - Deve deletar um item de menu dado seu hash id")
@@ -222,5 +265,23 @@ public class MenuItemControllerTest {
         ResponseEntity<BaseSuccessResponse200<MenuBatchResponseDTO>> menuBatchResponseEntity = testRestTemplate.exchange("/api/v1/menus", HttpMethod.PUT, new HttpEntity<>(menuBatchPutRequestDTO, headers), new ParameterizedTypeReference<>() {});
         assertNotNull(menuBatchResponseEntity.getBody());
         return menuBatchResponseEntity.getBody().getItem();
+    }
+
+    private void assertFirstValidElement(String url, HttpHeaders headers) {
+        ResponseEntity<?> menuItemResponseEntity = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+        BasePageableSuccessResponse200<MenuItemResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(menuItemResponseEntity, new TypeToken<>() {});
+
+        assertThat(responseObject).isNotNull();
+        assertThat(responseObject.isSuccess()).isTrue();
+        assertThat(HttpStatus.OK.value()).isEqualTo(responseObject.getStatus());
+        assertThat(responseObject.getPageNumber()).isEqualTo(1);
+        assertThat(responseObject.getPageSize()).isEqualTo(10);
+        assertThat(responseObject.getTotalElements()).isEqualTo(1);
+
+        MenuItemResponseDTO firstMenuItemFounded = ((ArrayList<MenuItemResponseDTO>) responseObject.getList()).getFirst();
+        assertThat(firstMenuItemFounded.getName()).isEqualTo("Espaguete à Bolonhesa");
+        assertThat(firstMenuItemFounded.getDescription()).isEqualTo("Espaguete tradicional com molho bolonhesa caseiro e queijo parmesão");
+        assertThat(firstMenuItemFounded.getPrice()).isEqualTo(BigDecimal.valueOf(19.99));
+        assertThat(firstMenuItemFounded.getAvailability()).isTrue();
     }
 }

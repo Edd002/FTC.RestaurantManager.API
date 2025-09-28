@@ -2,6 +2,7 @@ package com.fiap.tech.challenge.domain.unit.user;
 
 import com.fiap.tech.challenge.domain.address.entity.Address;
 import com.fiap.tech.challenge.domain.city.entity.City;
+import com.fiap.tech.challenge.domain.factory.RestaurantTestFactory;
 import com.fiap.tech.challenge.domain.factory.UserFactory;
 import com.fiap.tech.challenge.domain.factory.UserTypeFactory;
 import com.fiap.tech.challenge.domain.restaurantuser.entity.RestaurantUser;
@@ -33,7 +34,6 @@ public class UserUpdateUseCaseTest {
     private User loggedUser;
 
     @Mock
-
     private City city;
 
     @Mock
@@ -41,7 +41,6 @@ public class UserUpdateUseCaseTest {
 
     private UserType userType;
     private UserPutRequestDTO userPutRequestDTO;
-
     private AutoCloseable openMocks;
 
     @BeforeEach
@@ -62,7 +61,7 @@ public class UserUpdateUseCaseTest {
         userPutRequestDTO = UserFactory.loadValidClientUserPutRequestDTO();
         when(loggedUser.getPassword()).thenReturn(crypto.encode("test123"));
         when(loggedUser.getType()).thenReturn(UserTypeFactory.loadEntityUserTypeOwner());
-        when(loggedUser.getAddress()).thenReturn(address);
+        when(loggedUser.getAddress()).thenReturn(RestaurantTestFactory.loadDefaultAddress());
 
         new UserUpdateUseCase(loggedUser, userType, city, userPutRequestDTO);
 
