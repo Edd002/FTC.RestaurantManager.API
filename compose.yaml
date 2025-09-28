@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
 
-  # API Manager
+  # FTC RestaurantManager API
   app:
     env_file:
       - .env
