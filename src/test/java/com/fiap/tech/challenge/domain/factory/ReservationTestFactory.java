@@ -1,8 +1,8 @@
 package com.fiap.tech.challenge.domain.factory;
 
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationPostRequestDTO;
+import com.fiap.tech.challenge.domain.reservation.dto.ReservationUpdateStatusPatchRequestDTO;
 import com.fiap.tech.challenge.global.util.JsonUtil;
-import com.fiap.tech.challenge.global.util.enumerated.DatePatternEnum;
 
 import java.time.LocalDate;
 
@@ -37,6 +37,14 @@ public class ReservationTestFactory {
                 LocalDate.now().toString(),
                 "reservationPostRequestDTOInvalid",
                 ReservationPostRequestDTO.class
+        );
+    }
+
+    public static ReservationUpdateStatusPatchRequestDTO loadValidUpdateRequestDTO() {
+        return JsonUtil.objectFromJson(
+                "reservationUpdateStatusPatchRequestDTO",
+                PATH_RESOURCE_RESERVATION,
+                ReservationUpdateStatusPatchRequestDTO.class
         );
     }
 }
