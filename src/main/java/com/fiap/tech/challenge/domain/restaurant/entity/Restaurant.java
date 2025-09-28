@@ -125,7 +125,7 @@ public class Restaurant extends Audit implements Serializable {
     private List<Order> orders;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = { CascadeType.REMOVE })
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = List.of();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
     @JoinColumn(name = "fk_menu", nullable = false)
