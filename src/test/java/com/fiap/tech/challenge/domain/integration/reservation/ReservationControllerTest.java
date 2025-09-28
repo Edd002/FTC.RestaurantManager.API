@@ -1,5 +1,6 @@
 package com.fiap.tech.challenge.domain.integration.reservation;
 
+import com.fiap.tech.challenge.domain.factory.ReservationTestFactory;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationPostRequestDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationResponseDTO;
 import com.fiap.tech.challenge.domain.reservation.dto.ReservationUpdateStatusPatchRequestDTO;
@@ -26,6 +27,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.fiap.tech.challenge.domain.reservation.enumerated.ReservationBookingStatusEnum.*;
@@ -80,14 +82,15 @@ public class ReservationControllerTest {
     @Test
     public void createReservationSuccess() {
         HttpHeaders headers = httpHeaderComponent.generateHeaderWithClientBearerToken();
-        ReservationPostRequestDTO reservationPostRequestDTO = JsonUtil.objectFromJson("reservationPostRequestDTO", PATH_RESOURCE_RESERVATION, ReservationPostRequestDTO.class, DatePatternEnum.DATE_FORMAT_dd_mm_yyyy_WITH_SLASH.getValue());
+        ReservationPostRequestDTO reservationPostRequestDTO = ReservationTestFactory.loadValidPostRequestDTO();
         ResponseEntity<?> reservationResponseEntity = testRestTemplate.exchange("/api/v1/reservations", HttpMethod.POST, new HttpEntity<>(reservationPostRequestDTO, headers), new ParameterizedTypeReference<>() {});
         BaseSuccessResponse201<ReservationResponseDTO> responseObject = httpBodyComponent.responseEntityToObject(reservationResponseEntity, new TypeToken<>() {}, DatePatternEnum.DATE_FORMAT_dd_mm_yyyy_WITH_SLASH, new MultiFormatDateDeserializerTypeAdapter());
         assertThat(responseObject).isNotNull();
         assertThat(responseObject.isSuccess()).isTrue();
         assertThat(HttpStatus.CREATED.value()).isEqualTo(responseObject.getStatus());
         assertThat(responseObject.getItem().getHashId()).isNotNull();
-        assertThat(responseObject.getItem().getBookingDate()).hasYear(2025).hasMonth(11).hasDayOfMonth(11);
+        LocalDate reservationDate = LocalDate.now();
+        assertThat(responseObject.getItem().getBookingDate()).hasYear(reservationDate.getYear()).hasMonth(reservationDate.getMonthValue()).hasDayOfMonth(reservationDate.getDayOfMonth());
         assertThat(responseObject.getItem().getBookingQuantity()).isEqualTo(2);
         assertThat(responseObject.getItem().getBookingStatus()).isEqualTo(REQUESTED);
         assertThat(responseObject.getItem().getBookingTime()).isEqualTo(BREAKFAST);

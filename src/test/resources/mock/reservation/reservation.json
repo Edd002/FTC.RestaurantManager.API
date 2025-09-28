@@ -1,8 +1,15 @@
 {
   "reservationPostRequestDTO": {
     "bookingTime": "BREAKFAST",
-    "bookingDate": "11/11/2025",
+    "bookingDate": "UPDATE_DATE",
     "bookingQuantity": 2,
+    "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2"
+  },
+
+  "reservationPostRequestDTOInvalid": {
+    "bookingTime": "BREAKFAST",
+    "bookingDate": "UPDATE_DATE",
+    "bookingQuantity": 100,
     "hashIdRestaurant": "6d4b62960a6aa2b1fff43a9c1d95f7b2"
   },
 
