@@ -20,6 +20,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,7 @@ public class RestaurantUserController {
 
     @Operation(method = "POST", summary = "Criar associação de usuário com restaurante.", description = "Criar associação de usuário com restaurante.")
     @ApiResponse(responseCode = "201", description = "Created")
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping
     public ResponseEntity<BaseSuccessResponse201<RestaurantUserResponseDTO>> create(@RequestBody @Valid RestaurantUserPostRequestDTO restaurantUserPostRequestDTO) {
         log.info("Criando associação de usuário com restaurante...");
@@ -75,6 +77,7 @@ public class RestaurantUserController {
 
     @Operation(method = "DELETE", summary = "Excluir associação de usuário com restaurante.", description = "Excluir associação de usuário com restaurante.")
     @ApiResponse(responseCode = "200", description = "OK")
+    @PreAuthorize(value = "isAuthenticated()")
     @DeleteMapping(value = "/{hashId}")
     public ResponseEntity<NoPayloadBaseSuccessResponse200<RestaurantUserResponseDTO>> delete(@PathVariable("hashId") String hashId) {
         log.info("Excluindo associação de usuário com restaurante...");

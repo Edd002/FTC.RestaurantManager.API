@@ -52,19 +52,20 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, OrderResponseDTO> orderProducerFactory() {
-        return new DefaultKafkaProducerFactory<>(configProperties());
+        return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
     public ProducerFactory<String, ReservationResponseDTO> reservationProducerFactory() {
-        return new DefaultKafkaProducerFactory<>(configProperties());
+        return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
-    private Map<String, Object> configProperties() {
+    private Map<String, Object> producerConfig() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapAddress);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        properties.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
         return properties;
     }
 }

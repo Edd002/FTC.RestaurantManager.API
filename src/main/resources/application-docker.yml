@@ -17,16 +17,18 @@ spring:
     name: FTC.RestaurantManager.API
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5453/ftc_restaurant_manager_database
+    url: jdbc:postgresql://ftc_restaurant_manager_database:5432/ftc_restaurant_manager_database
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   # Apache Kafka Confluent Control Center URL: http://localhost:9021/clusters
   kafka:
-    bootstrap-servers: localhost:9092
-    topic:
-      name:
-        order-topic: orders
-        reservation-topic: reservations
+    bootstrap-servers: broker:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   jackson:
     default-property-inclusion: non_null
     deserialization:
