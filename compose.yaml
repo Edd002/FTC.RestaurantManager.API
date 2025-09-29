@@ -24,7 +24,7 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
     profiles: ["docker"]
 
 
@@ -75,7 +75,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
 
   broker:
     image: confluentinc/cp-kafka:5.5.1
@@ -98,7 +98,7 @@ services:
       KAFKA_JMX_PORT: 9101
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
 
   schema-registry:
     image: confluentinc/cp-schema-registry:5.5.1
@@ -113,7 +113,7 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest:5.5.1
@@ -131,7 +131,7 @@ services:
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:5.4.0
@@ -153,10 +153,10 @@ services:
       PORT: 9021
     networks:
       - ftc_restaurant_manager_net
-      - fts_restaurant_net
+      - ftc_restaurant_net
 
 networks:
-  fts_restaurant_net:
+  ftc_restaurant_net:
     driver: bridge
   ftc_restaurant_manager_net:
     driver: bridge
