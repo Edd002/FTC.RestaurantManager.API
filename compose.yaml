@@ -158,7 +158,7 @@ services:
 networks:
   ftc_restaurant_net:
     driver: bridge
-    external: true
+    name: ftc_restaurant_net
   ftc_restaurant_manager_net:
     driver: bridge
 

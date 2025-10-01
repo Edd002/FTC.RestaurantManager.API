@@ -33,7 +33,7 @@ Essa estrutura modular possibilita:
 ## Como rodar? 🚀
 Para executar o projeto utilizando Docker Compose:
 1. Crie (ou altere) um arquivo **.env** na raiz do projeto com suas configurações (PS.: Utilize como base o arquivo [.env.example](.env.example))
-2. Rode `docker compose --profile docker up` na raiz do projeto
+2. Rode `docker compose --profile docker up --build` na raiz do projeto
 3. Acesse o Swagger: [link](http://localhost:8085/restaurant-manager/swagger-ui/index.html)
 4. Acesse o pgAdmin utilizando as credencias do .env: [link](http://localhost:80)
 5. Acesse a documentação Postman: [link](https://documenter.getpostman.com/view/43787842/2sB2qcBfps)
